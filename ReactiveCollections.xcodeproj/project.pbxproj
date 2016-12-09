@@ -18,6 +18,32 @@
 		7D69AAFF1DF9D0E200FCB568 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D69AAFD1DF9D0E200FCB568 /* Result.framework */; };
 		7D69AB001DF9D11900FCB568 /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D69AAFC1DF9D0E200FCB568 /* ReactiveSwift.framework */; };
 		7D69AB011DF9D11900FCB568 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D69AAFD1DF9D0E200FCB568 /* Result.framework */; };
+		7DC1E2D91DFADF8700A61745 /* ReactiveCollections.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D69AAE01DF9CEE500FCB568 /* ReactiveCollections.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7DC1E2DA1DFADF9B00A61745 /* ReactiveArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D69AAF71DF9D07800FCB568 /* ReactiveArray.swift */; };
+		7DC1E2DD1DFADFA500A61745 /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DC1E2DB1DFADFA500A61745 /* ReactiveSwift.framework */; };
+		7DC1E2DE1DFADFA500A61745 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DC1E2DC1DFADFA500A61745 /* Result.framework */; };
+		7DE06D9C1DFADA84003303AB /* ReactiveCollections.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DE06D931DFADA84003303AB /* ReactiveCollections.framework */; };
+		7DE06DAA1DFADAF6003303AB /* ReactiveCollections.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D69AAE01DF9CEE500FCB568 /* ReactiveCollections.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7DE06DAB1DFADB0F003303AB /* ReactiveArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D69AAF71DF9D07800FCB568 /* ReactiveArray.swift */; };
+		7DE06DAC1DFADB19003303AB /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DE06D7C1DFAD8E9003303AB /* ReactiveSwift.framework */; };
+		7DE06DAD1DFADB19003303AB /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DE06D7D1DFAD8E9003303AB /* Result.framework */; };
+		7DE06DAE1DFADB6D003303AB /* ReactiveArrayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D69AAF91DF9D08C00FCB568 /* ReactiveArrayTests.swift */; };
+		7DE06DB11DFADB9F003303AB /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DE06D7C1DFAD8E9003303AB /* ReactiveSwift.framework */; };
+		7DE06DB21DFADB9F003303AB /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DE06D7D1DFAD8E9003303AB /* Result.framework */; };
+		7DE06DB51DFADBC3003303AB /* ReactiveCollections.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DE06D931DFADA84003303AB /* ReactiveCollections.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7DE06DB61DFADBCC003303AB /* ReactiveSwift.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DE06D7C1DFAD8E9003303AB /* ReactiveSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7DE06DB71DFADBCC003303AB /* Result.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DE06D7D1DFAD8E9003303AB /* Result.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7DE06DC61DFADCAF003303AB /* ReactiveCollections.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DE06DBD1DFADCAE003303AB /* ReactiveCollections.framework */; };
+		7DE06DD61DFADCE4003303AB /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DE06DD41DFADCE4003303AB /* ReactiveSwift.framework */; };
+		7DE06DD71DFADCE4003303AB /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DE06DD51DFADCE4003303AB /* Result.framework */; };
+		7DE06DD91DFADD07003303AB /* ReactiveCollections.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D69AAE01DF9CEE500FCB568 /* ReactiveCollections.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7DE06DDA1DFADD69003303AB /* ReactiveArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D69AAF71DF9D07800FCB568 /* ReactiveArray.swift */; };
+		7DE06DDB1DFADD6F003303AB /* ReactiveArrayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D69AAF91DF9D08C00FCB568 /* ReactiveArrayTests.swift */; };
+		7DE06DDC1DFADD8B003303AB /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DE06DD41DFADCE4003303AB /* ReactiveSwift.framework */; };
+		7DE06DDD1DFADD8B003303AB /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DE06DD51DFADCE4003303AB /* Result.framework */; };
+		7DE06DDF1DFADD9B003303AB /* ReactiveCollections.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DE06DBD1DFADCAE003303AB /* ReactiveCollections.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7DE06DE01DFADDA0003303AB /* ReactiveSwift.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DE06DD41DFADCE4003303AB /* ReactiveSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7DE06DE11DFADDA0003303AB /* Result.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DE06DD51DFADCE4003303AB /* Result.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,6 +53,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 7D69AADC1DF9CEE500FCB568;
 			remoteInfo = ReactiveCollections;
+		};
+		7DE06D9D1DFADA84003303AB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7D69AAD41DF9CEE500FCB568 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7DE06D921DFADA84003303AB;
+			remoteInfo = "ReactiveCollections-macOS";
+		};
+		7DE06DC71DFADCAF003303AB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7D69AAD41DF9CEE500FCB568 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7DE06DBC1DFADCAE003303AB;
+			remoteInfo = "ReactiveCollections-tvOS";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -43,6 +83,30 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7DE06DB41DFADBAF003303AB /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				7DE06DB51DFADBC3003303AB /* ReactiveCollections.framework in CopyFiles */,
+				7DE06DB61DFADBCC003303AB /* ReactiveSwift.framework in CopyFiles */,
+				7DE06DB71DFADBCC003303AB /* Result.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7DE06DDE1DFADD8F003303AB /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				7DE06DDF1DFADD9B003303AB /* ReactiveCollections.framework in CopyFiles */,
+				7DE06DE01DFADDA0003303AB /* ReactiveSwift.framework in CopyFiles */,
+				7DE06DE11DFADDA0003303AB /* Result.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +119,17 @@
 		7D69AAF91DF9D08C00FCB568 /* ReactiveArrayTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactiveArrayTests.swift; sourceTree = "<group>"; };
 		7D69AAFC1DF9D0E200FCB568 /* ReactiveSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveSwift.framework; path = Carthage/Build/iOS/ReactiveSwift.framework; sourceTree = "<group>"; };
 		7D69AAFD1DF9D0E200FCB568 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
+		7DC1E2D11DFADEA400A61745 /* ReactiveCollections.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ReactiveCollections.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7DC1E2DB1DFADFA500A61745 /* ReactiveSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveSwift.framework; path = Carthage/Build/watchOS/ReactiveSwift.framework; sourceTree = "<group>"; };
+		7DC1E2DC1DFADFA500A61745 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/watchOS/Result.framework; sourceTree = "<group>"; };
+		7DE06D7C1DFAD8E9003303AB /* ReactiveSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveSwift.framework; path = Carthage/Build/Mac/ReactiveSwift.framework; sourceTree = "<group>"; };
+		7DE06D7D1DFAD8E9003303AB /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/Mac/Result.framework; sourceTree = "<group>"; };
+		7DE06D931DFADA84003303AB /* ReactiveCollections.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ReactiveCollections.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7DE06D9B1DFADA84003303AB /* ReactiveCollectionsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReactiveCollectionsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7DE06DBD1DFADCAE003303AB /* ReactiveCollections.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ReactiveCollections.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7DE06DC51DFADCAF003303AB /* ReactiveCollectionsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReactiveCollectionsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7DE06DD41DFADCE4003303AB /* ReactiveSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveSwift.framework; path = Carthage/Build/tvOS/ReactiveSwift.framework; sourceTree = "<group>"; };
+		7DE06DD51DFADCE4003303AB /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/tvOS/Result.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +149,53 @@
 				7D69AAE71DF9CEE500FCB568 /* ReactiveCollections.framework in Frameworks */,
 				7D69AB001DF9D11900FCB568 /* ReactiveSwift.framework in Frameworks */,
 				7D69AB011DF9D11900FCB568 /* Result.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7DC1E2CD1DFADEA400A61745 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7DC1E2DD1DFADFA500A61745 /* ReactiveSwift.framework in Frameworks */,
+				7DC1E2DE1DFADFA500A61745 /* Result.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7DE06D8F1DFADA84003303AB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7DE06DAC1DFADB19003303AB /* ReactiveSwift.framework in Frameworks */,
+				7DE06DAD1DFADB19003303AB /* Result.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7DE06D981DFADA84003303AB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7DE06D9C1DFADA84003303AB /* ReactiveCollections.framework in Frameworks */,
+				7DE06DB11DFADB9F003303AB /* ReactiveSwift.framework in Frameworks */,
+				7DE06DB21DFADB9F003303AB /* Result.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7DE06DB91DFADCAE003303AB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7DE06DD61DFADCE4003303AB /* ReactiveSwift.framework in Frameworks */,
+				7DE06DD71DFADCE4003303AB /* Result.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7DE06DC21DFADCAF003303AB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7DE06DC61DFADCAF003303AB /* ReactiveCollections.framework in Frameworks */,
+				7DE06DDC1DFADD8B003303AB /* ReactiveSwift.framework in Frameworks */,
+				7DE06DDD1DFADD8B003303AB /* Result.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,6 +233,11 @@
 			children = (
 				7D69AADD1DF9CEE500FCB568 /* ReactiveCollections.framework */,
 				7D69AAE61DF9CEE500FCB568 /* ReactiveCollectionsTests.xctest */,
+				7DE06D931DFADA84003303AB /* ReactiveCollections.framework */,
+				7DE06D9B1DFADA84003303AB /* ReactiveCollectionsTests.xctest */,
+				7DE06DBD1DFADCAE003303AB /* ReactiveCollections.framework */,
+				7DE06DC51DFADCAF003303AB /* ReactiveCollectionsTests.xctest */,
+				7DC1E2D11DFADEA400A61745 /* ReactiveCollections.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -139,10 +266,48 @@
 		7D69AAFB1DF9D0E200FCB568 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7DE06DB01DFADB82003303AB /* iOS */,
+				7DE06DAF1DFADB7C003303AB /* macOS */,
+				7DE06DD81DFADCE8003303AB /* tvOS */,
+				7DC1E2DF1DFAE01800A61745 /* watchOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7DC1E2DF1DFAE01800A61745 /* watchOS */ = {
+			isa = PBXGroup;
+			children = (
+				7DC1E2DB1DFADFA500A61745 /* ReactiveSwift.framework */,
+				7DC1E2DC1DFADFA500A61745 /* Result.framework */,
+			);
+			name = watchOS;
+			sourceTree = "<group>";
+		};
+		7DE06DAF1DFADB7C003303AB /* macOS */ = {
+			isa = PBXGroup;
+			children = (
+				7DE06D7C1DFAD8E9003303AB /* ReactiveSwift.framework */,
+				7DE06D7D1DFAD8E9003303AB /* Result.framework */,
+			);
+			name = macOS;
+			sourceTree = "<group>";
+		};
+		7DE06DB01DFADB82003303AB /* iOS */ = {
+			isa = PBXGroup;
+			children = (
 				7D69AAFC1DF9D0E200FCB568 /* ReactiveSwift.framework */,
 				7D69AAFD1DF9D0E200FCB568 /* Result.framework */,
 			);
-			name = Frameworks;
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		7DE06DD81DFADCE8003303AB /* tvOS */ = {
+			isa = PBXGroup;
+			children = (
+				7DE06DD41DFADCE4003303AB /* ReactiveSwift.framework */,
+				7DE06DD51DFADCE4003303AB /* Result.framework */,
+			);
+			name = tvOS;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -153,6 +318,30 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D69AAEE1DF9CEE500FCB568 /* ReactiveCollections.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7DC1E2CE1DFADEA400A61745 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7DC1E2D91DFADF8700A61745 /* ReactiveCollections.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7DE06D901DFADA84003303AB /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7DE06DAA1DFADAF6003303AB /* ReactiveCollections.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7DE06DBA1DFADCAE003303AB /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7DE06DD91DFADD07003303AB /* ReactiveCollections.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -196,6 +385,98 @@
 			productReference = 7D69AAE61DF9CEE500FCB568 /* ReactiveCollectionsTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		7DC1E2D01DFADEA400A61745 /* ReactiveCollections-watchOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7DC1E2D81DFADEA400A61745 /* Build configuration list for PBXNativeTarget "ReactiveCollections-watchOS" */;
+			buildPhases = (
+				7DC1E2CC1DFADEA400A61745 /* Sources */,
+				7DC1E2CD1DFADEA400A61745 /* Frameworks */,
+				7DC1E2CE1DFADEA400A61745 /* Headers */,
+				7DC1E2CF1DFADEA400A61745 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "ReactiveCollections-watchOS";
+			productName = "ReactiveCollections-watchOS";
+			productReference = 7DC1E2D11DFADEA400A61745 /* ReactiveCollections.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		7DE06D921DFADA84003303AB /* ReactiveCollections-macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7DE06DA41DFADA84003303AB /* Build configuration list for PBXNativeTarget "ReactiveCollections-macOS" */;
+			buildPhases = (
+				7DE06D8E1DFADA84003303AB /* Sources */,
+				7DE06D8F1DFADA84003303AB /* Frameworks */,
+				7DE06D901DFADA84003303AB /* Headers */,
+				7DE06D911DFADA84003303AB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "ReactiveCollections-macOS";
+			productName = "ReactiveCollections-macOS";
+			productReference = 7DE06D931DFADA84003303AB /* ReactiveCollections.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		7DE06D9A1DFADA84003303AB /* ReactiveCollections-macOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7DE06DA71DFADA84003303AB /* Build configuration list for PBXNativeTarget "ReactiveCollections-macOSTests" */;
+			buildPhases = (
+				7DE06D971DFADA84003303AB /* Sources */,
+				7DE06D981DFADA84003303AB /* Frameworks */,
+				7DE06D991DFADA84003303AB /* Resources */,
+				7DE06DB41DFADBAF003303AB /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7DE06D9E1DFADA84003303AB /* PBXTargetDependency */,
+			);
+			name = "ReactiveCollections-macOSTests";
+			productName = "ReactiveCollections-macOSTests";
+			productReference = 7DE06D9B1DFADA84003303AB /* ReactiveCollectionsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		7DE06DBC1DFADCAE003303AB /* ReactiveCollections-tvOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7DE06DCE1DFADCAF003303AB /* Build configuration list for PBXNativeTarget "ReactiveCollections-tvOS" */;
+			buildPhases = (
+				7DE06DB81DFADCAE003303AB /* Sources */,
+				7DE06DB91DFADCAE003303AB /* Frameworks */,
+				7DE06DBA1DFADCAE003303AB /* Headers */,
+				7DE06DBB1DFADCAE003303AB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "ReactiveCollections-tvOS";
+			productName = "ReactiveCollections-tvOS";
+			productReference = 7DE06DBD1DFADCAE003303AB /* ReactiveCollections.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		7DE06DC41DFADCAF003303AB /* ReactiveCollections-tvOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7DE06DD11DFADCAF003303AB /* Build configuration list for PBXNativeTarget "ReactiveCollections-tvOSTests" */;
+			buildPhases = (
+				7DE06DC11DFADCAF003303AB /* Sources */,
+				7DE06DC21DFADCAF003303AB /* Frameworks */,
+				7DE06DC31DFADCAF003303AB /* Resources */,
+				7DE06DDE1DFADD8F003303AB /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7DE06DC81DFADCAF003303AB /* PBXTargetDependency */,
+			);
+			name = "ReactiveCollections-tvOSTests";
+			productName = "ReactiveCollections-tvOSTests";
+			productReference = 7DE06DC51DFADCAF003303AB /* ReactiveCollectionsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -216,6 +497,26 @@
 						LastSwiftMigration = 0810;
 						ProvisioningStyle = Automatic;
 					};
+					7DC1E2D01DFADEA400A61745 = {
+						CreatedOnToolsVersion = 8.1;
+						ProvisioningStyle = Automatic;
+					};
+					7DE06D921DFADA84003303AB = {
+						CreatedOnToolsVersion = 8.1;
+						ProvisioningStyle = Automatic;
+					};
+					7DE06D9A1DFADA84003303AB = {
+						CreatedOnToolsVersion = 8.1;
+						ProvisioningStyle = Automatic;
+					};
+					7DE06DBC1DFADCAE003303AB = {
+						CreatedOnToolsVersion = 8.1;
+						ProvisioningStyle = Automatic;
+					};
+					7DE06DC41DFADCAF003303AB = {
+						CreatedOnToolsVersion = 8.1;
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = 7D69AAD71DF9CEE500FCB568 /* Build configuration list for PBXProject "ReactiveCollections" */;
@@ -232,6 +533,11 @@
 			targets = (
 				7D69AADC1DF9CEE500FCB568 /* ReactiveCollections-iOS */,
 				7D69AAE51DF9CEE500FCB568 /* ReactiveCollections-iOSTests */,
+				7DE06D921DFADA84003303AB /* ReactiveCollections-macOS */,
+				7DE06D9A1DFADA84003303AB /* ReactiveCollections-macOSTests */,
+				7DE06DBC1DFADCAE003303AB /* ReactiveCollections-tvOS */,
+				7DE06DC41DFADCAF003303AB /* ReactiveCollections-tvOSTests */,
+				7DC1E2D01DFADEA400A61745 /* ReactiveCollections-watchOS */,
 			);
 		};
 /* End PBXProject section */
@@ -245,6 +551,41 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		7D69AAE41DF9CEE500FCB568 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7DC1E2CF1DFADEA400A61745 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7DE06D911DFADA84003303AB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7DE06D991DFADA84003303AB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7DE06DBB1DFADCAE003303AB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7DE06DC31DFADCAF003303AB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -270,6 +611,46 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7DC1E2CC1DFADEA400A61745 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7DC1E2DA1DFADF9B00A61745 /* ReactiveArray.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7DE06D8E1DFADA84003303AB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7DE06DAB1DFADB0F003303AB /* ReactiveArray.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7DE06D971DFADA84003303AB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7DE06DAE1DFADB6D003303AB /* ReactiveArrayTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7DE06DB81DFADCAE003303AB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7DE06DDA1DFADD69003303AB /* ReactiveArray.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7DE06DC11DFADCAF003303AB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7DE06DDB1DFADD6F003303AB /* ReactiveArrayTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -278,6 +659,16 @@
 			target = 7D69AADC1DF9CEE500FCB568 /* ReactiveCollections-iOS */;
 			targetProxy = 7D69AAE81DF9CEE500FCB568 /* PBXContainerItemProxy */;
 		};
+		7DE06D9E1DFADA84003303AB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7DE06D921DFADA84003303AB /* ReactiveCollections-macOS */;
+			targetProxy = 7DE06D9D1DFADA84003303AB /* PBXContainerItemProxy */;
+		};
+		7DE06DC81DFADCAF003303AB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7DE06DBC1DFADCAE003303AB /* ReactiveCollections-tvOS */;
+			targetProxy = 7DE06DC71DFADCAF003303AB /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -285,6 +676,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				BITCODE_GENERATION_MODE = bitcode;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -307,6 +699,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -324,16 +717,20 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.raccommunity.ReactiveCollections;
+				PRODUCT_NAME = ReactiveCollections;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
 		};
@@ -341,6 +738,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				BITCODE_GENERATION_MODE = bitcode;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -363,6 +761,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -374,22 +773,25 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.raccommunity.ReactiveCollections;
+				PRODUCT_NAME = ReactiveCollections;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;
 		};
 		7D69AAF21DF9CEE500FCB568 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -400,7 +802,6 @@
 				INFOPLIST_FILE = Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = ReactiveCollections;
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -408,7 +809,6 @@
 		7D69AAF31DF9CEE500FCB568 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -419,7 +819,6 @@
 				INFOPLIST_FILE = Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = ReactiveCollections;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -427,12 +826,14 @@
 		7D69AAF51DF9CEE500FCB568 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.raccommunity.ReactiveCollectionsTests;
 				PRODUCT_NAME = ReactiveCollectionsTests;
 			};
 			name = Debug;
@@ -440,13 +841,197 @@
 		7D69AAF61DF9CEE500FCB568 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.raccommunity.ReactiveCollectionsTests;
 				PRODUCT_NAME = ReactiveCollectionsTests;
+			};
+			name = Release;
+		};
+		7DC1E2D61DFADEA400A61745 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/watchOS",
+				);
+				INFOPLIST_FILE = Sources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Debug;
+		};
+		7DC1E2D71DFADEA400A61745 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/watchOS",
+				);
+				INFOPLIST_FILE = Sources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Release;
+		};
+		7DE06DA51DFADA84003303AB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = Sources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		7DE06DA61DFADA84003303AB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = Sources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		7DE06DA81DFADA84003303AB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.raccommunity.ReactiveCollectionsTests;
+				PRODUCT_NAME = ReactiveCollectionsTests;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		7DE06DA91DFADA84003303AB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.raccommunity.ReactiveCollectionsTests;
+				PRODUCT_NAME = ReactiveCollectionsTests;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		7DE06DCF1DFADCAF003303AB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+				);
+				INFOPLIST_FILE = Sources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 3;
+			};
+			name = Debug;
+		};
+		7DE06DD01DFADCAF003303AB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+				);
+				INFOPLIST_FILE = Sources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 3;
+			};
+			name = Release;
+		};
+		7DE06DD21DFADCAF003303AB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				APPLICATION_EXTENSION_API_ONLY = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+				);
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.raccommunity.ReactiveCollectionsTests;
+				PRODUCT_NAME = ReactiveCollectionsTests;
+				SDKROOT = appletvos;
+			};
+			name = Debug;
+		};
+		7DE06DD31DFADCAF003303AB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				APPLICATION_EXTENSION_API_ONLY = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+				);
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.raccommunity.ReactiveCollectionsTests;
+				PRODUCT_NAME = ReactiveCollectionsTests;
+				SDKROOT = appletvos;
 			};
 			name = Release;
 		};
@@ -476,6 +1061,51 @@
 			buildConfigurations = (
 				7D69AAF51DF9CEE500FCB568 /* Debug */,
 				7D69AAF61DF9CEE500FCB568 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7DC1E2D81DFADEA400A61745 /* Build configuration list for PBXNativeTarget "ReactiveCollections-watchOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7DC1E2D61DFADEA400A61745 /* Debug */,
+				7DC1E2D71DFADEA400A61745 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7DE06DA41DFADA84003303AB /* Build configuration list for PBXNativeTarget "ReactiveCollections-macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7DE06DA51DFADA84003303AB /* Debug */,
+				7DE06DA61DFADA84003303AB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7DE06DA71DFADA84003303AB /* Build configuration list for PBXNativeTarget "ReactiveCollections-macOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7DE06DA81DFADA84003303AB /* Debug */,
+				7DE06DA91DFADA84003303AB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7DE06DCE1DFADCAF003303AB /* Build configuration list for PBXNativeTarget "ReactiveCollections-tvOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7DE06DCF1DFADCAF003303AB /* Debug */,
+				7DE06DD01DFADCAF003303AB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7DE06DD11DFADCAF003303AB /* Build configuration list for PBXNativeTarget "ReactiveCollections-tvOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7DE06DD21DFADCAF003303AB /* Debug */,
+				7DE06DD31DFADCAF003303AB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

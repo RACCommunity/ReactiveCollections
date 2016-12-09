@@ -1,4 +1,4 @@
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 //! Project version number for ReactiveCollections.
 FOUNDATION_EXPORT double ReactiveCollectionsVersionNumber;
