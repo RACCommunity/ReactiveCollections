@@ -2,11 +2,36 @@ import Foundation
 import ReactiveSwift
 import enum Result.NoError
 
-// MARK: - Change
+// MARK: - Changeset
 
-public enum Change<T> {
-    case insert(element: T, at: Int)
-    case remove(element: T, at: Int)
+public struct Insert<Element> {
+    public let element: Element
+    public let index: Int
+
+    public init(element: Element, at index: Int) {
+        self.element = element
+        self.index = index
+    }
+}
+
+public struct Remove<Element> {
+    public let element: Element
+    public let index: Int
+
+    public init(element: Element, at index: Int) {
+        self.element = element
+        self.index = index
+    }
+}
+
+public struct Changeset<Element> {
+    public let deletions: [Remove<Element>]
+    public let insertions: [Insert<Element>]
+
+    public init(deletions: [Remove<Element>] = [], insertions: [Insert<Element>] = []) {
+        self.deletions = deletions
+        self.insertions = insertions
+    }
 }
 
 // MARK: - ReactiveArray
@@ -15,9 +40,9 @@ public final class ReactiveArray<Element> {
 
     fileprivate var elements: ContiguousArray<Element>
 
-    fileprivate let innerObserver: Observer<[Change<Element>], NoError>
+    fileprivate let innerObserver: Observer<Changeset<Element>, NoError>
 
-    public let signal: Signal<[Change<Element>], NoError>
+    public let signal: Signal<Changeset<Element>, NoError>
 
     public var capacity: Int {
         return elements.capacity
@@ -26,7 +51,7 @@ public final class ReactiveArray<Element> {
     public init(_ elements: [Element]) {
         self.elements = ContiguousArray(elements)
 
-        (signal, innerObserver) = Signal<[Change<Element>], NoError>.pipe()
+        (signal, innerObserver) = Signal<Changeset<Element>, NoError>.pipe()
     }
 
     public convenience init() {
@@ -122,14 +147,11 @@ extension ReactiveArray: RangeReplaceableCollection {
         if keepCapacity {
             removeSubrange(startIndex..<endIndex)
         } else {
-
-            let changes = elements[indices]
-                .enumerated()
-                .map(flip(Change.remove))
+            let changeset = Changeset(deletions: changes(removing: elements, at: Range(indices)))
 
             elements.removeAll()
 
-            innerObserver.send(value: changes)
+            innerObserver.send(value: changeset)
         }
     }
 
@@ -184,29 +206,41 @@ extension ReactiveArray: RangeReplaceableCollection {
     }
 
     public func replaceSubrange<C>(_ subrange: Range<Int>, with newElements: C) where C: Collection, C.Iterator.Element == Element {
-        var changes: [Change<Element>] = []
 
-        changes += elements[subrange]
-            .enumerated()
-            .map { ($0.advanced(by: subrange.lowerBound), $1) }
-            .map(flip(Change.remove))
-
-        changes += newElements
-            .enumerated()
-            .map { ($0.advanced(by: subrange.lowerBound), $1) }
-            .map(flip(Change.insert))
+        let changeset = Changeset(
+            deletions:  changes(removing: elements[subrange], at: subrange),
+            insertions: changes(inserting: newElements, at: subrange)
+        )
 
         elements.replaceSubrange(subrange, with: newElements)
 
-        innerObserver.send(value: changes)
+        innerObserver.send(value: changeset)
     }
 
     public func reserveCapacity(_ n: Int) {
         elements.reserveCapacity(n)
     }
+
 }
 
 // MARK: - Helpers
+
+extension ReactiveArray {
+
+    fileprivate func changes<C>(removing elements: C, at subrange: Range<Int>) -> [Remove<Element>] where C: Collection, C.Iterator.Element == Element {
+        return elements
+            .enumerated()
+            .map { ($0.advanced(by: subrange.lowerBound), $1) }
+            .map(flip(Remove.init))
+    }
+
+    fileprivate func changes<C>(inserting elements: C, at subrange: Range<Int>) -> [Insert<Element>] where C: Collection, C.Iterator.Element == Element {
+        return elements
+            .enumerated()
+            .map { ($0.advanced(by: subrange.lowerBound), $1) }
+            .map(flip(Insert.init))
+    }
+}
 
 private func flip<T, U, V>(_ function: @escaping (T, U) -> V) -> (U, T) -> V {
     return { function($1, $0) }
