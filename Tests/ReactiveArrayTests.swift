@@ -39,13 +39,15 @@ class ReactiveArrayTests: XCTestCase {
 
     func test_lifecycle() {
 
-        let exp = expectation(description: "")
+        let completedExpectation = expectation(description: "Completed expectation")
+        let disposedExpectation = expectation(description: "Disposed expectation")
 
         var array = ReactiveArray([1, 2, 3]) as Optional
 
-        _ = array?.signal.observeCompleted {
-            exp.fulfill()
-        }
+
+        _ = array?.signal.observeCompleted(completedExpectation.fulfill)
+        
+        _ = array?.signal.on(disposed: disposedExpectation.fulfill)
 
         array = nil
 
@@ -94,7 +96,7 @@ class ReactiveArrayTests: XCTestCase {
 
         var patches: [Change<Int>] = []
 
-        var array = ReactiveArray([1, 2, 3])
+        let array = ReactiveArray([1, 2, 3])
 
         array.signal.observeValues { patches += $0 }
 
@@ -110,7 +112,7 @@ class ReactiveArrayTests: XCTestCase {
 
         var patches: [Change<Int>] = []
 
-        var array = ReactiveArray([1, 2, 3])
+        let array = ReactiveArray([1, 2, 3])
 
         array.signal.observeValues { patches += $0 }
 
@@ -128,7 +130,7 @@ class ReactiveArrayTests: XCTestCase {
 
         var patches: [Change<Int>] = []
 
-        var array = ReactiveArray([1, 2, 3])
+        let array = ReactiveArray([1, 2, 3])
 
         array.signal.observeValues { patches += $0 }
 
@@ -190,7 +192,7 @@ class ReactiveArrayTests: XCTestCase {
 
         var patches: [Change<Int>] = []
 
-        var array = ReactiveArray([1, 2, 3])
+        let array = ReactiveArray([1, 2, 3])
 
         array.signal.observeValues { patches += $0 }
 
@@ -204,25 +206,19 @@ class ReactiveArrayTests: XCTestCase {
 
     func test_append_contents_of() {
 
-        var patches: [[Change<Int>]] = []
+        var patches: [Change<Int>] = []
 
-        var array = ReactiveArray([1, 2, 3])
+        let array = ReactiveArray([1, 2, 3])
 
-        array.signal.observeValues { patches.append($0) }
+        array.signal.observeValues { patches += $0 }
 
         array.append(contentsOf: [4, 5, 6])
 
         XCTAssertEqual(array[array.indices], [1, 2, 3, 4, 5, 6])
         XCTAssertEqual(patches, [
-            [
-                .insert(element: 4, at: 3)
-            ],
-            [
-                .insert(element: 5, at: 4)
-            ],
-            [
-                .insert(element: 6, at: 5)
-            ]
+            .insert(element: 4, at: 3),
+            .insert(element: 5, at: 4),
+            .insert(element: 6, at: 5)
             ])
     }
 
@@ -232,7 +228,7 @@ class ReactiveArrayTests: XCTestCase {
 
         var patches: [Change<Int>] = []
 
-        var array = ReactiveArray([1, 2, 3])
+        let array = ReactiveArray([1, 2, 3])
 
         array.signal.observeValues { patches += $0 }
 
@@ -257,7 +253,7 @@ class ReactiveArrayTests: XCTestCase {
 
         var patches: [Change<Int>] = []
 
-        var array = ReactiveArray([1, 2, 3])
+        let array = ReactiveArray([1, 2, 3])
 
         array.signal.observeValues { patches += $0 }
 
@@ -277,7 +273,7 @@ class ReactiveArrayTests: XCTestCase {
 
         var patches: [Change<Int>] = []
 
-        var array = ReactiveArray([1, 2, 3])
+        let array = ReactiveArray([1, 2, 3])
 
         array.signal.observeValues { patches += $0 }
 
@@ -295,7 +291,7 @@ class ReactiveArrayTests: XCTestCase {
 
         var patches: [Change<Int>] = []
 
-        var array = ReactiveArray([1, 2, 3])
+        let array = ReactiveArray([1, 2, 3])
 
         let initialCapacity = array.capacity
 
@@ -316,11 +312,11 @@ class ReactiveArrayTests: XCTestCase {
 
         var patches: [Change<Int>] = []
 
-        var array = ReactiveArray([1, 2, 3])
+        let array = ReactiveArray([1, 2, 3])
 
         array.signal.observeValues { patches += $0 }
 
-        array.removeFirst()
+        XCTAssertEqual(array.removeFirst(), 1)
 
         XCTAssertEqual(array[array.indices], [2, 3])
         XCTAssertEqual(patches, [
@@ -332,7 +328,7 @@ class ReactiveArrayTests: XCTestCase {
 
         var patches: [Change<Int>] = []
 
-        var array = ReactiveArray([1, 2, 3])
+        let array = ReactiveArray([1, 2, 3])
 
         array.signal.observeValues { patches += $0 }
 
@@ -349,7 +345,7 @@ class ReactiveArrayTests: XCTestCase {
 
         var patches: [Change<Int>] = []
 
-        var array = ReactiveArray([1, 2, 3])
+        let array = ReactiveArray([1, 2, 3])
 
         array.signal.observeValues { patches += $0 }
 
@@ -367,11 +363,11 @@ class ReactiveArrayTests: XCTestCase {
 
         var patches: [Change<Int>] = []
 
-        var array = ReactiveArray([1, 2, 3])
+        let array = ReactiveArray([1, 2, 3])
 
         array.signal.observeValues { patches += $0 }
 
-        array.removeLast()
+        XCTAssertEqual(array.removeLast(), 3)
 
         XCTAssertEqual(array[array.indices], [1, 2])
         XCTAssertEqual(patches, [
@@ -383,7 +379,7 @@ class ReactiveArrayTests: XCTestCase {
 
         var patches: [Change<Int>] = []
 
-        var array = ReactiveArray([1, 2, 3])
+        let array = ReactiveArray([1, 2, 3])
 
         array.signal.observeValues { patches += $0 }
 
@@ -400,7 +396,7 @@ class ReactiveArrayTests: XCTestCase {
 
         var patches: [Change<Int>] = []
 
-        var array = ReactiveArray([1, 2, 3])
+        let array = ReactiveArray([1, 2, 3])
 
         array.signal.observeValues { patches += $0 }
 
@@ -418,11 +414,11 @@ class ReactiveArrayTests: XCTestCase {
 
         var patches: [Change<Int>] = []
         
-        var array = ReactiveArray([1, 2, 3])
+        let array = ReactiveArray([1, 2, 3])
         
         array.signal.observeValues { patches += $0 }
         
-        array.remove(at: 1)
+        XCTAssertEqual(array.remove(at: 1), 2)
         
         XCTAssertEqual(array[array.indices], [1, 3])
         XCTAssertEqual(patches, [
@@ -430,11 +426,11 @@ class ReactiveArrayTests: XCTestCase {
             ])
     }
 
-    func test_remove_range() {
+    func test_remove_subrange() {
         
         var patches: [Change<Int>] = []
         
-        var array = ReactiveArray([1, 2, 3])
+        let array = ReactiveArray([1, 2, 3])
         
         array.signal.observeValues { patches += $0 }
 

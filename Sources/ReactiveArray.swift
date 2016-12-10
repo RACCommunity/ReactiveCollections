@@ -2,10 +2,14 @@ import Foundation
 import ReactiveSwift
 import enum Result.NoError
 
+// MARK: - Change
+
 public enum Change<T> {
     case insert(element: T, at: Int)
     case remove(element: T, at: Int)
 }
+
+// MARK: - ReactiveArray
 
 public final class ReactiveArray<Element> {
 
@@ -25,11 +29,17 @@ public final class ReactiveArray<Element> {
         (signal, innerObserver) = Signal<[Change<Element>], NoError>.pipe()
     }
 
+    public convenience init() {
+        self.init([])
+    }
+
     deinit {
         innerObserver.sendCompleted()
     }
 
 }
+
+// MARK: - ExpressibleByArrayLiteral
 
 extension ReactiveArray: ExpressibleByArrayLiteral {
 
@@ -38,16 +48,15 @@ extension ReactiveArray: ExpressibleByArrayLiteral {
     }
 }
 
+// MARK: - MutableCollection
+
 extension ReactiveArray: MutableCollection {
 
-    public typealias SubSequence = ArraySlice<Element>
-    public typealias Index = Int
-
-    public var startIndex: Index {
+    public var startIndex: Int {
         return elements.startIndex
     }
 
-    public var endIndex: Index {
+    public var endIndex: Int {
         return elements.endIndex
     }
 
@@ -60,7 +69,7 @@ extension ReactiveArray: MutableCollection {
         }
     }
 
-    public subscript(bounds: Range<Int>) -> SubSequence {
+    public subscript(bounds: Range<Int>) -> ArraySlice<Element> {
         get {
             return elements[bounds]
         }
@@ -70,35 +79,48 @@ extension ReactiveArray: MutableCollection {
     }
 }
 
+// MARK: - RandomAccessCollection
+
 extension ReactiveArray: RandomAccessCollection {
 
     public typealias Indices = CountableRange<Int>
 }
 
-extension ReactiveArray: RangeReplaceableCollection {
+// MARK: - RangeReplaceableCollection
 
-    public convenience init() {
-        self.init([])
-    }
+extension ReactiveArray: RangeReplaceableCollection {
 
     public convenience init(repeating repeatedValue: Element, count: Int) {
         self.init(Array(repeating: repeatedValue, count: count))
     }
 
-    public func reserveCapacity(_ n: Int) {
-        elements.reserveCapacity(n)
+    public func append(_ newElement: Element) {
+        insert(newElement, at: endIndex)
     }
 
-    // TODO: Implement a custom append(contentsOf:) to behave like an 
-    // insert(contentsOf:at:), trigger a single update instead of N with N being
-    // the number of elements appended
+    public func append<S : Sequence>(contentsOf newElements: S) where S.Iterator.Element == Element {
+        reserveCapacity(count + newElements.underestimatedCount)
+        insert(contentsOf: Array(newElements), at: endIndex)
+    }
 
-    /// NOTE: We can't use the default implementation when we don't want to keep
-    /// array's capacity since Swift Standard Library initializes a whole new
-    /// instance as an optimization
+    public func insert(_ newElement: Element, at i: Int) {
+        replaceSubrange(i..<i, with: CollectionOfOne(newElement))
+    }
+
+    public func insert<C : Collection>(contentsOf newElements: C, at i: Int) where C.Iterator.Element == Element {
+        replaceSubrange(i..<i, with: newElements)
+    }
+
+    public func remove(at position: Int) -> Element {
+        precondition(!isEmpty, "can't remove from an empty array")
+        let result = self[position]
+        removeSubrange(position..<index(after: position))
+        return result
+    }
+
     public func removeAll(keepingCapacity keepCapacity: Bool = false) {
         if keepCapacity {
-            replaceSubrange(startIndex..<endIndex, with: EmptyCollection())
+            removeSubrange(startIndex..<endIndex)
         } else {
 
             let changes = elements[indices]
@@ -109,6 +131,56 @@ extension ReactiveArray: RangeReplaceableCollection {
 
             innerObserver.send(value: changes)
         }
+    }
+
+    public func removeFirst() -> Element {
+        precondition(!isEmpty, "can't remove first element from an empty array")
+        return remove(at: startIndex)
+    }
+
+    public func removeFirst(_ n: Int) {
+        precondition(n >= 0, "number of elements to remove should be non-negative")
+        precondition(n <= count, "can't remove more items from an array than it has")
+        removeSubrange(startIndex..<startIndex.advanced(by: n))
+    }
+
+    public func removeLast() -> Element {
+        precondition(!isEmpty, "can't remove last element from an empty array")
+        return remove(at: index(before: endIndex))
+    }
+
+    public func removeLast(_ n: Int) {
+        precondition(n >= 0, "number of elements to remove should be non-negative")
+        precondition(n <= count, "can't remove more items from an array than it has")
+        removeSubrange(endIndex.advanced(by: -n)..<endIndex)
+    }
+
+    public func removeSubrange(_ bounds: ClosedRange<Int>) {
+        replaceSubrange(bounds, with: EmptyCollection())
+    }
+
+    public func removeSubrange(_ bounds: CountableRange<Int>) {
+        replaceSubrange(bounds, with: EmptyCollection())
+    }
+
+    public func removeSubrange(_ bounds: CountableClosedRange<Int>) {
+        replaceSubrange(bounds, with: EmptyCollection())
+    }
+
+    public func removeSubrange(_ bounds: Range<Int>) {
+        replaceSubrange(bounds, with: EmptyCollection())
+    }
+
+    public func replaceSubrange<C>(_ subrange: ClosedRange<Int>, with newElements: C) where C : Collection, C.Iterator.Element == Element {
+        replaceSubrange(Range(subrange), with: newElements)
+    }
+
+    public func replaceSubrange<C>(_ subrange: CountableRange<Int>, with newElements: C) where C : Collection, C.Iterator.Element == Element {
+        replaceSubrange(Range(subrange), with: newElements)
+    }
+
+    public func replaceSubrange<C>(_ subrange: CountableClosedRange<Int>, with newElements: C) where C : Collection, C.Iterator.Element == Element {
+        replaceSubrange(Range(subrange), with: newElements)
     }
 
     public func replaceSubrange<C>(_ subrange: Range<Int>, with newElements: C) where C: Collection, C.Iterator.Element == Element {
@@ -127,6 +199,10 @@ extension ReactiveArray: RangeReplaceableCollection {
         elements.replaceSubrange(subrange, with: newElements)
 
         innerObserver.send(value: changes)
+    }
+
+    public func reserveCapacity(_ n: Int) {
+        elements.reserveCapacity(n)
     }
 }
 
