@@ -59,10 +59,6 @@ public final class ReactiveArray<Element> {
             .concat(SignalProducer(signal: signal))
     }
 
-    public var capacity: Int {
-        return elements.capacity
-    }
-
     public init(_ elements: [Element]) {
         self.elements = ContiguousArray(elements)
 
