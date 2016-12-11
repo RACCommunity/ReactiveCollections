@@ -324,8 +324,6 @@ class ReactiveArrayTests: XCTestCase {
 
         let array = ReactiveArray([1, 2, 3])
 
-        let initialCapacity = array.capacity
-
         array.signal.observeValues {
             XCTAssertNil(changeset)
             changeset = $0
@@ -334,7 +332,6 @@ class ReactiveArrayTests: XCTestCase {
         array.removeAll(keepingCapacity: true)
 
         XCTAssertEqual(array[array.indices], [])
-        XCTAssertEqual(array.capacity, initialCapacity)
         XCTAssertEqual(changeset, Changeset(
             deletions: [
                 Remove(element: 1, at: 0),
