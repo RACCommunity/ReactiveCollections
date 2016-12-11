@@ -506,6 +506,98 @@ class ReactiveArrayTests: XCTestCase {
             ])
         )
     }
+
+    // MARK: - Producer tests
+
+    func test_producer() {
+
+        var changesets: [Changeset<Int>] = []
+
+        let array = ReactiveArray([1, 2, 3])
+
+        array.producer.startWithValues { changesets.append($0) }
+
+        array.append(4)
+
+        array.removeAll()
+
+        let expectedChangesets = [
+            Changeset(
+                insertions: [
+                    Insert(element: 1, at: 0),
+                    Insert(element: 2, at: 1),
+                    Insert(element: 3, at: 2)
+                ]),
+            Changeset(
+                insertions: [
+                    Insert(element: 4, at: 3)
+                ]),
+            Changeset(
+                deletions: [
+                    Remove(element: 1, at: 0),
+                    Remove(element: 2, at: 1),
+                    Remove(element: 3, at: 2),
+                    Remove(element: 4, at: 3)
+                ])
+        ]
+
+        zip(changesets, expectedChangesets).forEach { XCTAssertEqual($0, $1) }
+    }
+
+    func test_producer_with_up_to_date_changes() {
+
+        var changesets: [Changeset<Int>] = []
+
+        let array = ReactiveArray([1, 2, 3])
+
+        let producer = array.producer
+
+        array.append(4)
+
+        producer.startWithValues { changesets.append($0) }
+
+        array.removeAll()
+
+        let expectedChangesets = [
+            Changeset(
+                insertions: [
+                    Insert(element: 1, at: 0),
+                    Insert(element: 2, at: 1),
+                    Insert(element: 3, at: 2),
+                    Insert(element: 4, at: 3)
+                ]),
+            Changeset(
+                deletions: [
+                    Remove(element: 1, at: 0),
+                    Remove(element: 2, at: 1),
+                    Remove(element: 3, at: 2),
+                    Remove(element: 4, at: 3)
+                ])
+        ]
+
+        zip(changesets, expectedChangesets).forEach { XCTAssertEqual($0, $1) }
+    }
+
+    func test_producer_not_retaining_array() {
+
+        let completedExpectation = expectation(description: "Completed expectation")
+
+        var array = ReactiveArray([1, 2, 3]) as Optional
+
+        let producer = array!.producer
+
+        array = nil
+
+        producer
+            .on(completed: {
+                completedExpectation.fulfill()
+            }, value: { _ in
+                XCTAssertFalse(false, "Producer should not send any values") }
+            )
+            .start()
+
+        waitForExpectations(timeout: 1.0, handler: nil)
+    }
 }
 
 // MARK: - Helpers
