@@ -1,6 +1,6 @@
 import Foundation
 import ReactiveSwift
-import enum Result.NoError
+import Result
 
 // MARK: - Changeset
 
@@ -43,6 +43,21 @@ public final class ReactiveArray<Element> {
     fileprivate let innerObserver: Observer<Changeset<Element>, NoError>
 
     public let signal: Signal<Changeset<Element>, NoError>
+
+    public var producer: SignalProducer<Changeset<Element>, NoError> {
+        return SignalProducer.attempt { [weak self] () -> Result<Changeset<Element>, NSError> in
+            guard let `self` = self else { return .failure(NSError()) }
+
+            return .success(
+                Changeset(insertions:
+                    self.changes(inserting: self[self.indices], at: Range(self.indices))
+                )
+            )
+
+            }
+            .flatMapError { _ in .empty }
+            .concat(SignalProducer(signal: signal))
+    }
 
     public var capacity: Int {
         return elements.capacity
