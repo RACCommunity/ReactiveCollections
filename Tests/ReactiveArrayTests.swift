@@ -106,7 +106,13 @@ class ReactiveArrayTests: XCTestCase {
         array[3] = 4
 
         XCTAssertEqual(array[array.indices], [1, 2, 3, 4])
-        XCTAssertEqual(changeset, Changeset(insertions: [Insert(element: 4, at: 3)]))
+        XCTAssertNotNil(changeset)
+        XCTAssertTrue(changeset! == Changeset(
+            inserts: [.item(4, at: 3)],
+            removes: [],
+            updates: []
+            )
+        )
     }
 
     func test_subscripting_insert_at_head() {
@@ -123,7 +129,13 @@ class ReactiveArrayTests: XCTestCase {
         array[0] = 3
 
         XCTAssertEqual(array[array.indices], [3, 1, 2, 3])
-        XCTAssertEqual(changeset, Changeset(insertions: [Insert(element: 3, at: 0)]))
+        XCTAssertNotNil(changeset)
+        XCTAssertTrue(changeset! == Changeset(
+            inserts: [.item(3, at: 0)],
+            removes: [],
+            updates: []
+            )
+        )
     }
 
     // MARK: - Replace tests
@@ -142,64 +154,51 @@ class ReactiveArrayTests: XCTestCase {
         array.replaceSubrange(1...2, with: [1, 1])
 
         XCTAssertEqual(array[array.indices], [1, 1, 1])
-        XCTAssertEqual(changeset, Changeset(
-                deletions: [
-                    Remove(element: 2, at: 1),
-                    Remove(element: 3, at: 2)
-                ],
-                insertions: [
-                    Insert(element: 1, at: 1),
-                    Insert(element: 1, at: 2)
-                ])
+        XCTAssertNotNil(changeset)
+        XCTAssertEqual(changeset!, Changeset(
+            inserts: [.items([1, 1], range: 1..<3)],
+            removes: [.items([2, 3], range: 1..<3)],
+            updates: []
             )
+        )
 
         changeset = nil
 
         array.replaceSubrange(0...1, with: [0, 0, 0])
 
         XCTAssertEqual(array[array.indices], [0, 0, 0, 1])
-        XCTAssertEqual(changeset, Changeset(
-                deletions: [
-                    Remove(element: 1, at: 0),
-                    Remove(element: 1, at: 1)
-                ],
-                insertions: [
-                    Insert(element: 0, at: 0),
-                    Insert(element: 0, at: 1),
-                    Insert(element: 0, at: 2)
-                ])
+        XCTAssertNotNil(changeset)
+        XCTAssertEqual(changeset!, Changeset(
+            inserts: [.items([0, 0, 0], range: 0..<3)],
+            removes: [.items([1, 1], range: 0..<2)],
+            updates: []
             )
+        )
 
         changeset = nil
 
         array.replaceSubrange(0...0, with: [1])
 
         XCTAssertEqual(array[array.indices], [1, 0, 0, 1])
-        XCTAssertEqual(changeset, Changeset(
-            deletions:  [Remove(element: 0, at: 0)],
-            insertions: [Insert(element: 1, at: 0)]
-            ))
+        XCTAssertNotNil(changeset)
+        XCTAssertEqual(changeset!, Changeset(
+            inserts: [.item(1, at: 0)],
+            removes: [.item(0, at: 0)],
+            updates: []
+            )
+        )
 
         changeset = nil
 
         array.replaceSubrange(array.indices, with: Array(0...5))
 
         XCTAssertEqual(array[array.indices], [0, 1, 2, 3, 4, 5])
-        XCTAssertEqual(changeset, Changeset(
-            deletions: [
-                Remove(element: 1, at: 0),
-                Remove(element: 0, at: 1),
-                Remove(element: 0, at: 2),
-                Remove(element: 1, at: 3)
-            ],
-            insertions: [
-                Insert(element: 0, at: 0),
-                Insert(element: 1, at: 1),
-                Insert(element: 2, at: 2),
-                Insert(element: 3, at: 3),
-                Insert(element: 4, at: 4),
-                Insert(element: 5, at: 5)
-            ])
+        XCTAssertNotNil(changeset)
+        XCTAssertEqual(changeset!, Changeset(
+            inserts: [.items([0, 1, 2, 3, 4, 5], range: 0..<6)],
+            removes: [.items([1, 0, 0, 1], range: 0..<4)],
+            updates: []
+            )
         )
     }
 
@@ -219,7 +218,13 @@ class ReactiveArrayTests: XCTestCase {
         array.append(4)
 
         XCTAssertEqual(array[array.indices], [1, 2, 3, 4])
-        XCTAssertEqual(changeset, Changeset(insertions: [Insert(element: 4, at: 3)]))
+        XCTAssertNotNil(changeset)
+        XCTAssertTrue(changeset! == Changeset(
+            inserts: [.item(4, at: 3)],
+            removes: [],
+            updates: []
+            )
+        )
     }
 
     func test_append_contents_of() {
@@ -236,12 +241,12 @@ class ReactiveArrayTests: XCTestCase {
         array.append(contentsOf: [4, 5, 6])
 
         XCTAssertEqual(array[array.indices], [1, 2, 3, 4, 5, 6])
-        XCTAssertEqual(changeset, Changeset(
-            insertions: [
-                Insert(element: 4, at: 3),
-                Insert(element: 5, at: 4),
-                Insert(element: 6, at: 5)
-            ])
+        XCTAssertNotNil(changeset)
+        XCTAssertTrue(changeset! == Changeset(
+            inserts: [.items([4, 5, 6], range: 3..<6)],
+            removes: [],
+            updates: []
+            )
         )
     }
 
@@ -261,14 +266,26 @@ class ReactiveArrayTests: XCTestCase {
         array.insert(4, at: array.endIndex)
 
         XCTAssertEqual(array[array.indices], [1, 2, 3, 4])
-        XCTAssertEqual(changeset, Changeset(insertions: [Insert(element: 4, at: 3)]))
+        XCTAssertNotNil(changeset)
+        XCTAssertEqual(changeset!, Changeset(
+            inserts: [.item(4, at: 3)],
+            removes: [],
+            updates: []
+            )
+        )
 
         changeset = nil
 
         array.insert(0, at: 0)
 
         XCTAssertEqual(array[array.indices], [0, 1, 2, 3, 4])
-        XCTAssertEqual(changeset, Changeset(insertions: [Insert(element: 0, at: 0)]))
+        XCTAssertNotNil(changeset)
+        XCTAssertEqual(changeset!, Changeset(
+            inserts: [.item(0, at: 0)],
+            removes: [],
+            updates: []
+            )
+        )
     }
 
     func test_insert_contents_of() {
@@ -285,12 +302,12 @@ class ReactiveArrayTests: XCTestCase {
         array.insert(contentsOf: [4, 5, 6], at: 0)
 
         XCTAssertEqual(array[array.indices], [4, 5, 6, 1, 2, 3])
-        XCTAssertEqual(changeset, Changeset(
-            insertions: [
-                Insert(element: 4, at: 0),
-                Insert(element: 5, at: 1),
-                Insert(element: 6, at: 2)
-            ])
+        XCTAssertNotNil(changeset)
+        XCTAssertTrue(changeset! == Changeset(
+            inserts: [.items([4, 5, 6], range: 0..<3)],
+            removes: [],
+            updates: []
+            )
         )
     }
 
@@ -310,11 +327,12 @@ class ReactiveArrayTests: XCTestCase {
         array.removeAll()
 
         XCTAssertEqual(array[array.indices], [])
-        XCTAssertEqual(changeset, Changeset(deletions: [
-            Remove(element: 1, at: 0),
-            Remove(element: 2, at: 1),
-            Remove(element: 3, at: 2)
-            ])
+        XCTAssertNotNil(changeset)
+        XCTAssertEqual(changeset!, Changeset(
+            inserts: [],
+            removes: [.items([1, 2, 3], range: 0..<3)],
+            updates: []
+            )
         )
     }
 
@@ -332,12 +350,12 @@ class ReactiveArrayTests: XCTestCase {
         array.removeAll(keepingCapacity: true)
 
         XCTAssertEqual(array[array.indices], [])
-        XCTAssertEqual(changeset, Changeset(
-            deletions: [
-                Remove(element: 1, at: 0),
-                Remove(element: 2, at: 1),
-                Remove(element: 3, at: 2)
-            ])
+        XCTAssertNotNil(changeset)
+        XCTAssertEqual(changeset!, Changeset(
+            inserts: [],
+            removes: [.items([1, 2, 3], range: 0..<3)],
+            updates: []
+            )
         )
     }
 
@@ -355,7 +373,13 @@ class ReactiveArrayTests: XCTestCase {
         XCTAssertEqual(array.removeFirst(), 1)
 
         XCTAssertEqual(array[array.indices], [2, 3])
-        XCTAssertEqual(changeset, Changeset(deletions: [Remove(element: 1, at: 0)]))
+        XCTAssertNotNil(changeset)
+        XCTAssertEqual(changeset!, Changeset(
+            inserts: [],
+            removes: [.item(1, at: 0)],
+            updates: []
+            )
+        )
     }
 
     func test_remove_first2() {
@@ -372,11 +396,12 @@ class ReactiveArrayTests: XCTestCase {
         array.removeFirst(2)
 
         XCTAssertEqual(array[array.indices], [3])
-        XCTAssertEqual(changeset, Changeset(
-            deletions: [
-                Remove(element: 1, at: 0),
-                Remove(element: 2, at: 1)
-            ])
+        XCTAssertNotNil(changeset)
+        XCTAssertEqual(changeset!, Changeset(
+            inserts: [],
+            removes: [.items([1, 2], range: 0..<2)],
+            updates: []
+            )
         )
     }
 
@@ -394,12 +419,12 @@ class ReactiveArrayTests: XCTestCase {
         array.removeFirst(3)
 
         XCTAssertEqual(array[array.indices], [])
-        XCTAssertEqual(changeset, Changeset(
-            deletions: [
-                Remove(element: 1, at: 0),
-                Remove(element: 2, at: 1),
-                Remove(element: 3, at: 2)
-            ])
+        XCTAssertNotNil(changeset)
+        XCTAssertEqual(changeset!, Changeset(
+            inserts: [],
+            removes: [.items([1, 2, 3], range: 0..<3)],
+            updates: []
+            )
         )
     }
 
@@ -417,7 +442,13 @@ class ReactiveArrayTests: XCTestCase {
         XCTAssertEqual(array.removeLast(), 3)
 
         XCTAssertEqual(array[array.indices], [1, 2])
-        XCTAssertEqual(changeset, Changeset(deletions: [Remove(element: 3, at: 2)]))
+        XCTAssertNotNil(changeset)
+        XCTAssertEqual(changeset!, Changeset(
+            inserts: [],
+            removes: [.item(3, at: 2)],
+            updates: []
+            )
+        )
     }
 
     func test_remove_last2() {
@@ -434,11 +465,12 @@ class ReactiveArrayTests: XCTestCase {
         array.removeLast(2)
 
         XCTAssertEqual(array[array.indices], [1])
-        XCTAssertEqual(changeset, Changeset(
-            deletions: [
-                Remove(element: 2, at: 1),
-                Remove(element: 3, at: 2)
-            ])
+        XCTAssertNotNil(changeset)
+        XCTAssertEqual(changeset!, Changeset(
+            inserts: [],
+            removes: [.items([2, 3], range: 1..<3)],
+            updates: []
+            )
         )
     }
 
@@ -456,12 +488,12 @@ class ReactiveArrayTests: XCTestCase {
         array.removeLast(3)
 
         XCTAssertEqual(array[array.indices], [])
-        XCTAssertEqual(changeset, Changeset(
-            deletions: [
-                Remove(element: 1, at: 0),
-                Remove(element: 2, at: 1),
-                Remove(element: 3, at: 2)
-            ])
+        XCTAssertNotNil(changeset)
+        XCTAssertEqual(changeset!, Changeset(
+            inserts: [],
+            removes: [.items([1, 2, 3], range: 0..<3)],
+            updates: []
+            )
         )
     }
 
@@ -479,7 +511,13 @@ class ReactiveArrayTests: XCTestCase {
         XCTAssertEqual(array.remove(at: 1), 2)
         
         XCTAssertEqual(array[array.indices], [1, 3])
-        XCTAssertEqual(changeset, Changeset(deletions: [Remove(element: 2, at: 1)]))
+        XCTAssertNotNil(changeset)
+        XCTAssertEqual(changeset!, Changeset(
+            inserts: [],
+            removes: [.item(2, at: 1)],
+            updates: []
+            )
+        )
     }
 
     func test_remove_subrange() {
@@ -496,11 +534,12 @@ class ReactiveArrayTests: XCTestCase {
         array.removeSubrange(1...2)
         
         XCTAssertEqual(array[array.indices], [1])
-        XCTAssertEqual(changeset, Changeset(
-            deletions: [
-                Remove(element: 2, at: 1),
-                Remove(element: 3, at: 2)
-            ])
+        XCTAssertNotNil(changeset)
+        XCTAssertEqual(changeset!, Changeset(
+            inserts: [],
+            removes: [.items([2, 3], range: 1..<3)],
+            updates: []
+            )
         )
     }
 
@@ -520,22 +559,20 @@ class ReactiveArrayTests: XCTestCase {
 
         let expectedChangesets = [
             Changeset(
-                insertions: [
-                    Insert(element: 1, at: 0),
-                    Insert(element: 2, at: 1),
-                    Insert(element: 3, at: 2)
-                ]),
+                inserts: [.items([1, 2, 3], range: 0..<3)],
+                removes: [],
+                updates: []
+            ),
             Changeset(
-                insertions: [
-                    Insert(element: 4, at: 3)
-                ]),
+                inserts: [.item(4, at: 3)],
+                removes: [],
+                updates: []
+            ),
             Changeset(
-                deletions: [
-                    Remove(element: 1, at: 0),
-                    Remove(element: 2, at: 1),
-                    Remove(element: 3, at: 2),
-                    Remove(element: 4, at: 3)
-                ])
+                inserts: [],
+                removes: [.items([1, 2, 3, 4], range: 0..<4)],
+                updates: []
+            )
         ]
 
         zip(changesets, expectedChangesets).forEach { XCTAssertEqual($0, $1) }
@@ -557,19 +594,15 @@ class ReactiveArrayTests: XCTestCase {
 
         let expectedChangesets = [
             Changeset(
-                insertions: [
-                    Insert(element: 1, at: 0),
-                    Insert(element: 2, at: 1),
-                    Insert(element: 3, at: 2),
-                    Insert(element: 4, at: 3)
-                ]),
+                inserts: [.items([1, 2, 3, 4], range: 0..<4)],
+                removes: [],
+                updates: []
+            ),
             Changeset(
-                deletions: [
-                    Remove(element: 1, at: 0),
-                    Remove(element: 2, at: 1),
-                    Remove(element: 3, at: 2),
-                    Remove(element: 4, at: 3)
-                ])
+                inserts: [],
+                removes: [.items([1, 2, 3, 4], range: 0..<4)],
+                updates: []
+            )
         ]
 
         zip(changesets, expectedChangesets).forEach { XCTAssertEqual($0, $1) }
@@ -599,48 +632,13 @@ class ReactiveArrayTests: XCTestCase {
 
 // MARK: - Helpers
 
-// TODO: Keep while we haven't `SE-0143: Conditional conformances` (expected in Swift 4)
-
-private protocol ChangeIndexable {
-    associatedtype Element
-
-    var element: Element { get }
-    var index: Int { get }
-}
-
-extension Remove: ChangeIndexable {}
-extension Insert: ChangeIndexable {}
-
-private func equals<C: ChangeIndexable, E: Equatable>(_ lhs: C, _ rhs: C) -> Bool where C.Element == E {
-    return lhs.element == rhs.element && rhs.index == rhs.index
-}
-
-private func equals<C: ChangeIndexable, E: Equatable>(_ lhs: [C], _ rhs: [C]) -> Bool where C.Element == E  {
-    guard lhs.count == rhs.count else { return false }
-
-    return zip(lhs, rhs)
-        .map(equals)
-        .reduce(true, { $0 && $1 })
-}
-
-private func equals<E: Equatable>(_ lhs: Changeset<E>, _ rhs: Changeset<E>) -> Bool {
-    guard
-        lhs.deletions.count == rhs.deletions.count,
-        lhs.insertions.count == rhs.insertions.count
-        else { return false }
-
-    return equals(lhs.deletions, rhs.deletions)
-        && equals(lhs.insertions, rhs.insertions)
-}
-
 func XCTAssertEqual<T : Equatable>(
-    _ expression1: @autoclosure () -> Changeset<T>?,
+    _ expression1: @autoclosure () -> Changeset<T>,
     _ expression2: @autoclosure () -> Changeset<T>,
     _ message: @autoclosure () -> String = "",
     file: StaticString = #file,
     line: UInt = #line)
 {
     let (lhs, rhs) = (expression1(), expression2())
-    XCTAssertNotNil(lhs)
-    XCTAssertTrue(equals(lhs!, rhs), "(\"\(lhs)\") is not equal to (\"\(rhs)\")")
+    XCTAssert(lhs == rhs, "(\"\(lhs)\") is not equal to (\"\(rhs)\")", file: file, line: line)
 }

@@ -2,40 +2,6 @@ import Foundation
 import ReactiveSwift
 import Result
 
-// MARK: - Changeset
-
-public struct Insert<Element> {
-    public let element: Element
-    public let index: Int
-
-    public init(element: Element, at index: Int) {
-        self.element = element
-        self.index = index
-    }
-}
-
-public struct Remove<Element> {
-    public let element: Element
-    public let index: Int
-
-    public init(element: Element, at index: Int) {
-        self.element = element
-        self.index = index
-    }
-}
-
-public struct Changeset<Element> {
-    public let deletions: [Remove<Element>]
-    public let insertions: [Insert<Element>]
-
-    public init(deletions: [Remove<Element>] = [], insertions: [Insert<Element>] = []) {
-        self.deletions = deletions
-        self.insertions = insertions
-    }
-}
-
-// MARK: - ReactiveArray
-
 public final class ReactiveArray<Element> {
 
     fileprivate var elements: ContiguousArray<Element>
@@ -49,8 +15,9 @@ public final class ReactiveArray<Element> {
             guard let `self` = self else { return .failure(NSError()) }
 
             return .success(
-                Changeset(insertions:
-                    self.changes(inserting: self[self.indices], at: Range(self.indices))
+                Changeset.generate(
+                    insert: (items: self[self.indices], range: Range(self.indices)),
+                    remove: nil
                 )
             )
 
@@ -156,9 +123,12 @@ extension ReactiveArray: RangeReplaceableCollection {
 
     public func removeAll(keepingCapacity keepCapacity: Bool = false) {
         if keepCapacity {
-            removeSubrange(startIndex..<endIndex)
+            removeSubrange(indices)
         } else {
-            let changeset = Changeset(deletions: changes(removing: elements, at: Range(indices)))
+            let changeset = Changeset.generate(
+                insert: nil,
+                remove: (items: self[indices], range: Range(indices))
+            )
 
             elements.removeAll()
 
@@ -218,9 +188,9 @@ extension ReactiveArray: RangeReplaceableCollection {
 
     public func replaceSubrange<C>(_ subrange: Range<Int>, with newElements: C) where C: Collection, C.Iterator.Element == Element {
 
-        let changeset = Changeset(
-            deletions:  changes(removing: elements[subrange], at: subrange),
-            insertions: changes(inserting: newElements, at: subrange)
+        let changeset = Changeset.generate(
+            insert: (items: ArraySlice(newElements), range: subrange),
+            remove: (items: elements[subrange], range: subrange)
         )
 
         elements.replaceSubrange(subrange, with: newElements)
@@ -231,28 +201,4 @@ extension ReactiveArray: RangeReplaceableCollection {
     public func reserveCapacity(_ n: Int) {
         elements.reserveCapacity(n)
     }
-
-}
-
-// MARK: - Helpers
-
-extension ReactiveArray {
-
-    fileprivate func changes<C>(removing elements: C, at subrange: Range<Int>) -> [Remove<Element>] where C: Collection, C.Iterator.Element == Element {
-        return elements
-            .enumerated()
-            .map { ($0.advanced(by: subrange.lowerBound), $1) }
-            .map(flip(Remove.init))
-    }
-
-    fileprivate func changes<C>(inserting elements: C, at subrange: Range<Int>) -> [Insert<Element>] where C: Collection, C.Iterator.Element == Element {
-        return elements
-            .enumerated()
-            .map { ($0.advanced(by: subrange.lowerBound), $1) }
-            .map(flip(Insert.init))
-    }
-}
-
-private func flip<T, U, V>(_ function: @escaping (T, U) -> V) -> (U, T) -> V {
-    return { function($1, $0) }
 }
