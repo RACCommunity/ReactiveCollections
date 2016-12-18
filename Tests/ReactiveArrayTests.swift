@@ -92,7 +92,7 @@ class ReactiveArrayTests: XCTestCase {
         XCTAssertEqual(array[2], 3)
     }
 
-    func test_subscripting_insert_at_tail() {
+    func test_subscripting_replace_at_head() {
 
         var changeset: Changeset<Int>? = nil
 

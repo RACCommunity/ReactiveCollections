@@ -68,7 +68,7 @@ extension ReactiveArray: MutableCollection {
             return elements[position]
         }
         set {
-            replaceSubrange(position..<position, with: CollectionOfOne(newValue))
+            replaceSubrange(position..<index(after: position), with: CollectionOfOne(newValue))
         }
     }
 
