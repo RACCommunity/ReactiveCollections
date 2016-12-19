@@ -4,32 +4,19 @@ import Result
 
 public final class ReactiveArray<Element> {
 
+    public typealias Snapshot = ContiguousArray<Element>
+    public typealias Change = Delta<Snapshot, IndexSet>
+
+    public let signal: Signal<Change, NoError>
+
     fileprivate var elements: ContiguousArray<Element>
 
-    fileprivate let innerObserver: Observer<Changeset<Element>, NoError>
-
-    public let signal: Signal<Changeset<Element>, NoError>
-
-    public var producer: SignalProducer<Changeset<Element>, NoError> {
-        return SignalProducer.attempt { [weak self] () -> Result<Changeset<Element>, NSError> in
-            guard let `self` = self else { return .failure(NSError()) }
-
-            return .success(
-                Changeset.generate(
-                    insert: (items: self[self.indices], range: Range(self.indices)),
-                    remove: nil
-                )
-            )
-
-            }
-            .flatMapError { _ in .empty }
-            .concat(SignalProducer(signal: signal))
-    }
+    fileprivate let innerObserver: Observer<Change, NoError>
 
     public init(_ elements: [Element]) {
         self.elements = ContiguousArray(elements)
 
-        (signal, innerObserver) = Signal<Changeset<Element>, NoError>.pipe()
+        (signal, innerObserver) = Signal<Change, NoError>.pipe()
     }
 
     public convenience init() {
@@ -40,6 +27,26 @@ public final class ReactiveArray<Element> {
         innerObserver.sendCompleted()
     }
 
+}
+
+extension ReactiveArray {
+
+    public var producer: SignalProducer<Change, NoError> {
+        return SignalProducer<Change, NSError>.attempt { [weak self] in
+            guard let `self` = self else { return .failure(NSError()) }
+
+            return .success(
+                Delta(
+                    previous: [],
+                    current: self.elements,
+                    inserts: IndexSet(integersIn: self.indices),
+                    deletes: .empty,
+                    updates: .empty
+                )
+            )}
+            .flatMapError { _ in .empty }
+            .concat(SignalProducer(signal: signal))
+    }
 }
 
 // MARK: - ExpressibleByArrayLiteral
@@ -125,14 +132,20 @@ extension ReactiveArray: RangeReplaceableCollection {
         if keepCapacity {
             removeSubrange(indices)
         } else {
-            let changeset = Changeset.generate(
-                insert: nil,
-                remove: (items: self[indices], range: Range(indices))
-            )
+
+            let previous = elements
 
             elements.removeAll()
 
-            innerObserver.send(value: changeset)
+            innerObserver.send(value:
+                Delta(
+                    previous: previous,
+                    current: elements,
+                    inserts: .empty,
+                    deletes: IndexSet(integersIn: previous.indices),
+                    updates: .empty
+                )
+            )
         }
     }
 
@@ -188,14 +201,23 @@ extension ReactiveArray: RangeReplaceableCollection {
 
     public func replaceSubrange<C>(_ subrange: Range<Int>, with newElements: C) where C: Collection, C.Iterator.Element == Element {
 
-        let changeset = Changeset.generate(
-            insert: (items: ArraySlice(newElements), range: subrange),
-            remove: (items: elements[subrange], range: subrange)
-        )
+        let previous = elements
 
         elements.replaceSubrange(subrange, with: newElements)
 
-        innerObserver.send(value: changeset)
+        let inserts = IndexSet(integersIn: subrange.lowerBound..<subrange.lowerBound.advanced(by: newElements.underestimatedCount))
+        let deletes = IndexSet(integersIn: subrange)
+        let updates = inserts.intersection(deletes)
+
+        innerObserver.send(value:
+            Delta(
+                previous: previous,
+                current: elements,
+                inserts: inserts.subtracting(updates),
+                deletes: deletes.subtracting(updates),
+                updates: updates
+            )
+        )
     }
 
     public func reserveCapacity(_ n: Int) {

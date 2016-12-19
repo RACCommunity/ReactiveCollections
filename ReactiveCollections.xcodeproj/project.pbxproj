@@ -44,10 +44,10 @@
 		7DE06DDF1DFADD9B003303AB /* ReactiveCollections.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DE06DBD1DFADCAE003303AB /* ReactiveCollections.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7DE06DE01DFADDA0003303AB /* ReactiveSwift.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DE06DD41DFADCE4003303AB /* ReactiveSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7DE06DE11DFADDA0003303AB /* Result.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DE06DD51DFADCE4003303AB /* Result.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		7DF60EED1E007DEF0096283B /* Changeset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF60EEC1E007DEF0096283B /* Changeset.swift */; };
-		7DF60EEE1E007DEF0096283B /* Changeset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF60EEC1E007DEF0096283B /* Changeset.swift */; };
-		7DF60EEF1E007DEF0096283B /* Changeset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF60EEC1E007DEF0096283B /* Changeset.swift */; };
-		7DF60EF01E007DEF0096283B /* Changeset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF60EEC1E007DEF0096283B /* Changeset.swift */; };
+		7DF60EED1E007DEF0096283B /* Delta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF60EEC1E007DEF0096283B /* Delta.swift */; };
+		7DF60EEE1E007DEF0096283B /* Delta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF60EEC1E007DEF0096283B /* Delta.swift */; };
+		7DF60EEF1E007DEF0096283B /* Delta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF60EEC1E007DEF0096283B /* Delta.swift */; };
+		7DF60EF01E007DEF0096283B /* Delta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF60EEC1E007DEF0096283B /* Delta.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -134,7 +134,7 @@
 		7DE06DC51DFADCAF003303AB /* ReactiveCollectionsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReactiveCollectionsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DE06DD41DFADCE4003303AB /* ReactiveSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveSwift.framework; path = Carthage/Build/tvOS/ReactiveSwift.framework; sourceTree = "<group>"; };
 		7DE06DD51DFADCE4003303AB /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/tvOS/Result.framework; sourceTree = "<group>"; };
-		7DF60EEC1E007DEF0096283B /* Changeset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Changeset.swift; sourceTree = "<group>"; };
+		7DF60EEC1E007DEF0096283B /* Delta.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Delta.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -252,7 +252,7 @@
 			children = (
 				7D69AAE01DF9CEE500FCB568 /* ReactiveCollections.h */,
 				7D69AAF71DF9D07800FCB568 /* ReactiveArray.swift */,
-				7DF60EEC1E007DEF0096283B /* Changeset.swift */,
+				7DF60EEC1E007DEF0096283B /* Delta.swift */,
 				7D3D8BE41DF9EAE000E90921 /* Supporting Files */,
 			);
 			name = ReactiveCollections;
@@ -606,7 +606,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D69AAF81DF9D07800FCB568 /* ReactiveArray.swift in Sources */,
-				7DF60EED1E007DEF0096283B /* Changeset.swift in Sources */,
+				7DF60EED1E007DEF0096283B /* Delta.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -623,7 +623,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7DC1E2DA1DFADF9B00A61745 /* ReactiveArray.swift in Sources */,
-				7DF60EF01E007DEF0096283B /* Changeset.swift in Sources */,
+				7DF60EF01E007DEF0096283B /* Delta.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -632,7 +632,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7DE06DAB1DFADB0F003303AB /* ReactiveArray.swift in Sources */,
-				7DF60EEE1E007DEF0096283B /* Changeset.swift in Sources */,
+				7DF60EEE1E007DEF0096283B /* Delta.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -649,7 +649,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7DE06DDA1DFADD69003303AB /* ReactiveArray.swift in Sources */,
-				7DF60EEF1E007DEF0096283B /* Changeset.swift in Sources */,
+				7DF60EEF1E007DEF0096283B /* Delta.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
