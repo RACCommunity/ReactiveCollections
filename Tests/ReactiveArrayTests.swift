@@ -5,6 +5,8 @@ import Result
 
 class ReactiveArrayTests: XCTestCase {
 
+    typealias Change<T> = ReactiveArray<T>.Change
+
     // MARK: - Initializers
 
     func test_initializer() {
@@ -94,493 +96,516 @@ class ReactiveArrayTests: XCTestCase {
 
     func test_subscripting_replace_at_head() {
 
-        var changeset: Changeset<Int>? = nil
+        var changes: [Change<Int>] = []
+        var expectedChanges: [Change<Int>] = []
 
         let array = ReactiveArray([1, 2, 3])
 
-        array.signal.observeValues {
-            XCTAssertNil(changeset)
-            changeset = $0
-        }
-
-        array[3] = 4
-
-        XCTAssertEqual(array[array.indices], [1, 2, 3, 4])
-        XCTAssertNotNil(changeset)
-        XCTAssertTrue(changeset! == Changeset(
-            inserts: [.item(4, at: 3)],
-            removes: [],
-            updates: []
-            )
-        )
-    }
-
-    func test_subscripting_insert_at_head() {
-
-        var changeset: Changeset<Int>? = nil
-
-        let array = ReactiveArray([1, 2, 3])
-
-        array.signal.observeValues {
-            XCTAssertNil(changeset)
-            changeset = $0
-        }
+        array.signal.observeValues { changes.append($0) }
 
         array[0] = 3
 
-        XCTAssertEqual(array[array.indices], [3, 1, 2, 3])
-        XCTAssertNotNil(changeset)
-        XCTAssertTrue(changeset! == Changeset(
-            inserts: [.item(3, at: 0)],
-            removes: [],
-            updates: []
+        expectedChanges.append(
+            Delta(
+                previous: [1, 2, 3],
+                current: [3, 2, 3],
+                inserts: .empty,
+                deletes: .empty,
+                updates: IndexSet(integer: 0)
             )
         )
+
+        XCTAssertEqual(array[array.indices], [3, 2, 3])
+        XCTAssertEqual(changes, expectedChanges)
     }
 
     // MARK: - Replace tests
 
     func test_replace_range() {
 
-        var changeset: Changeset<Int>? = nil
+        var changes: [Change<Int>] = []
+        var expectedChanges: [Change<Int>] = []
 
         let array = ReactiveArray([1, 2, 3])
 
-        array.signal.observeValues {
-            XCTAssertNil(changeset)
-            changeset = $0
-        }
+        array.signal.observeValues { changes.append($0) }
 
         array.replaceSubrange(1...2, with: [1, 1])
 
-        XCTAssertEqual(array[array.indices], [1, 1, 1])
-        XCTAssertNotNil(changeset)
-        XCTAssertEqual(changeset!, Changeset(
-            inserts: [.items([1, 1], range: 1..<3)],
-            removes: [.items([2, 3], range: 1..<3)],
-            updates: []
+        expectedChanges.append(
+            Delta(
+                previous: [1, 2, 3],
+                current: [1, 1, 1],
+                inserts: .empty,
+                deletes: .empty,
+                updates: IndexSet(1...2)
             )
         )
 
-        changeset = nil
+        XCTAssertEqual(array[array.indices], [1, 1, 1])
+        XCTAssertEqual(changes, expectedChanges)
 
         array.replaceSubrange(0...1, with: [0, 0, 0])
 
-        XCTAssertEqual(array[array.indices], [0, 0, 0, 1])
-        XCTAssertNotNil(changeset)
-        XCTAssertEqual(changeset!, Changeset(
-            inserts: [.items([0, 0, 0], range: 0..<3)],
-            removes: [.items([1, 1], range: 0..<2)],
-            updates: []
+        expectedChanges.append(
+            Delta(
+                previous: [1, 1, 1],
+                current: [0, 0, 0, 1],
+                inserts: IndexSet(integer: 2),
+                deletes: .empty,
+                updates: IndexSet(0...1)
             )
         )
 
-        changeset = nil
+        XCTAssertEqual(array[array.indices], [0, 0, 0, 1])
+        XCTAssertEqual(changes, expectedChanges)
 
         array.replaceSubrange(0...0, with: [1])
 
-        XCTAssertEqual(array[array.indices], [1, 0, 0, 1])
-        XCTAssertNotNil(changeset)
-        XCTAssertEqual(changeset!, Changeset(
-            inserts: [.item(1, at: 0)],
-            removes: [.item(0, at: 0)],
-            updates: []
+        expectedChanges.append(
+            Delta(
+                previous: [0, 0, 0, 1],
+                current: [1, 0, 0, 1],
+                inserts: .empty,
+                deletes: .empty,
+                updates: IndexSet(integer: 0)
             )
         )
 
-        changeset = nil
+        XCTAssertEqual(array[array.indices], [1, 0, 0, 1])
+        XCTAssertEqual(changes, expectedChanges)
 
         array.replaceSubrange(array.indices, with: Array(0...5))
 
-        XCTAssertEqual(array[array.indices], [0, 1, 2, 3, 4, 5])
-        XCTAssertNotNil(changeset)
-        XCTAssertEqual(changeset!, Changeset(
-            inserts: [.items([0, 1, 2, 3, 4, 5], range: 0..<6)],
-            removes: [.items([1, 0, 0, 1], range: 0..<4)],
-            updates: []
+        expectedChanges.append(
+            Delta(
+                previous: [1, 0, 0, 1],
+                current: [0, 1, 2, 3, 4, 5],
+                inserts: IndexSet(4...5),
+                deletes: .empty,
+                updates: IndexSet(0...3)
             )
         )
+
+        XCTAssertEqual(array[array.indices], [0, 1, 2, 3, 4, 5])
+        XCTAssertEqual(changes, expectedChanges)
     }
 
     // MARK: - Append tests
 
     func test_append() {
 
-        var changeset: Changeset<Int>? = nil
+        var changes: [Change<Int>] = []
+        var expectedChanges: [Change<Int>] = []
 
         let array = ReactiveArray([1, 2, 3])
 
-        array.signal.observeValues {
-            XCTAssertNil(changeset)
-            changeset = $0
-        }
+        array.signal.observeValues { changes.append($0) }
 
         array.append(4)
 
-        XCTAssertEqual(array[array.indices], [1, 2, 3, 4])
-        XCTAssertNotNil(changeset)
-        XCTAssertTrue(changeset! == Changeset(
-            inserts: [.item(4, at: 3)],
-            removes: [],
-            updates: []
+        expectedChanges.append(
+            Delta(
+                previous: [1, 2, 3],
+                current: [1, 2, 3, 4],
+                inserts: IndexSet(integer: 3),
+                deletes: .empty,
+                updates: .empty
             )
         )
+
+        XCTAssertEqual(array[array.indices], [1, 2, 3, 4])
+        XCTAssertEqual(changes, expectedChanges)
     }
 
     func test_append_contents_of() {
 
-        var changeset: Changeset<Int>? = nil
+        var changes: [Change<Int>] = []
+        var expectedChanges: [Change<Int>] = []
 
         let array = ReactiveArray([1, 2, 3])
 
-        array.signal.observeValues {
-            XCTAssertNil(changeset)
-            changeset = $0
-        }
+        array.signal.observeValues { changes.append($0) }
 
         array.append(contentsOf: [4, 5, 6])
 
-        XCTAssertEqual(array[array.indices], [1, 2, 3, 4, 5, 6])
-        XCTAssertNotNil(changeset)
-        XCTAssertTrue(changeset! == Changeset(
-            inserts: [.items([4, 5, 6], range: 3..<6)],
-            removes: [],
-            updates: []
+        expectedChanges.append(
+            Delta(
+                previous: [1, 2, 3],
+                current: [1, 2, 3, 4, 5, 6],
+                inserts: IndexSet(3..<6),
+                deletes: .empty,
+                updates: .empty
             )
         )
+
+        XCTAssertEqual(array[array.indices], [1, 2, 3, 4, 5, 6])
+        XCTAssertEqual(changes, expectedChanges)
     }
 
     // MARK: - Insert tests
 
     func test_insert_at_index() {
 
-        var changeset: Changeset<Int>? = nil
+        var changes: [Change<Int>] = []
+        var expectedChanges: [Change<Int>] = []
 
         let array = ReactiveArray([1, 2, 3])
 
-        array.signal.observeValues {
-            XCTAssertNil(changeset)
-            changeset = $0
-        }
+        array.signal.observeValues { changes.append($0) }
 
         array.insert(4, at: array.endIndex)
 
-        XCTAssertEqual(array[array.indices], [1, 2, 3, 4])
-        XCTAssertNotNil(changeset)
-        XCTAssertEqual(changeset!, Changeset(
-            inserts: [.item(4, at: 3)],
-            removes: [],
-            updates: []
+        expectedChanges.append(
+            Delta(
+                previous: [1, 2, 3],
+                current: [1, 2, 3, 4],
+                inserts: IndexSet(integer: 3),
+                deletes: .empty,
+                updates: .empty
             )
         )
 
-        changeset = nil
+        XCTAssertEqual(array[array.indices], [1, 2, 3, 4])
+        XCTAssertEqual(changes, expectedChanges)
 
         array.insert(0, at: 0)
 
-        XCTAssertEqual(array[array.indices], [0, 1, 2, 3, 4])
-        XCTAssertNotNil(changeset)
-        XCTAssertEqual(changeset!, Changeset(
-            inserts: [.item(0, at: 0)],
-            removes: [],
-            updates: []
+        expectedChanges.append(
+            Delta(
+                previous: [1, 2, 3, 4],
+                current: [0, 1, 2, 3, 4],
+                inserts: IndexSet(integer: 0),
+                deletes: .empty,
+                updates: .empty
             )
         )
+
+        XCTAssertEqual(array[array.indices], [0, 1, 2, 3, 4])
+        XCTAssertEqual(changes, expectedChanges)
     }
 
     func test_insert_contents_of() {
 
-        var changeset: Changeset<Int>? = nil
+        var changes: [Change<Int>] = []
+        var expectedChanges: [Change<Int>] = []
 
         let array = ReactiveArray([1, 2, 3])
 
-        array.signal.observeValues {
-            XCTAssertNil(changeset)
-            changeset = $0
-        }
+        array.signal.observeValues { changes.append($0) }
 
         array.insert(contentsOf: [4, 5, 6], at: 0)
 
-        XCTAssertEqual(array[array.indices], [4, 5, 6, 1, 2, 3])
-        XCTAssertNotNil(changeset)
-        XCTAssertTrue(changeset! == Changeset(
-            inserts: [.items([4, 5, 6], range: 0..<3)],
-            removes: [],
-            updates: []
+        expectedChanges.append(
+            Delta(
+                previous: [1, 2, 3],
+                current: [4, 5, 6, 1, 2, 3],
+                inserts: IndexSet(0..<3),
+                deletes: .empty,
+                updates: .empty
             )
         )
+
+        XCTAssertEqual(array[array.indices], [4, 5, 6, 1, 2, 3])
+        XCTAssertEqual(changes, expectedChanges)
     }
 
     // MARK: - Remove tests
 
     func test_remove_all() {
 
-        var changeset: Changeset<Int>? = nil
+        var changes: [Change<Int>] = []
+        var expectedChanges: [Change<Int>] = []
 
         let array = ReactiveArray([1, 2, 3])
 
-        array.signal.observeValues {
-            XCTAssertNil(changeset)
-            changeset = $0
-        }
+        array.signal.observeValues { changes.append($0) }
 
         array.removeAll()
 
-        XCTAssertEqual(array[array.indices], [])
-        XCTAssertNotNil(changeset)
-        XCTAssertEqual(changeset!, Changeset(
-            inserts: [],
-            removes: [.items([1, 2, 3], range: 0..<3)],
-            updates: []
+        expectedChanges.append(
+            Delta(
+                previous: [1, 2, 3],
+                current: [],
+                inserts: .empty,
+                deletes: IndexSet(0..<3),
+                updates: .empty
             )
         )
+
+        XCTAssertEqual(array[array.indices], [])
+        XCTAssertEqual(changes, expectedChanges)
     }
 
     func test_remove_all_and_keep_capacity() {
 
-        var changeset: Changeset<Int>? = nil
+        var changes: [Change<Int>] = []
+        var expectedChanges: [Change<Int>] = []
 
         let array = ReactiveArray([1, 2, 3])
 
-        array.signal.observeValues {
-            XCTAssertNil(changeset)
-            changeset = $0
-        }
+        array.signal.observeValues { changes.append($0) }
 
         array.removeAll(keepingCapacity: true)
 
-        XCTAssertEqual(array[array.indices], [])
-        XCTAssertNotNil(changeset)
-        XCTAssertEqual(changeset!, Changeset(
-            inserts: [],
-            removes: [.items([1, 2, 3], range: 0..<3)],
-            updates: []
+        expectedChanges.append(
+            Delta(
+                previous: [1, 2, 3],
+                current: [],
+                inserts: .empty,
+                deletes: IndexSet(0..<3),
+                updates: .empty
             )
         )
+
+        XCTAssertEqual(array[array.indices], [])
+        XCTAssertEqual(changes, expectedChanges)
     }
 
     func test_remove_first() {
 
-        var changeset: Changeset<Int>? = nil
+        var changes: [Change<Int>] = []
+        var expectedChanges: [Change<Int>] = []
 
         let array = ReactiveArray([1, 2, 3])
 
-        array.signal.observeValues {
-            XCTAssertNil(changeset)
-            changeset = $0
-        }
+        array.signal.observeValues { changes.append($0) }
 
         XCTAssertEqual(array.removeFirst(), 1)
 
-        XCTAssertEqual(array[array.indices], [2, 3])
-        XCTAssertNotNil(changeset)
-        XCTAssertEqual(changeset!, Changeset(
-            inserts: [],
-            removes: [.item(1, at: 0)],
-            updates: []
+        expectedChanges.append(
+            Delta(
+                previous: [1, 2, 3],
+                current: [2, 3],
+                inserts: .empty,
+                deletes: IndexSet(integer: 0),
+                updates: .empty
             )
         )
+
+        XCTAssertEqual(array[array.indices], [2, 3])
+        XCTAssertEqual(changes, expectedChanges)
     }
 
     func test_remove_first2() {
 
-        var changeset: Changeset<Int>? = nil
+        var changes: [Change<Int>] = []
+        var expectedChanges: [Change<Int>] = []
 
         let array = ReactiveArray([1, 2, 3])
 
-        array.signal.observeValues {
-            XCTAssertNil(changeset)
-            changeset = $0
-        }
+        array.signal.observeValues { changes.append($0) }
 
         array.removeFirst(2)
 
-        XCTAssertEqual(array[array.indices], [3])
-        XCTAssertNotNil(changeset)
-        XCTAssertEqual(changeset!, Changeset(
-            inserts: [],
-            removes: [.items([1, 2], range: 0..<2)],
-            updates: []
+        expectedChanges.append(
+            Delta(
+                previous: [1, 2, 3],
+                current: [3],
+                inserts: .empty,
+                deletes: IndexSet(0...1),
+                updates: .empty
             )
         )
+
+        XCTAssertEqual(array[array.indices], [3])
+        XCTAssertEqual(changes, expectedChanges)
     }
 
     func test_remove_first_all() {
 
-        var changeset: Changeset<Int>? = nil
+        var changes: [Change<Int>] = []
+        var expectedChanges: [Change<Int>] = []
 
         let array = ReactiveArray([1, 2, 3])
 
-        array.signal.observeValues {
-            XCTAssertNil(changeset)
-            changeset = $0
-        }
+        array.signal.observeValues { changes.append($0) }
 
         array.removeFirst(3)
 
-        XCTAssertEqual(array[array.indices], [])
-        XCTAssertNotNil(changeset)
-        XCTAssertEqual(changeset!, Changeset(
-            inserts: [],
-            removes: [.items([1, 2, 3], range: 0..<3)],
-            updates: []
+        expectedChanges.append(
+            Delta(
+                previous: [1, 2, 3],
+                current: [],
+                inserts: .empty,
+                deletes: IndexSet(0...2),
+                updates: .empty
             )
         )
+
+        XCTAssertEqual(array[array.indices], [])
+        XCTAssertEqual(changes, expectedChanges)
     }
 
     func test_remove_last() {
 
-        var changeset: Changeset<Int>? = nil
+        var changes: [Change<Int>] = []
+        var expectedChanges: [Change<Int>] = []
 
         let array = ReactiveArray([1, 2, 3])
 
-        array.signal.observeValues {
-            XCTAssertNil(changeset)
-            changeset = $0
-        }
+        array.signal.observeValues { changes.append($0) }
 
         XCTAssertEqual(array.removeLast(), 3)
 
-        XCTAssertEqual(array[array.indices], [1, 2])
-        XCTAssertNotNil(changeset)
-        XCTAssertEqual(changeset!, Changeset(
-            inserts: [],
-            removes: [.item(3, at: 2)],
-            updates: []
+        expectedChanges.append(
+            Delta(
+                previous: [1, 2, 3],
+                current: [1, 2],
+                inserts: .empty,
+                deletes: IndexSet(integer: 2),
+                updates: .empty
             )
         )
+
+        XCTAssertEqual(array[array.indices], [1, 2])
+        XCTAssertEqual(changes, expectedChanges)
     }
 
     func test_remove_last2() {
 
-        var changeset: Changeset<Int>? = nil
+        var changes: [Change<Int>] = []
+        var expectedChanges: [Change<Int>] = []
 
         let array = ReactiveArray([1, 2, 3])
 
-        array.signal.observeValues {
-            XCTAssertNil(changeset)
-            changeset = $0
-        }
+        array.signal.observeValues { changes.append($0) }
 
         array.removeLast(2)
 
-        XCTAssertEqual(array[array.indices], [1])
-        XCTAssertNotNil(changeset)
-        XCTAssertEqual(changeset!, Changeset(
-            inserts: [],
-            removes: [.items([2, 3], range: 1..<3)],
-            updates: []
+        expectedChanges.append(
+            Delta(
+                previous: [1, 2, 3],
+                current: [1],
+                inserts: .empty,
+                deletes: IndexSet(1..<3),
+                updates: .empty
             )
         )
+
+        XCTAssertEqual(array[array.indices], [1])
+        XCTAssertEqual(changes, expectedChanges)
     }
 
     func test_remove_last_all() {
 
-        var changeset: Changeset<Int>? = nil
+        var changes: [Change<Int>] = []
+        var expectedChanges: [Change<Int>] = []
 
         let array = ReactiveArray([1, 2, 3])
 
-        array.signal.observeValues {
-            XCTAssertNil(changeset)
-            changeset = $0
-        }
+        array.signal.observeValues { changes.append($0) }
 
         array.removeLast(3)
 
-        XCTAssertEqual(array[array.indices], [])
-        XCTAssertNotNil(changeset)
-        XCTAssertEqual(changeset!, Changeset(
-            inserts: [],
-            removes: [.items([1, 2, 3], range: 0..<3)],
-            updates: []
+        expectedChanges.append(
+            Delta(
+                previous: [1, 2, 3],
+                current: [],
+                inserts: .empty,
+                deletes: IndexSet(0..<3),
+                updates: .empty
             )
         )
+
+        XCTAssertEqual(array[array.indices], [])
+        XCTAssertEqual(changes, expectedChanges)
     }
 
     func test_remove_at_index() {
 
-        var changeset: Changeset<Int>? = nil
-        
+        var changes: [Change<Int>] = []
+        var expectedChanges: [Change<Int>] = []
+
         let array = ReactiveArray([1, 2, 3])
         
-        array.signal.observeValues {
-            XCTAssertNil(changeset)
-            changeset = $0
-        }
+        array.signal.observeValues { changes.append($0) }
         
         XCTAssertEqual(array.remove(at: 1), 2)
-        
-        XCTAssertEqual(array[array.indices], [1, 3])
-        XCTAssertNotNil(changeset)
-        XCTAssertEqual(changeset!, Changeset(
-            inserts: [],
-            removes: [.item(2, at: 1)],
-            updates: []
+
+        expectedChanges.append(
+            Delta(
+                previous: [1, 2, 3],
+                current: [1, 3],
+                inserts: .empty,
+                deletes: IndexSet(integer: 1),
+                updates: .empty
             )
         )
+        
+        XCTAssertEqual(array[array.indices], [1, 3])
+        XCTAssertEqual(changes, expectedChanges)
     }
 
     func test_remove_subrange() {
         
-        var changeset: Changeset<Int>? = nil
-        
+        var changes: [Change<Int>] = []
+        var expectedChanges: [Change<Int>] = []
+
         let array = ReactiveArray([1, 2, 3])
         
-        array.signal.observeValues {
-            XCTAssertNil(changeset)
-            changeset = $0
-        }
+        array.signal.observeValues { changes.append($0) }
 
         array.removeSubrange(1...2)
-        
-        XCTAssertEqual(array[array.indices], [1])
-        XCTAssertNotNil(changeset)
-        XCTAssertEqual(changeset!, Changeset(
-            inserts: [],
-            removes: [.items([2, 3], range: 1..<3)],
-            updates: []
+
+        expectedChanges.append(
+            Delta(
+                previous: [1, 2, 3],
+                current: [1],
+                inserts: .empty,
+                deletes: IndexSet(1..<3),
+                updates: .empty
             )
         )
+        
+        XCTAssertEqual(array[array.indices], [1])
+        XCTAssertEqual(changes, expectedChanges)
     }
 
     // MARK: - Producer tests
 
     func test_producer() {
 
-        var changesets: [Changeset<Int>] = []
+        var changes: [Change<Int>] = []
 
         let array = ReactiveArray([1, 2, 3])
 
-        array.producer.startWithValues { changesets.append($0) }
+        array.producer.startWithValues { changes.append($0) }
 
         array.append(4)
 
         array.removeAll()
 
-        let expectedChangesets = [
-            Changeset(
-                inserts: [.items([1, 2, 3], range: 0..<3)],
-                removes: [],
-                updates: []
+        let expectedChanges: [Change<Int>] = [
+            Delta(
+                previous: [],
+                current: [1, 2, 3],
+                inserts: IndexSet(0..<3),
+                deletes: .empty,
+                updates: .empty
             ),
-            Changeset(
-                inserts: [.item(4, at: 3)],
-                removes: [],
-                updates: []
+            Delta(
+                previous: [1, 2, 3],
+                current: [1, 2, 3, 4],
+                inserts: IndexSet(integer: 3),
+                deletes: .empty,
+                updates: .empty
             ),
-            Changeset(
-                inserts: [],
-                removes: [.items([1, 2, 3, 4], range: 0..<4)],
-                updates: []
+            Delta(
+                previous: [1, 2, 3, 4],
+                current: [],
+                inserts: .empty,
+                deletes: IndexSet(0...3),
+                updates: .empty
             )
         ]
 
-        zip(changesets, expectedChangesets).forEach { XCTAssertEqual($0, $1) }
+        zip(changes, expectedChanges).forEach { XCTAssertEqual($0, $1) }
     }
 
     func test_producer_with_up_to_date_changes() {
 
-        var changesets: [Changeset<Int>] = []
+        var changes: [Change<Int>] = []
 
         let array = ReactiveArray([1, 2, 3])
 
@@ -588,24 +613,28 @@ class ReactiveArrayTests: XCTestCase {
 
         array.append(4)
 
-        producer.startWithValues { changesets.append($0) }
+        producer.startWithValues { changes.append($0) }
 
         array.removeAll()
 
-        let expectedChangesets = [
-            Changeset(
-                inserts: [.items([1, 2, 3, 4], range: 0..<4)],
-                removes: [],
-                updates: []
+        let expectedChanges: [Change<Int>] = [
+            Delta(
+                previous: [],
+                current: [1, 2, 3, 4],
+                inserts: IndexSet(0..<4),
+                deletes: .empty,
+                updates: .empty
             ),
-            Changeset(
-                inserts: [],
-                removes: [.items([1, 2, 3, 4], range: 0..<4)],
-                updates: []
+            Delta(
+                previous: [1, 2, 3, 4],
+                current: [],
+                inserts: .empty,
+                deletes: IndexSet(0..<4),
+                updates: .empty
             )
         ]
 
-        zip(changesets, expectedChangesets).forEach { XCTAssertEqual($0, $1) }
+        zip(changes, expectedChanges).forEach { XCTAssertEqual($0, $1) }
     }
 
     func test_producer_not_retaining_array() {
@@ -632,12 +661,28 @@ class ReactiveArrayTests: XCTestCase {
 
 // MARK: - Helpers
 
-func XCTAssertEqual<T : Equatable>(
-    _ expression1: @autoclosure () -> Changeset<T>,
-    _ expression2: @autoclosure () -> Changeset<T>,
+func XCTAssertEqual<T>(
+    _ expression1: @autoclosure () -> [ReactiveArray<T>.Change],
+    _ expression2: @autoclosure () -> [ReactiveArray<T>.Change],
     _ message: @autoclosure () -> String = "",
     file: StaticString = #file,
     line: UInt = #line)
+    where T : Equatable
+{
+    let (lhs, rhs) = (expression1(), expression2())
+    let equal = zip(lhs, rhs)
+        .map(==)
+        .reduce(true, { $0 && $1 })
+    XCTAssertTrue(equal, "(\"\(lhs)\") is not equal to (\"\(rhs)\")", file: file, line: line)
+}
+
+func XCTAssertEqual<T>(
+    _ expression1: @autoclosure () -> ReactiveArray<T>.Change,
+    _ expression2: @autoclosure () -> ReactiveArray<T>.Change,
+    _ message: @autoclosure () -> String = "",
+    file: StaticString = #file,
+    line: UInt = #line)
+    where T : Equatable
 {
     let (lhs, rhs) = (expression1(), expression2())
     XCTAssert(lhs == rhs, "(\"\(lhs)\") is not equal to (\"\(rhs)\")", file: file, line: line)
