@@ -13,7 +13,6 @@
 		7D69AAE71DF9CEE500FCB568 /* ReactiveCollections.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D69AADD1DF9CEE500FCB568 /* ReactiveCollections.framework */; };
 		7D69AAEE1DF9CEE500FCB568 /* ReactiveCollections.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D69AAE01DF9CEE500FCB568 /* ReactiveCollections.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7D69AAF81DF9D07800FCB568 /* ReactiveArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D69AAF71DF9D07800FCB568 /* ReactiveArray.swift */; };
-		7D69AAFA1DF9D08C00FCB568 /* ReactiveArrayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D69AAF91DF9D08C00FCB568 /* ReactiveArrayTests.swift */; };
 		7D69AAFE1DF9D0E200FCB568 /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D69AAFC1DF9D0E200FCB568 /* ReactiveSwift.framework */; };
 		7D69AAFF1DF9D0E200FCB568 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D69AAFD1DF9D0E200FCB568 /* Result.framework */; };
 		7D69AB001DF9D11900FCB568 /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D69AAFC1DF9D0E200FCB568 /* ReactiveSwift.framework */; };
@@ -27,7 +26,6 @@
 		7DE06DAB1DFADB0F003303AB /* ReactiveArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D69AAF71DF9D07800FCB568 /* ReactiveArray.swift */; };
 		7DE06DAC1DFADB19003303AB /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DE06D7C1DFAD8E9003303AB /* ReactiveSwift.framework */; };
 		7DE06DAD1DFADB19003303AB /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DE06D7D1DFAD8E9003303AB /* Result.framework */; };
-		7DE06DAE1DFADB6D003303AB /* ReactiveArrayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D69AAF91DF9D08C00FCB568 /* ReactiveArrayTests.swift */; };
 		7DE06DB11DFADB9F003303AB /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DE06D7C1DFAD8E9003303AB /* ReactiveSwift.framework */; };
 		7DE06DB21DFADB9F003303AB /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DE06D7D1DFAD8E9003303AB /* Result.framework */; };
 		7DE06DB51DFADBC3003303AB /* ReactiveCollections.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DE06D931DFADA84003303AB /* ReactiveCollections.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -38,7 +36,6 @@
 		7DE06DD71DFADCE4003303AB /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DE06DD51DFADCE4003303AB /* Result.framework */; };
 		7DE06DD91DFADD07003303AB /* ReactiveCollections.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D69AAE01DF9CEE500FCB568 /* ReactiveCollections.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7DE06DDA1DFADD69003303AB /* ReactiveArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D69AAF71DF9D07800FCB568 /* ReactiveArray.swift */; };
-		7DE06DDB1DFADD6F003303AB /* ReactiveArrayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D69AAF91DF9D08C00FCB568 /* ReactiveArrayTests.swift */; };
 		7DE06DDC1DFADD8B003303AB /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DE06DD41DFADCE4003303AB /* ReactiveSwift.framework */; };
 		7DE06DDD1DFADD8B003303AB /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DE06DD51DFADCE4003303AB /* Result.framework */; };
 		7DE06DDF1DFADD9B003303AB /* ReactiveCollections.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DE06DBD1DFADCAE003303AB /* ReactiveCollections.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -48,6 +45,7 @@
 		7DF60EEE1E007DEF0096283B /* Delta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF60EEC1E007DEF0096283B /* Delta.swift */; };
 		7DF60EEF1E007DEF0096283B /* Delta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF60EEC1E007DEF0096283B /* Delta.swift */; };
 		7DF60EF01E007DEF0096283B /* Delta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF60EEC1E007DEF0096283B /* Delta.swift */; };
+		9A37DC661E0B34D70075EC2E /* ReactiveArrayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A37DC651E0B34D70075EC2E /* ReactiveArrayTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -120,7 +118,6 @@
 		7D69AAE61DF9CEE500FCB568 /* ReactiveCollectionsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReactiveCollectionsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D69AAED1DF9CEE500FCB568 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7D69AAF71DF9D07800FCB568 /* ReactiveArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactiveArray.swift; sourceTree = "<group>"; };
-		7D69AAF91DF9D08C00FCB568 /* ReactiveArrayTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactiveArrayTests.swift; sourceTree = "<group>"; };
 		7D69AAFC1DF9D0E200FCB568 /* ReactiveSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveSwift.framework; path = Carthage/Build/iOS/ReactiveSwift.framework; sourceTree = "<group>"; };
 		7D69AAFD1DF9D0E200FCB568 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
 		7DC1E2D11DFADEA400A61745 /* ReactiveCollections.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ReactiveCollections.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -135,6 +132,7 @@
 		7DE06DD41DFADCE4003303AB /* ReactiveSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveSwift.framework; path = Carthage/Build/tvOS/ReactiveSwift.framework; sourceTree = "<group>"; };
 		7DE06DD51DFADCE4003303AB /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/tvOS/Result.framework; sourceTree = "<group>"; };
 		7DF60EEC1E007DEF0096283B /* Delta.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Delta.swift; sourceTree = "<group>"; };
+		9A37DC651E0B34D70075EC2E /* ReactiveArrayTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReactiveArrayTests.swift; path = ReactiveCollectionsTests/ReactiveArrayTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -262,7 +260,7 @@
 		7D69AAEA1DF9CEE500FCB568 /* ReactiveCollectionsTests */ = {
 			isa = PBXGroup;
 			children = (
-				7D69AAF91DF9D08C00FCB568 /* ReactiveArrayTests.swift */,
+				9A37DC651E0B34D70075EC2E /* ReactiveArrayTests.swift */,
 				7D3D8BE51DF9EB1D00E90921 /* Supporting Files */,
 			);
 			name = ReactiveCollectionsTests;
@@ -605,6 +603,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A37DC661E0B34D70075EC2E /* ReactiveArrayTests.swift in Sources */,
 				7D69AAF81DF9D07800FCB568 /* ReactiveArray.swift in Sources */,
 				7DF60EED1E007DEF0096283B /* Delta.swift in Sources */,
 			);
@@ -614,7 +613,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7D69AAFA1DF9D08C00FCB568 /* ReactiveArrayTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -640,7 +638,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7DE06DAE1DFADB6D003303AB /* ReactiveArrayTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -657,7 +654,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7DE06DDB1DFADD6F003303AB /* ReactiveArrayTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
