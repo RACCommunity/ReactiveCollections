@@ -230,6 +230,7 @@
 				7D69AAFB1DF9D0E200FCB568 /* Frameworks */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 1;
 		};
 		7D69AADE1DF9CEE500FCB568 /* Products */ = {
 			isa = PBXGroup;
