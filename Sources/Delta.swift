@@ -35,12 +35,6 @@ fileprivate extension Collection where Iterator.Element: Equatable {
 			return false
 		}
 
-		for (left, rigtht) in zip(lhs, rhs) {
-			if left != right {
-				return false
-			}
-		}
-
-		return true
+		return zip(lhs, rhs).first(where: !=) == nil
 	}
 }
