@@ -17,6 +17,9 @@
 		7D69AAFF1DF9D0E200FCB568 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D69AAFD1DF9D0E200FCB568 /* Result.framework */; };
 		7D69AB001DF9D11900FCB568 /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D69AAFC1DF9D0E200FCB568 /* ReactiveSwift.framework */; };
 		7D69AB011DF9D11900FCB568 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D69AAFD1DF9D0E200FCB568 /* Result.framework */; };
+		7D85106C1E0BDFC200A57CC9 /* ReactiveArrayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A37DC651E0B34D70075EC2E /* ReactiveArrayTests.swift */; };
+		7D85106D1E0BDFCD00A57CC9 /* ReactiveArrayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A37DC651E0B34D70075EC2E /* ReactiveArrayTests.swift */; };
+		7D85106E1E0BDFD400A57CC9 /* ReactiveArrayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A37DC651E0B34D70075EC2E /* ReactiveArrayTests.swift */; };
 		7DC1E2D91DFADF8700A61745 /* ReactiveCollections.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D69AAE01DF9CEE500FCB568 /* ReactiveCollections.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7DC1E2DA1DFADF9B00A61745 /* ReactiveArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D69AAF71DF9D07800FCB568 /* ReactiveArray.swift */; };
 		7DC1E2DD1DFADFA500A61745 /* ReactiveSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DC1E2DB1DFADFA500A61745 /* ReactiveSwift.framework */; };
@@ -45,7 +48,6 @@
 		7DF60EEE1E007DEF0096283B /* Delta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF60EEC1E007DEF0096283B /* Delta.swift */; };
 		7DF60EEF1E007DEF0096283B /* Delta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF60EEC1E007DEF0096283B /* Delta.swift */; };
 		7DF60EF01E007DEF0096283B /* Delta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF60EEC1E007DEF0096283B /* Delta.swift */; };
-		9A37DC661E0B34D70075EC2E /* ReactiveArrayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A37DC651E0B34D70075EC2E /* ReactiveArrayTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -722,7 +724,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9A37DC661E0B34D70075EC2E /* ReactiveArrayTests.swift in Sources */,
 				7D69AAF81DF9D07800FCB568 /* ReactiveArray.swift in Sources */,
 				7DF60EED1E007DEF0096283B /* Delta.swift in Sources */,
 			);
@@ -732,6 +733,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D85106C1E0BDFC200A57CC9 /* ReactiveArrayTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -757,6 +759,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D85106D1E0BDFCD00A57CC9 /* ReactiveArrayTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -773,6 +776,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D85106E1E0BDFD400A57CC9 /* ReactiveArrayTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
