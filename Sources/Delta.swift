@@ -31,12 +31,15 @@ extension Delta where Snapshot.Iterator.Element: Equatable, ChangeRepresentation
 fileprivate extension Collection where Iterator.Element: Equatable {
 
 	fileprivate static func ==(lhs: Self, rhs: Self) -> Bool {
+		guard lhs.count == rhs.count else {
+			return false
+		}
 
-		guard lhs.count == rhs.count && lhs.count == rhs.count
-			else { return false }
-
-		guard zip(lhs, rhs).map(==).reduce(true, { $0 && $1 })
-			else { return false }
+		for (left, rigtht) in zip(lhs, rhs) {
+			if left != right {
+				return false
+			}
+		}
 
 		return true
 	}
