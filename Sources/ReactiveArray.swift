@@ -33,7 +33,8 @@ extension ReactiveArray {
 
 	public var producer: SignalProducer<Change, NoError> {
 		return SignalProducer<Change, NSError>.attempt { [weak self] in
-			guard let `self` = self else { return .failure(NSError()) }
+			guard let `self` = self
+				else { return .failure(NSError(domain: "org.RACCommunity.ReactiveCollections", code: 0, userInfo: nil)) }
 
 			return .success(
 				Delta(
