@@ -1,17 +1,11 @@
 language: objective-c
 osx_image: xcode8.2
-before_install: true
-install: true
-git:
-  submodules: false
 branches:
   only:
     - master
-before_script:
-  - git submodule update --init --recursive
 script:
   - script/build
-xcode_workspace: ReactiveCollections.xcworkspace
+xcode_project: ReactiveCollections.xcodeproj
 matrix:
   include:
     - xcode_scheme: ReactiveCollections-macOS
@@ -19,27 +13,51 @@ matrix:
         - XCODE_SDK=macosx
         - XCODE_ACTION="build test"
         - XCODE_DESTINATION="arch=x86_64"
-        - XCODE_PLAYGROUND_TARGET="x86_64-apple-macosx10.10"
+      before_install:
+        - brew update
+        - brew outdated carthage || brew upgrade carthage
+      install:
+        - carthage bootstrap --no-use-binaries --platform macOS
     - xcode_scheme: ReactiveCollections-iOS
       env:
         - XCODE_SDK=iphonesimulator
         - XCODE_ACTION="build-for-testing test-without-building"
         - XCODE_DESTINATION="platform=iOS Simulator,name=iPhone 6s,OS=10.1"
+      before_install:
+        - brew update
+        - brew outdated carthage || brew upgrade carthage
+      install:
+        - carthage bootstrap --no-use-binaries --platform iOS
     - xcode_scheme: ReactiveCollections-iOS
       env:
         - XCODE_SDK=iphonesimulator
         - XCODE_ACTION="build-for-testing test-without-building"
         - XCODE_DESTINATION="platform=iOS Simulator,name=iPhone 5,OS=10.1"
+      before_install:
+        - brew update
+        - brew outdated carthage || brew upgrade carthage
+      install:
+        - carthage bootstrap --no-use-binaries --platform iOS
     - xcode_scheme: ReactiveCollections-tvOS
       env:
         - XCODE_SDK=appletvsimulator
         - XCODE_ACTION="build-for-testing test-without-building"
         - XCODE_DESTINATION="platform=tvOS Simulator,name=Apple TV 1080p"
+      before_install:
+        - brew update
+        - brew outdated carthage || brew upgrade carthage
+      install:
+        - carthage bootstrap --no-use-binaries --platform tvOS
     - xcode_scheme: ReactiveCollections-watchOS
       env:
         - XCODE_SDK=watchsimulator
         - XCODE_ACTION=build
         - XCODE_DESTINATION="platform=watchOS Simulator,name=Apple Watch - 38mm"
+      before_install:
+        - brew update
+        - brew outdated carthage || brew upgrade carthage
+      install:
+        - carthage bootstrap --no-use-binaries --platform watchOS
     - script:
         - brew update
         - brew outdated carthage || brew upgrade carthage
