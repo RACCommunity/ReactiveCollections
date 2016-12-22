@@ -638,25 +638,41 @@ class ReactiveArrayTests: XCTestCase {
 		zip(changes, expectedChanges).forEach { XCTAssertEqual($0, $1) }
 	}
 
-	func test_producer_not_retaining_array() {
-
-		let completedExpectation = expectation(description: "Completed expectation")
-
+	func test_producer_should_not_retain_the_array() {
 		var array = ReactiveArray([1, 2, 3]) as Optional
+		weak var weakArray = array
 
+		withExtendedLifetime(array!.producer) {
+			array = nil
+			XCTAssertNil(weakArray)
+		}
+	}
+
+	func test_producer_should_send_last_snapshot_even_if_array_has_deinitialized() {
+		var array = ReactiveArray([1, 2, 3]) as Optional
 		let producer = array!.producer
-
 		array = nil
 
-		producer
-			.on(completed: {
-				completedExpectation.fulfill()
-			}, value: { _ in
-				XCTAssertFalse(false, "Producer should not send any values") }
-			)
-			.start()
+		var latestSnapshot: ContiguousArray<Int>?
+		var completed = false
+		var hasUnanticipatedEvents = false
 
-		waitForExpectations(timeout: 1.0, handler: nil)
+		producer.start { event in
+			switch event {
+			case let .value(delta):
+				latestSnapshot = delta.current
+
+			case .completed:
+				completed = true
+
+			case .interrupted, .failed:
+				hasUnanticipatedEvents = true
+			}
+		}
+
+		XCTAssertEqual(latestSnapshot ?? [], [1, 2, 3])
+		XCTAssertTrue(completed)
+		XCTAssertFalse(hasUnanticipatedEvents)
 	}
 }
 
@@ -696,7 +712,8 @@ extension ReactiveArrayTests {
 			("test_remove_subrange", test_remove_subrange),
 			("test_producer", test_producer),
 			("test_producer_with_up_to_date_changes", test_producer_with_up_to_date_changes),
-			("test_producer_not_retaining_array", test_producer_not_retaining_array)
+			("test_producer_should_not_retain_the_array", test_producer_should_not_retain_the_array),
+			("test_producer_should_send_last_snapshot_even_if_array_has_deinitialized", test_producer_should_send_last_snapshot_even_if_array_has_deinitialized)
 		]
 	}
 }
