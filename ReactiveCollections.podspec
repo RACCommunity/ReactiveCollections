@@ -2,9 +2,6 @@ Pod::Spec.new do |s|
   s.name         = "ReactiveCollections"
   s.version      = "1.0.0-alpha.0"
   s.summary      = "Reactive collections for Swift using ReactiveSwift"
-  s.description  = <<-DESC
-Reactive collections for Swift using ReactiveSwift
-                   DESC
   s.homepage     = "https://github.com/RACCommunity/ReactiveCollections/"
   s.license      = { :type => "MIT", :file => "LICENSE" }
   s.author       = "RACCommunity"
