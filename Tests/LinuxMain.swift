@@ -4,6 +4,6 @@ import Quick
 @testable import ReactiveCollectionsTests
 
 XCTMain([
-    ReactiveCollectionsTests.allTests
+    testCase(ReactiveArrayTests.allTests)
 ])
 // Quick.QCKMain([])
