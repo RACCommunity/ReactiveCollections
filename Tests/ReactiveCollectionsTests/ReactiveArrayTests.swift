@@ -660,6 +660,48 @@ class ReactiveArrayTests: XCTestCase {
 	}
 }
 
+// MARK: - Linux support
+
+#if os(Linux)
+extension ReactiveArrayTests {
+
+	static var allTests: [(String, (ReactiveArrayTests) -> () throws -> Void)] {
+		return [
+			("test_initializer", test_initializer),
+			("test_empty_initializer", test_empty_initializer),
+			("test_literal_initializer", test_literal_initializer),
+			("test_repeating_initializer", test_repeating_initializer),
+			("test_lifecycle", test_lifecycle),
+			("test_count", test_count),
+			("test_first", test_first),
+			("test_is_empty", test_is_empty),
+			("test_end_index", test_end_index),
+			("test_start_index", test_start_index),
+			("test_subscripting_access", test_subscripting_access),
+			("test_subscripting_replace_at_head", test_subscripting_replace_at_head),
+			("test_replace_range", test_replace_range),
+			("test_append", test_append),
+			("test_append_contents_of", test_append_contents_of),
+			("test_insert_at_index", test_insert_at_index),
+			("test_insert_contents_of", test_insert_contents_of),
+			("test_remove_all", test_remove_all),
+			("test_remove_all_and_keep_capacity", test_remove_all_and_keep_capacity),
+			("test_remove_first", test_remove_first),
+			("test_remove_first2", test_remove_first2),
+			("test_remove_first_all", test_remove_first_all),
+			("test_remove_last", test_remove_last),
+			("test_remove_last2", test_remove_last2),
+			("test_remove_last_all", test_remove_last_all),
+			("test_remove_at_index", test_remove_at_index),
+			("test_remove_subrange", test_remove_subrange),
+			("test_producer", test_producer),
+			("test_producer_with_up_to_date_changes", test_producer_with_up_to_date_changes),
+			("test_producer_not_retaining_array", test_producer_not_retaining_array)
+		]
+	}
+}
+#endif
+
 // MARK: - Helpers
 
 func XCTAssertEqual<T>(

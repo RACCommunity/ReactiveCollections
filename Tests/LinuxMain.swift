@@ -3,5 +3,7 @@ import Quick
 
 @testable import ReactiveCollectionsTests
 
-XCTMain([ReactiveCollectionsTests.allTests()])
+XCTMain([
+    ReactiveCollectionsTests.allTests
+])
 // Quick.QCKMain([])
