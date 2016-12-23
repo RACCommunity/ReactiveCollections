@@ -1,3 +1,4 @@
+import Foundation
 import XCTest
 import ReactiveSwift
 import Result
@@ -47,9 +48,9 @@ class ReactiveArrayTests: XCTestCase {
 		var array = ReactiveArray([1, 2, 3]) as Optional
 
 
-		_ = array?.signal.observeCompleted(completedExpectation.fulfill)
+		_ = array?.signal.observeCompleted { completedExpectation.fulfill() }
 
-		_ = array?.signal.on(disposed: disposedExpectation.fulfill)
+		_ = array?.signal.on(disposed: { disposedExpectation.fulfill() })
 
 		array = nil
 
