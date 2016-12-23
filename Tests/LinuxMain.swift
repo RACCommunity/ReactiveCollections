@@ -1,7 +1,9 @@
 import XCTest
 import Quick
 
-@testable import ReactiveSwiftTests
+@testable import ReactiveCollectionsTests
 
-XCTMain([ReactiveCollectionsTests.allTests()])
+XCTMain([
+    testCase(ReactiveArrayTests.allTests)
+])
 // Quick.QCKMain([])
