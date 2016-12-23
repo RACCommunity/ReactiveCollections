@@ -28,6 +28,16 @@ matrix:
         - brew outdated carthage || brew upgrade carthage
       install:
         - carthage bootstrap --no-use-binaries --platform iOS
+    - xcode_scheme: ReactiveCollections-iOS
+      env:
+        - XCODE_SDK=iphonesimulator
+        - XCODE_ACTION="build-for-testing test-without-building"
+        - XCODE_DESTINATION="platform=iOS Simulator,name=iPhone 5,OS=10.1"
+      before_install:
+        - brew update
+        - brew outdated carthage || brew upgrade carthage
+      install:
+        - carthage bootstrap --no-use-binaries --platform iOS
     - xcode_scheme: ReactiveCollections-tvOS
       env:
         - XCODE_SDK=appletvsimulator
