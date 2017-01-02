@@ -14,5 +14,5 @@ Pod::Spec.new do |s|
 
   # Directory glob for all Swift files
   s.source_files  = "Sources/*.{swift}"
-  s.dependency 'ReactiveSwift', '~> 1.0.0-rc'
+  s.dependency 'ReactiveSwift', '~> 1.0.0'
 end
