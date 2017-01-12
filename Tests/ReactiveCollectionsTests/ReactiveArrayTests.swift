@@ -6,7 +6,7 @@ import Result
 
 class ReactiveArrayTests: XCTestCase {
 
-	typealias Change<T> = ReactiveArray<T>.Change
+	typealias Delta<T> = ReactiveArray<T>.Delta
 
 	// MARK: - Initializers
 
@@ -97,8 +97,8 @@ class ReactiveArrayTests: XCTestCase {
 
 	func test_subscripting_replace_at_head() {
 
-		var changes: [Change<Int>] = []
-		var expectedChanges: [Change<Int>] = []
+		var changes: [Delta<Int>] = []
+		var expectedChanges: [Delta<Int>] = []
 
 		let array = ReactiveArray([1, 2, 3])
 
@@ -124,8 +124,8 @@ class ReactiveArrayTests: XCTestCase {
 
 	func test_replace_range() {
 
-		var changes: [Change<Int>] = []
-		var expectedChanges: [Change<Int>] = []
+		var changes: [Delta<Int>] = []
+		var expectedChanges: [Delta<Int>] = []
 
 		let array = ReactiveArray([1, 2, 3])
 
@@ -196,8 +196,8 @@ class ReactiveArrayTests: XCTestCase {
 
 	func test_append() {
 
-		var changes: [Change<Int>] = []
-		var expectedChanges: [Change<Int>] = []
+		var changes: [Delta<Int>] = []
+		var expectedChanges: [Delta<Int>] = []
 
 		let array = ReactiveArray([1, 2, 3])
 
@@ -221,8 +221,8 @@ class ReactiveArrayTests: XCTestCase {
 
 	func test_append_contents_of() {
 
-		var changes: [Change<Int>] = []
-		var expectedChanges: [Change<Int>] = []
+		var changes: [Delta<Int>] = []
+		var expectedChanges: [Delta<Int>] = []
 
 		let array = ReactiveArray([1, 2, 3])
 
@@ -248,8 +248,8 @@ class ReactiveArrayTests: XCTestCase {
 
 	func test_insert_at_index() {
 
-		var changes: [Change<Int>] = []
-		var expectedChanges: [Change<Int>] = []
+		var changes: [Delta<Int>] = []
+		var expectedChanges: [Delta<Int>] = []
 
 		let array = ReactiveArray([1, 2, 3])
 
@@ -288,8 +288,8 @@ class ReactiveArrayTests: XCTestCase {
 
 	func test_insert_contents_of() {
 
-		var changes: [Change<Int>] = []
-		var expectedChanges: [Change<Int>] = []
+		var changes: [Delta<Int>] = []
+		var expectedChanges: [Delta<Int>] = []
 
 		let array = ReactiveArray([1, 2, 3])
 
@@ -315,8 +315,8 @@ class ReactiveArrayTests: XCTestCase {
 
 	func test_remove_all() {
 
-		var changes: [Change<Int>] = []
-		var expectedChanges: [Change<Int>] = []
+		var changes: [Delta<Int>] = []
+		var expectedChanges: [Delta<Int>] = []
 
 		let array = ReactiveArray([1, 2, 3])
 
@@ -340,8 +340,8 @@ class ReactiveArrayTests: XCTestCase {
 
 	func test_remove_all_and_keep_capacity() {
 
-		var changes: [Change<Int>] = []
-		var expectedChanges: [Change<Int>] = []
+		var changes: [Delta<Int>] = []
+		var expectedChanges: [Delta<Int>] = []
 
 		let array = ReactiveArray([1, 2, 3])
 
@@ -365,8 +365,8 @@ class ReactiveArrayTests: XCTestCase {
 
 	func test_remove_first() {
 
-		var changes: [Change<Int>] = []
-		var expectedChanges: [Change<Int>] = []
+		var changes: [Delta<Int>] = []
+		var expectedChanges: [Delta<Int>] = []
 
 		let array = ReactiveArray([1, 2, 3])
 
@@ -390,8 +390,8 @@ class ReactiveArrayTests: XCTestCase {
 
 	func test_remove_first2() {
 
-		var changes: [Change<Int>] = []
-		var expectedChanges: [Change<Int>] = []
+		var changes: [Delta<Int>] = []
+		var expectedChanges: [Delta<Int>] = []
 
 		let array = ReactiveArray([1, 2, 3])
 
@@ -415,8 +415,8 @@ class ReactiveArrayTests: XCTestCase {
 
 	func test_remove_first_all() {
 
-		var changes: [Change<Int>] = []
-		var expectedChanges: [Change<Int>] = []
+		var changes: [Delta<Int>] = []
+		var expectedChanges: [Delta<Int>] = []
 
 		let array = ReactiveArray([1, 2, 3])
 
@@ -440,8 +440,8 @@ class ReactiveArrayTests: XCTestCase {
 
 	func test_remove_last() {
 
-		var changes: [Change<Int>] = []
-		var expectedChanges: [Change<Int>] = []
+		var changes: [Delta<Int>] = []
+		var expectedChanges: [Delta<Int>] = []
 
 		let array = ReactiveArray([1, 2, 3])
 
@@ -465,8 +465,8 @@ class ReactiveArrayTests: XCTestCase {
 
 	func test_remove_last2() {
 
-		var changes: [Change<Int>] = []
-		var expectedChanges: [Change<Int>] = []
+		var changes: [Delta<Int>] = []
+		var expectedChanges: [Delta<Int>] = []
 
 		let array = ReactiveArray([1, 2, 3])
 
@@ -490,8 +490,8 @@ class ReactiveArrayTests: XCTestCase {
 
 	func test_remove_last_all() {
 
-		var changes: [Change<Int>] = []
-		var expectedChanges: [Change<Int>] = []
+		var changes: [Delta<Int>] = []
+		var expectedChanges: [Delta<Int>] = []
 
 		let array = ReactiveArray([1, 2, 3])
 
@@ -515,8 +515,8 @@ class ReactiveArrayTests: XCTestCase {
 
 	func test_remove_at_index() {
 
-		var changes: [Change<Int>] = []
-		var expectedChanges: [Change<Int>] = []
+		var changes: [Delta<Int>] = []
+		var expectedChanges: [Delta<Int>] = []
 
 		let array = ReactiveArray([1, 2, 3])
 
@@ -540,8 +540,8 @@ class ReactiveArrayTests: XCTestCase {
 
 	func test_remove_subrange() {
 
-		var changes: [Change<Int>] = []
-		var expectedChanges: [Change<Int>] = []
+		var changes: [Delta<Int>] = []
+		var expectedChanges: [Delta<Int>] = []
 
 		let array = ReactiveArray([1, 2, 3])
 
@@ -567,7 +567,7 @@ class ReactiveArrayTests: XCTestCase {
 
 	func test_producer() {
 
-		var changes: [Change<Int>] = []
+		var changes: [Delta<Int>] = []
 
 		let array = ReactiveArray([1, 2, 3])
 
@@ -577,7 +577,7 @@ class ReactiveArrayTests: XCTestCase {
 
 		array.removeAll()
 
-		let expectedChanges: [Change<Int>] = [
+		let expectedChanges: [Delta<Int>] = [
 			Delta(
 				previous: [],
 				current: [1, 2, 3],
@@ -606,7 +606,7 @@ class ReactiveArrayTests: XCTestCase {
 
 	func test_producer_with_up_to_date_changes() {
 
-		var changes: [Change<Int>] = []
+		var changes: [Delta<Int>] = []
 
 		let array = ReactiveArray([1, 2, 3])
 
@@ -618,7 +618,7 @@ class ReactiveArrayTests: XCTestCase {
 
 		array.removeAll()
 
-		let expectedChanges: [Change<Int>] = [
+		let expectedChanges: [Delta<Int>] = [
 			Delta(
 				previous: [],
 				current: [1, 2, 3, 4],
@@ -705,8 +705,8 @@ extension ReactiveArrayTests {
 // MARK: - Helpers
 
 func XCTAssertEqual<T>(
-	_ expression1: @autoclosure () -> [ReactiveArray<T>.Change],
-	_ expression2: @autoclosure () -> [ReactiveArray<T>.Change],
+	_ expression1: @autoclosure () -> [ReactiveArray<T>.Delta],
+	_ expression2: @autoclosure () -> [ReactiveArray<T>.Delta],
 	_ message: @autoclosure () -> String = "",
 	file: StaticString = #file,
 	line: UInt = #line)
@@ -720,8 +720,8 @@ func XCTAssertEqual<T>(
 }
 
 func XCTAssertEqual<T>(
-	_ expression1: @autoclosure () -> ReactiveArray<T>.Change,
-	_ expression2: @autoclosure () -> ReactiveArray<T>.Change,
+	_ expression1: @autoclosure () -> ReactiveArray<T>.Delta,
+	_ expression2: @autoclosure () -> ReactiveArray<T>.Delta,
 	_ message: @autoclosure () -> String = "",
 	file: StaticString = #file,
 	line: UInt = #line)

@@ -3,20 +3,18 @@ import ReactiveSwift
 import Result
 
 public final class ReactiveArray<Element> {
-
 	public typealias Snapshot = ContiguousArray<Element>
-	public typealias Change = Delta<Snapshot, IndexSet>
+	public typealias DeltaIndices = IndexSet
+	public typealias Delta = ReactiveCollections.Delta<Snapshot, DeltaIndices>
 
-	public let signal: Signal<Change, NoError>
-
+	public let signal: Signal<Delta, NoError>
 	fileprivate var elements: ContiguousArray<Element>
-
-	fileprivate let innerObserver: Observer<Change, NoError>
+	fileprivate let innerObserver: Observer<Delta, NoError>
 
 	public init(_ elements: [Element]) {
 		self.elements = ContiguousArray(elements)
 
-		(signal, innerObserver) = Signal<Change, NoError>.pipe()
+		(signal, innerObserver) = Signal.pipe()
 	}
 
 	public convenience init() {
@@ -29,10 +27,9 @@ public final class ReactiveArray<Element> {
 
 }
 
-extension ReactiveArray {
-
-	public var producer: SignalProducer<Change, NoError> {
-		return SignalProducer<Change, NSError>.attempt { [weak self] in
+extension ReactiveArray: OrderedReactiveCollection {
+	public var producer: SignalProducer<Delta, NoError> {
+		return SignalProducer<Delta, NSError>.attempt { [weak self] in
 			guard let `self` = self
 				else { return .failure(NSError(domain: "org.RACCommunity.ReactiveCollections", code: 0, userInfo: nil)) }
 
