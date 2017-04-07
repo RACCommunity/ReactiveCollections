@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "ReactiveCollections"
-  s.version      = "1.0.0-alpha.0"
+  s.version      = "1.0.0-alpha.1"
   s.summary      = "Reactive collections for Swift using ReactiveSwift"
   s.homepage     = "https://github.com/RACCommunity/ReactiveCollections/"
   s.license      = { :type => "MIT", :file => "LICENSE" }
@@ -14,5 +14,5 @@ Pod::Spec.new do |s|
 
   # Directory glob for all Swift files
   s.source_files  = "Sources/*.{swift}"
-  s.dependency 'ReactiveSwift', '~> 1.0.0'
+  s.dependency 'ReactiveSwift', '~> 1.0'
 end
