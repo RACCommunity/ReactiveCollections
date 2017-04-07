@@ -3,20 +3,17 @@ import ReactiveSwift
 import Result
 
 public final class ReactiveArray<Element> {
-
 	public typealias Snapshot = ContiguousArray<Element>
 	public typealias Change = Delta<Snapshot, IndexSet>
 
+	fileprivate let storage: Storage<ContiguousArray<Element>>
+
 	public let signal: Signal<Change, NoError>
-
-	fileprivate var elements: ContiguousArray<Element>
-
 	fileprivate let innerObserver: Observer<Change, NoError>
 
 	public init(_ elements: [Element]) {
-		self.elements = ContiguousArray(elements)
-
 		(signal, innerObserver) = Signal<Change, NoError>.pipe()
+		storage = Storage(ContiguousArray(elements))
 	}
 
 	public convenience init() {
@@ -32,21 +29,22 @@ public final class ReactiveArray<Element> {
 extension ReactiveArray {
 
 	public var producer: SignalProducer<Change, NoError> {
-		return SignalProducer<Change, NSError>.attempt { [weak self] in
-			guard let `self` = self
-				else { return .failure(NSError(domain: "org.RACCommunity.ReactiveCollections", code: 0, userInfo: nil)) }
+		return SignalProducer { [weak self, storage] observer, disposable in
+			storage.modify { elements in
+				let delta = Delta(previous: [],
+				                  current: elements,
+				                  inserts: IndexSet(integersIn: elements.indices),
+				                  deletes: .empty,
+				                  updates: .empty)
+				observer.send(value: delta)
 
-			return .success(
-				Delta(
-					previous: [],
-					current: self.elements,
-					inserts: IndexSet(integersIn: self.indices),
-					deletes: .empty,
-					updates: .empty
-				)
-			)}
-			.flatMapError { _ in .empty }
-			.concat(SignalProducer(signal))
+				if let strongSelf = self {
+					disposable += strongSelf.signal.observe(observer)
+				} else {
+					observer.sendCompleted()
+				}
+			}
+		}
 	}
 }
 
@@ -64,16 +62,16 @@ extension ReactiveArray: ExpressibleByArrayLiteral {
 extension ReactiveArray: MutableCollection {
 
 	public var startIndex: Int {
-		return elements.startIndex
+		return storage.elements.startIndex
 	}
 
 	public var endIndex: Int {
-		return elements.endIndex
+		return storage.elements.endIndex
 	}
 
 	public subscript(position: Int) -> Element {
 		get {
-			return elements[position]
+			return storage.elements[position]
 		}
 		set {
 			replaceSubrange(position..<index(after: position), with: CollectionOfOne(newValue))
@@ -82,7 +80,7 @@ extension ReactiveArray: MutableCollection {
 
 	public subscript(bounds: Range<Int>) -> ArraySlice<Element> {
 		get {
-			return elements[bounds]
+			return storage.elements[bounds]
 		}
 		set {
 			replaceSubrange(bounds, with: newValue)
@@ -124,29 +122,29 @@ extension ReactiveArray: RangeReplaceableCollection {
 
 	public func remove(at position: Int) -> Element {
 		precondition(!isEmpty, "can't remove from an empty array")
-		let result = self[position]
-		removeSubrange(position..<index(after: position))
-		return result
+
+		return storage.modify { elements in
+			let value = elements[position]
+			elements.remove(at: position)
+			return value
+		}
 	}
 
 	public func removeAll(keepingCapacity keepCapacity: Bool = false) {
 		if keepCapacity {
 			removeSubrange(indices)
 		} else {
+			storage.modify { elements in
+				let previous = storage.elements
+				elements.removeAll()
 
-			let previous = elements
-
-			elements.removeAll()
-
-			innerObserver.send(value:
-				Delta(
-					previous: previous,
-					current: elements,
-					inserts: .empty,
-					deletes: IndexSet(integersIn: previous.indices),
-					updates: .empty
-				)
-			)
+				let delta = Delta(previous: previous,
+				                  current: elements,
+				                  inserts: .empty,
+				                  deletes: IndexSet(integersIn: previous.indices),
+				                  updates: .empty)
+				innerObserver.send(value: delta)
+			}
 		}
 	}
 
@@ -201,27 +199,59 @@ extension ReactiveArray: RangeReplaceableCollection {
 	}
 
 	public func replaceSubrange<C>(_ subrange: Range<Int>, with newElements: C) where C: Collection, C.Iterator.Element == Element {
+		storage.modify { elements in
+			let previous = elements
 
-		let previous = elements
+			elements.replaceSubrange(subrange, with: newElements)
 
-		elements.replaceSubrange(subrange, with: newElements)
+			let insertsUpperBound = subrange.lowerBound.advanced(by: Int(newElements.distance(from: newElements.startIndex, to: newElements.endIndex).toIntMax()))
+			let inserts = IndexSet(integersIn: subrange.lowerBound ..< insertsUpperBound)
+			let deletes = IndexSet(integersIn: subrange)
+			let updates = inserts.intersection(deletes)
 
-		let inserts = IndexSet(integersIn: subrange.lowerBound..<subrange.lowerBound.advanced(by: newElements.underestimatedCount))
-		let deletes = IndexSet(integersIn: subrange)
-		let updates = inserts.intersection(deletes)
-
-		innerObserver.send(value:
-			Delta(
-				previous: previous,
-				current: elements,
-				inserts: inserts.subtracting(updates),
-				deletes: deletes.subtracting(updates),
-				updates: updates
-			)
-		)
+			let delta = Delta(previous: previous,
+			                  current: storage.elements,
+			                  inserts: inserts.subtracting(updates),
+			                  deletes: deletes.subtracting(updates),
+			                  updates: updates)
+			innerObserver.send(value: delta)
+		}
 	}
 
 	public func reserveCapacity(_ n: Int) {
-		elements.reserveCapacity(n)
+		storage.modify { $0.reserveCapacity(n) }
+	}
+}
+
+private final class Storage<Elements> {
+	private var _elements: Elements
+
+	var elements: Elements {
+		get { return _elements }
+		set {
+			writeLock.lock()
+			_elements = newValue
+			writeLock.unlock()
+		}
+	}
+
+	/// A lock to protect mutations and their subsequent event emission. Reads do
+	/// not need to be protected, since the copy-on-write already guards reads.
+	/// The producer, however, has to acquire the lock to block new mutations
+	/// before it observes the delta signal.
+	fileprivate let writeLock: NSLock
+
+	init(_ elements: Elements) {
+		self._elements = elements
+
+		writeLock = NSLock()
+		writeLock.name = "org.RACCommunity.ReactiveCollections.ReactiveArray.writeLock"
+	}
+
+	func modify<Result>(_ action: (inout Elements) throws -> Result) rethrows -> Result {
+		writeLock.lock()
+		let returnValue = try action(&_elements)
+		writeLock.unlock()
+		return returnValue
 	}
 }
