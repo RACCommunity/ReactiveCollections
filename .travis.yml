@@ -52,7 +52,7 @@ matrix:
       env:
         - XCODE_SDK=watchsimulator
         - XCODE_ACTION=build
-        - XCODE_DESTINATION="platform=watchOS Simulator,name=Apple Watch - 38mm"
+        - XCODE_DESTINATION="platform=watchOS Simulator,name=Apple Watch - 38mm,OS=2.2"
       before_install:
         - brew update
         - brew outdated carthage || brew upgrade carthage
@@ -96,6 +96,7 @@ matrix:
       language: generic
       script:
         - swift build
+        - SWIFTPM_TEST_ReactiveCollections=YES swift test
       env:
         - JOB=SWIFTPM_DARWIN
     - os: linux
@@ -105,7 +106,6 @@ matrix:
       before_install:
         - eval "$(curl -sL https://gist.githubusercontent.com/kylef/5c0475ff02b7c7671d2a/raw/9f442512a46d7a2af7b850d65a7e9bd31edfb09b/swiftenv-install.sh)"
       script:
-        - mv .Package.test.swift Package.swift
         - swift build
-        - swift test
+        - SWIFTPM_TEST_ReactiveCollections=YES swift test
       env: JOB=SWIFTPM_LINUX
