@@ -4,7 +4,7 @@ import Result
 
 public final class ReactiveArray<Element> {
 	public typealias Snapshot = ContiguousArray<Element>
-	public typealias Change = Delta<Snapshot, IndexSet>
+	public typealias Change = ArrayDelta<Snapshot>
 
 	fileprivate let storage: Storage<ContiguousArray<Element>>
 
@@ -23,7 +23,6 @@ public final class ReactiveArray<Element> {
 	deinit {
 		innerObserver.sendCompleted()
 	}
-
 }
 
 extension ReactiveArray {
@@ -31,11 +30,9 @@ extension ReactiveArray {
 	public var producer: SignalProducer<Change, NoError> {
 		return SignalProducer { [weak self, storage] observer, disposable in
 			storage.modify { elements in
-				let delta = Delta(previous: [],
-				                  current: elements,
-				                  inserts: IndexSet(integersIn: elements.indices),
-				                  deletes: [],
-				                  updates: [])
+				let delta = ArrayDelta(previous: [],
+				                       current: elements,
+				                       inserts: IndexSet(integersIn: elements.startIndex ..< elements.endIndex))
 				observer.send(value: delta)
 
 				if let strongSelf = self {
@@ -128,11 +125,9 @@ extension ReactiveArray: RangeReplaceableCollection {
 			let value = previous[position]
 			elements.remove(at: position)
 
-			let delta = Delta(previous: previous,
-			                  current: elements,
-			                  inserts: [],
-			                  deletes: IndexSet(integer: position),
-			                  updates: [])
+			let delta = ArrayDelta(previous: previous,
+			                       current: elements,
+			                       deletes: [position])
 			innerObserver.send(value: delta)
 
 			return value
@@ -147,11 +142,9 @@ extension ReactiveArray: RangeReplaceableCollection {
 				let previous = storage.elements
 				elements.removeAll()
 
-				let delta = Delta(previous: previous,
-				                  current: elements,
-				                  inserts: [],
-				                  deletes: IndexSet(integersIn: previous.indices),
-				                  updates: [])
+				let delta = ArrayDelta(previous: previous,
+				                       current: elements,
+				                       deletes: IndexSet(integersIn: previous.startIndex ..< previous.endIndex))
 				innerObserver.send(value: delta)
 			}
 		}
@@ -218,11 +211,11 @@ extension ReactiveArray: RangeReplaceableCollection {
 			let deletes = IndexSet(integersIn: subrange)
 			let updates = inserts.intersection(deletes)
 
-			let delta = Delta(previous: previous,
-			                  current: storage.elements,
-			                  inserts: inserts.subtracting(updates),
-			                  deletes: deletes.subtracting(updates),
-			                  updates: updates)
+			let delta = ArrayDelta(previous: previous,
+			                       current: storage.elements,
+			                       inserts: inserts.subtracting(updates),
+			                       deletes: deletes.subtracting(updates),
+			                       updates: updates)
 			innerObserver.send(value: delta)
 		}
 	}

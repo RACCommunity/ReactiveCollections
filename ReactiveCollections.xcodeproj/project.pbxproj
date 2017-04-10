@@ -313,8 +313,8 @@
 		7D69AADF1DF9CEE500FCB568 /* ReactiveCollections */ = {
 			isa = PBXGroup;
 			children = (
-				7D69AAF71DF9D07800FCB568 /* ReactiveArray.swift */,
 				7DF60EEC1E007DEF0096283B /* Delta.swift */,
+				7D69AAF71DF9D07800FCB568 /* ReactiveArray.swift */,
 				7D3D8BE41DF9EAE000E90921 /* Supporting Files */,
 			);
 			name = ReactiveCollections;
