@@ -124,8 +124,17 @@ extension ReactiveArray: RangeReplaceableCollection {
 		precondition(!isEmpty, "can't remove from an empty array")
 
 		return storage.modify { elements in
-			let value = elements[position]
+			let previous = elements
+			let value = previous[position]
 			elements.remove(at: position)
+
+			let delta = Delta(previous: previous,
+			                  current: elements,
+			                  inserts: .empty,
+			                  deletes: IndexSet(integer: position),
+			                  updates: .empty)
+			innerObserver.send(value: delta)
+
 			return value
 		}
 	}
