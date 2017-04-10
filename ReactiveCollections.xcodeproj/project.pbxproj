@@ -60,6 +60,9 @@
 		9AF7E1911E9A8CCA00F6672B /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AF7E1811E9A8C8A00F6672B /* Quick.framework */; };
 		9AF7E1921E9A8CCD00F6672B /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9AF7E1801E9A8C8A00F6672B /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9AF7E1931E9A8CCD00F6672B /* Quick.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9AF7E1811E9A8C8A00F6672B /* Quick.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9AF7E19D1E9C9EAC00F6672B /* Delta+NimbleMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF7E19C1E9C9EAC00F6672B /* Delta+NimbleMatcher.swift */; };
+		9AF7E19E1E9C9EAC00F6672B /* Delta+NimbleMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF7E19C1E9C9EAC00F6672B /* Delta+NimbleMatcher.swift */; };
+		9AF7E19F1E9C9EAC00F6672B /* Delta+NimbleMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF7E19C1E9C9EAC00F6672B /* Delta+NimbleMatcher.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -160,6 +163,7 @@
 		9AF7E1831E9A8C9700F6672B /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/Mac/Quick.framework; sourceTree = "<group>"; };
 		9AF7E1841E9A8C9F00F6672B /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		9AF7E1851E9A8C9F00F6672B /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
+		9AF7E19C1E9C9EAC00F6672B /* Delta+NimbleMatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Delta+NimbleMatcher.swift"; path = "ReactiveCollectionsTests/Delta+NimbleMatcher.swift"; sourceTree = "<group>"; };
 		9AFF559E1E0AFEDE006426F4 /* Common.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
 		9AFF55A01E0AFEDE006426F4 /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		9AFF55A11E0AFEDE006426F4 /* Profile.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Profile.xcconfig; sourceTree = "<group>"; };
@@ -322,6 +326,7 @@
 			children = (
 				9AF7E17E1E9A8BE100F6672B /* LinuxMain.swift */,
 				9A37DC651E0B34D70075EC2E /* ReactiveArrayTests.swift */,
+				9AF7E19C1E9C9EAC00F6672B /* Delta+NimbleMatcher.swift */,
 				7D3D8BE51DF9EB1D00E90921 /* Supporting Files */,
 			);
 			path = Tests;
@@ -771,6 +776,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9AF7E19D1E9C9EAC00F6672B /* Delta+NimbleMatcher.swift in Sources */,
 				7D85106C1E0BDFC200A57CC9 /* ReactiveArrayTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -797,6 +803,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9AF7E19E1E9C9EAC00F6672B /* Delta+NimbleMatcher.swift in Sources */,
 				7D85106D1E0BDFCD00A57CC9 /* ReactiveArrayTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -814,6 +821,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9AF7E19F1E9C9EAC00F6672B /* Delta+NimbleMatcher.swift in Sources */,
 				7D85106E1E0BDFD400A57CC9 /* ReactiveArrayTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

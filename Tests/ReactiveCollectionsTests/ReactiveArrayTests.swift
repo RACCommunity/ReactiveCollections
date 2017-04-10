@@ -2,6 +2,7 @@ import Foundation
 import XCTest
 import ReactiveSwift
 import Result
+import Nimble
 @testable import ReactiveCollections
 
 class ReactiveArrayTests: XCTestCase {
@@ -117,7 +118,7 @@ class ReactiveArrayTests: XCTestCase {
 		)
 
 		XCTAssertEqual(array[array.indices], [3, 2, 3])
-		XCTAssertEqual(changes, expectedChanges)
+		expect(changes) == expectedChanges
 	}
 
 	// MARK: - Replace tests
@@ -144,7 +145,7 @@ class ReactiveArrayTests: XCTestCase {
 		)
 
 		XCTAssertEqual(array[array.indices], [1, 1, 1])
-		XCTAssertEqual(changes, expectedChanges)
+		expect(changes) == expectedChanges
 
 		array.replaceSubrange(0...1, with: [0, 0, 0])
 
@@ -159,7 +160,7 @@ class ReactiveArrayTests: XCTestCase {
 		)
 
 		XCTAssertEqual(array[array.indices], [0, 0, 0, 1])
-		XCTAssertEqual(changes, expectedChanges)
+		expect(changes) == expectedChanges
 
 		array.replaceSubrange(0...0, with: [1])
 
@@ -174,7 +175,7 @@ class ReactiveArrayTests: XCTestCase {
 		)
 
 		XCTAssertEqual(array[array.indices], [1, 0, 0, 1])
-		XCTAssertEqual(changes, expectedChanges)
+		expect(changes) == expectedChanges
 
 		array.replaceSubrange(array.indices, with: Array(0...5))
 
@@ -189,7 +190,7 @@ class ReactiveArrayTests: XCTestCase {
 		)
 
 		XCTAssertEqual(array[array.indices], [0, 1, 2, 3, 4, 5])
-		XCTAssertEqual(changes, expectedChanges)
+		expect(changes) == expectedChanges
 	}
 
 	// MARK: - Append tests
@@ -216,7 +217,7 @@ class ReactiveArrayTests: XCTestCase {
 		)
 
 		XCTAssertEqual(array[array.indices], [1, 2, 3, 4])
-		XCTAssertEqual(changes, expectedChanges)
+		expect(changes) == expectedChanges
 	}
 
 	func test_append_contents_of() {
@@ -241,7 +242,7 @@ class ReactiveArrayTests: XCTestCase {
 		)
 
 		XCTAssertEqual(array[array.indices], [1, 2, 3, 4, 5, 6])
-		XCTAssertEqual(changes, expectedChanges)
+		expect(changes) == expectedChanges
 	}
 
 	// MARK: - Insert tests
@@ -268,7 +269,7 @@ class ReactiveArrayTests: XCTestCase {
 		)
 
 		XCTAssertEqual(array[array.indices], [1, 2, 3, 4])
-		XCTAssertEqual(changes, expectedChanges)
+		expect(changes) == expectedChanges
 
 		array.insert(0, at: 0)
 
@@ -283,7 +284,7 @@ class ReactiveArrayTests: XCTestCase {
 		)
 
 		XCTAssertEqual(array[array.indices], [0, 1, 2, 3, 4])
-		XCTAssertEqual(changes, expectedChanges)
+		expect(changes) == expectedChanges
 	}
 
 	func test_insert_contents_of() {
@@ -308,7 +309,7 @@ class ReactiveArrayTests: XCTestCase {
 		)
 
 		XCTAssertEqual(array[array.indices], [4, 5, 6, 1, 2, 3])
-		XCTAssertEqual(changes, expectedChanges)
+		expect(changes) == expectedChanges
 	}
 
 	// MARK: - Remove tests
@@ -335,7 +336,7 @@ class ReactiveArrayTests: XCTestCase {
 		)
 
 		XCTAssertEqual(array[array.indices], [])
-		XCTAssertEqual(changes, expectedChanges)
+		expect(changes) == expectedChanges
 	}
 
 	func test_remove_all_and_keep_capacity() {
@@ -360,7 +361,7 @@ class ReactiveArrayTests: XCTestCase {
 		)
 
 		XCTAssertEqual(array[array.indices], [])
-		XCTAssertEqual(changes, expectedChanges)
+		expect(changes) == expectedChanges
 	}
 
 	func test_remove_first() {
@@ -385,7 +386,7 @@ class ReactiveArrayTests: XCTestCase {
 		)
 
 		XCTAssertEqual(array[array.indices], [2, 3])
-		XCTAssertEqual(changes, expectedChanges)
+		expect(changes) == expectedChanges
 	}
 
 	func test_remove_first2() {
@@ -410,7 +411,7 @@ class ReactiveArrayTests: XCTestCase {
 		)
 
 		XCTAssertEqual(array[array.indices], [3])
-		XCTAssertEqual(changes, expectedChanges)
+		expect(changes) == expectedChanges
 	}
 
 	func test_remove_first_all() {
@@ -435,7 +436,7 @@ class ReactiveArrayTests: XCTestCase {
 		)
 
 		XCTAssertEqual(array[array.indices], [])
-		XCTAssertEqual(changes, expectedChanges)
+		expect(changes) == expectedChanges
 	}
 
 	func test_remove_last() {
@@ -460,7 +461,7 @@ class ReactiveArrayTests: XCTestCase {
 		)
 
 		XCTAssertEqual(array[array.indices], [1, 2])
-		XCTAssertEqual(changes, expectedChanges)
+		expect(changes) == expectedChanges
 	}
 
 	func test_remove_last2() {
@@ -485,7 +486,7 @@ class ReactiveArrayTests: XCTestCase {
 		)
 
 		XCTAssertEqual(array[array.indices], [1])
-		XCTAssertEqual(changes, expectedChanges)
+		expect(changes) == expectedChanges
 	}
 
 	func test_remove_last_all() {
@@ -510,7 +511,7 @@ class ReactiveArrayTests: XCTestCase {
 		)
 
 		XCTAssertEqual(array[array.indices], [])
-		XCTAssertEqual(changes, expectedChanges)
+		expect(changes) == expectedChanges
 	}
 
 	func test_remove_at_index() {
@@ -535,7 +536,7 @@ class ReactiveArrayTests: XCTestCase {
 		)
 
 		XCTAssertEqual(array[array.indices], [1, 3])
-		XCTAssertEqual(changes, expectedChanges)
+		expect(changes) == expectedChanges
 	}
 
 	func test_remove_subrange() {
@@ -560,7 +561,7 @@ class ReactiveArrayTests: XCTestCase {
 		)
 
 		XCTAssertEqual(array[array.indices], [1])
-		XCTAssertEqual(changes, expectedChanges)
+		expect(changes) == expectedChanges
 	}
 
 	// MARK: - Producer tests
