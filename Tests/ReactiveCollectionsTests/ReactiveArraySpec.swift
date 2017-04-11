@@ -89,7 +89,7 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0[0] = 3 }
 
 				expectedChanges.append(
-					Delta(
+					ArrayDelta(
 						previous: [1, 2, 3],
 						current: [3, 2, 3],
 						inserts: [],
@@ -115,7 +115,7 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.replaceSubrange(1...2, with: [1, 1]) }
 
 				expectedChanges.append(
-					Delta(
+					ArrayDelta(
 						previous: [1, 2, 3],
 						current: [1, 1, 1],
 						inserts: [],
@@ -130,7 +130,7 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.replaceSubrange(0...1, with: [0, 0, 0]) }
 
 				expectedChanges.append(
-					Delta(
+					ArrayDelta(
 						previous: [1, 1, 1],
 						current: [0, 0, 0, 1],
 						inserts: IndexSet(integer: 2),
@@ -145,7 +145,7 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.replaceSubrange(0...0, with: [1]) }
 
 				expectedChanges.append(
-					Delta(
+					ArrayDelta(
 						previous: [0, 0, 0, 1],
 						current: [1, 0, 0, 1],
 						inserts: [],
@@ -160,7 +160,7 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.replaceSubrange(array.indices, with: Array(0...5)) }
 
 				expectedChanges.append(
-					Delta(
+					ArrayDelta(
 						previous: [1, 0, 0, 1],
 						current: [0, 1, 2, 3, 4, 5],
 						inserts: IndexSet(4...5),
@@ -184,7 +184,7 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.append(4) }
 
 				expectedChanges.append(
-					Delta(
+					ArrayDelta(
 						previous: [1, 2, 3],
 						current: [1, 2, 3, 4],
 						inserts: IndexSet(integer: 3),
@@ -208,7 +208,7 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.append(contentsOf: [4, 5, 6]) }
 
 				expectedChanges.append(
-					Delta(
+					ArrayDelta(
 						previous: [1, 2, 3],
 						current: [1, 2, 3, 4, 5, 6],
 						inserts: IndexSet(3..<6),
@@ -232,7 +232,7 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.insert(4, at: array.endIndex) }
 
 				expectedChanges.append(
-					Delta(
+					ArrayDelta(
 						previous: [1, 2, 3],
 						current: [1, 2, 3, 4],
 						inserts: IndexSet(integer: 3),
@@ -247,7 +247,7 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.insert(0, at: 0) }
 
 				expectedChanges.append(
-					Delta(
+					ArrayDelta(
 						previous: [1, 2, 3, 4],
 						current: [0, 1, 2, 3, 4],
 						inserts: IndexSet(integer: 0),
@@ -271,7 +271,7 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.insert(contentsOf: [4, 5, 6], at: 0) }
 
 				expectedChanges.append(
-					Delta(
+					ArrayDelta(
 						previous: [1, 2, 3],
 						current: [4, 5, 6, 1, 2, 3],
 						inserts: IndexSet(0..<3),
@@ -295,7 +295,7 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.removeAll() }
 
 				expectedChanges.append(
-					Delta(
+					ArrayDelta(
 						previous: [1, 2, 3],
 						current: [],
 						inserts: [],
@@ -319,7 +319,7 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.removeAll(keepingCapacity: true) }
 
 				expectedChanges.append(
-					Delta(
+					ArrayDelta(
 						previous: [1, 2, 3],
 						current: [],
 						inserts: [],
@@ -343,7 +343,7 @@ class ReactiveArraySpec: QuickSpec {
 				expect(array.modify { $0.removeFirst() }) == 1
 
 				expectedChanges.append(
-					Delta(
+					ArrayDelta(
 						previous: [1, 2, 3],
 						current: [2, 3],
 						inserts: [],
@@ -367,7 +367,7 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.removeFirst(2) }
 
 				expectedChanges.append(
-					Delta(
+					ArrayDelta(
 						previous: [1, 2, 3],
 						current: [3],
 						inserts: [],
@@ -391,7 +391,7 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.removeFirst(3) }
 
 				expectedChanges.append(
-					Delta(
+					ArrayDelta(
 						previous: [1, 2, 3],
 						current: [],
 						inserts: [],
@@ -415,7 +415,7 @@ class ReactiveArraySpec: QuickSpec {
 				expect(array.modify { $0.removeLast() }) == 3
 
 				expectedChanges.append(
-					Delta(
+					ArrayDelta(
 						previous: [1, 2, 3],
 						current: [1, 2],
 						inserts: [],
@@ -439,7 +439,7 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.removeLast(2) }
 
 				expectedChanges.append(
-					Delta(
+					ArrayDelta(
 						previous: [1, 2, 3],
 						current: [1],
 						inserts: [],
@@ -463,7 +463,7 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.removeLast(3) }
 
 				expectedChanges.append(
-					Delta(
+					ArrayDelta(
 						previous: [1, 2, 3],
 						current: [],
 						inserts: [],
@@ -487,7 +487,7 @@ class ReactiveArraySpec: QuickSpec {
 				expect(array.modify { $0.remove(at: 1) }) == 2
 
 				expectedChanges.append(
-					Delta(
+					ArrayDelta(
 						previous: [1, 2, 3],
 						current: [1, 3],
 						inserts: [],
@@ -511,7 +511,7 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.removeSubrange(1...2) }
 				
 				expectedChanges.append(
-					Delta(
+					ArrayDelta(
 						previous: [1, 2, 3],
 						current: [1],
 						inserts: [],
@@ -567,7 +567,7 @@ class ReactiveArraySpec: QuickSpec {
 					}
 
 					expect(array) == [8, 9, 0]
-					expect(latestDelta) == Delta(previous: [1, 2, 3],
+					expect(latestDelta) == ArrayDelta(previous: [1, 2, 3],
 					                             current: [8, 9, 0],
 					                             inserts: IndexSet(0 ..< 3),
 					                             deletes: IndexSet(0 ..< 3),
@@ -581,7 +581,7 @@ class ReactiveArraySpec: QuickSpec {
 					}
 
 					expect(array) == [1, 2, 3]
-					expect(latestDelta) == Delta(previous: [1, 2, 3],
+					expect(latestDelta) == ArrayDelta(previous: [1, 2, 3],
 					                             current: [1, 2, 3],
 					                             inserts: [],
 					                             deletes: [],
@@ -595,7 +595,7 @@ class ReactiveArraySpec: QuickSpec {
 					}
 
 					expect(array) == [1, 100, 2]
-					expect(latestDelta) == Delta(previous: [1, 2, 3],
+					expect(latestDelta) == ArrayDelta(previous: [1, 2, 3],
 					                             current: [1, 100, 2],
 					                             inserts: IndexSet(integer: 1),
 					                             deletes: IndexSet(integer: 2),
@@ -609,7 +609,7 @@ class ReactiveArraySpec: QuickSpec {
 					}
 
 					expect(array) == [1, 100, 2, 200]
-					expect(latestDelta) == Delta(previous: [1, 2, 3],
+					expect(latestDelta) == ArrayDelta(previous: [1, 2, 3],
 					                             current: [1, 100, 2, 200],
 					                             inserts: IndexSet(integer: 1),
 					                             deletes: [],
@@ -627,7 +627,7 @@ class ReactiveArraySpec: QuickSpec {
 					}
 
 					expect(array) == sorted
-					expect(latestDelta) == Delta(previous: [1, 2, 3],
+					expect(latestDelta) == ArrayDelta(previous: [1, 2, 3],
 					                             current: sorted,
 					                             inserts: IndexSet(integersIn: 3 ..< 11),
 					                             deletes: [],
@@ -646,7 +646,7 @@ class ReactiveArraySpec: QuickSpec {
 					}
 
 					expect(array) == sorted
-					expect(latestDelta) == Delta(previous: [1, 2, 3],
+					expect(latestDelta) == ArrayDelta(previous: [1, 2, 3],
 					                             current: sorted,
 					                             inserts: IndexSet(integersIn: 0 ..< 11),
 					                             deletes: IndexSet(integersIn: 0 ..< 3),
@@ -668,21 +668,21 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.removeAll() }
 
 				let expectedChanges: [Change<Int>] = [
-					Delta(
+					ArrayDelta(
 						previous: [],
 						current: [1, 2, 3],
 						inserts: IndexSet(0..<3),
 						deletes: [],
 						updates: []
 					),
-					Delta(
+					ArrayDelta(
 						previous: [1, 2, 3],
 						current: [1, 2, 3, 4],
 						inserts: IndexSet(integer: 3),
 						deletes: [],
 						updates: []
 					),
-					Delta(
+					ArrayDelta(
 						previous: [1, 2, 3, 4],
 						current: [],
 						inserts: [],
@@ -708,14 +708,14 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.removeAll() }
 
 				let expectedChanges: [Change<Int>] = [
-					Delta(
+					ArrayDelta(
 						previous: [],
 						current: [1, 2, 3, 4],
 						inserts: IndexSet(0..<4),
 						deletes: [],
 						updates: []
 					),
-					Delta(
+					ArrayDelta(
 						previous: [1, 2, 3, 4],
 						current: [],
 						inserts: [],
