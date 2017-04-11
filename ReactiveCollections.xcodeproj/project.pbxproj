@@ -48,6 +48,20 @@
 		7DF60EEE1E007DEF0096283B /* Delta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF60EEC1E007DEF0096283B /* Delta.swift */; };
 		7DF60EEF1E007DEF0096283B /* Delta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF60EEC1E007DEF0096283B /* Delta.swift */; };
 		7DF60EF01E007DEF0096283B /* Delta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF60EEC1E007DEF0096283B /* Delta.swift */; };
+		9ADC56471E9E662F0049C090 /* StdlibExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADC56461E9E662F0049C090 /* StdlibExtensions.swift */; };
+		9ADC56481E9E662F0049C090 /* StdlibExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADC56461E9E662F0049C090 /* StdlibExtensions.swift */; };
+		9ADC56491E9E662F0049C090 /* StdlibExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADC56461E9E662F0049C090 /* StdlibExtensions.swift */; };
+		9ADC564A1E9E662F0049C090 /* StdlibExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADC56461E9E662F0049C090 /* StdlibExtensions.swift */; };
+		9ADC56381E9D2DC60049C090 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ADC56371E9D2DB90049C090 /* ReactiveCocoa.framework */; };
+		9ADC56391E9D2DCB0049C090 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ADC56361E9D2DB00049C090 /* ReactiveCocoa.framework */; };
+		9ADC563A1E9D2DD00049C090 /* ReactiveCocoa.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9ADC56361E9D2DB00049C090 /* ReactiveCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9ADC563B1E9D2DD30049C090 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ADC56361E9D2DB00049C090 /* ReactiveCocoa.framework */; };
+		9ADC563E1E9D2DF80049C090 /* ReactiveCocoa.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9ADC56351E9D2DA40049C090 /* ReactiveCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9ADC563F1E9D2E000049C090 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ADC56351E9D2DA40049C090 /* ReactiveCocoa.framework */; };
+		9ADC56401E9D2E050049C090 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ADC56351E9D2DA40049C090 /* ReactiveCocoa.framework */; };
+		9ADC56411E9D2E090049C090 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ADC56341E9D2D9C0049C090 /* ReactiveCocoa.framework */; };
+		9ADC56421E9D2E0B0049C090 /* ReactiveCocoa.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9ADC56341E9D2D9C0049C090 /* ReactiveCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9ADC56431E9D2E0F0049C090 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ADC56341E9D2D9C0049C090 /* ReactiveCocoa.framework */; };
 		9AF7E1861E9A8CB000F6672B /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AF7E1841E9A8C9F00F6672B /* Nimble.framework */; };
 		9AF7E1871E9A8CB000F6672B /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AF7E1851E9A8C9F00F6672B /* Quick.framework */; };
 		9AF7E1881E9A8CB400F6672B /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9AF7E1841E9A8C9F00F6672B /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -97,6 +111,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				7D3D8BE11DF9D23F00E90921 /* ReactiveCollections.framework in CopyFiles */,
+				9ADC56421E9D2E0B0049C090 /* ReactiveCocoa.framework in CopyFiles */,
 				7D3D8BE21DF9D23F00E90921 /* ReactiveSwift.framework in CopyFiles */,
 				7D3D8BE31DF9D23F00E90921 /* Result.framework in CopyFiles */,
 				9AF7E1881E9A8CB400F6672B /* Nimble.framework in CopyFiles */,
@@ -111,6 +126,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				7DE06DB51DFADBC3003303AB /* ReactiveCollections.framework in CopyFiles */,
+				9ADC563E1E9D2DF80049C090 /* ReactiveCocoa.framework in CopyFiles */,
 				7DE06DB61DFADBCC003303AB /* ReactiveSwift.framework in CopyFiles */,
 				7DE06DB71DFADBCC003303AB /* Result.framework in CopyFiles */,
 				9AF7E18C1E9A8CBE00F6672B /* Nimble.framework in CopyFiles */,
@@ -124,6 +140,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				9ADC563A1E9D2DD00049C090 /* ReactiveCocoa.framework in CopyFiles */,
 				7DE06DDF1DFADD9B003303AB /* ReactiveCollections.framework in CopyFiles */,
 				7DE06DE01DFADDA0003303AB /* ReactiveSwift.framework in CopyFiles */,
 				7DE06DE11DFADDA0003303AB /* Result.framework in CopyFiles */,
@@ -156,6 +173,11 @@
 		7DE06DD51DFADCE4003303AB /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/tvOS/Result.framework; sourceTree = "<group>"; };
 		7DF60EEC1E007DEF0096283B /* Delta.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Delta.swift; sourceTree = "<group>"; };
 		9A37DC651E0B34D70075EC2E /* ReactiveArraySpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReactiveArraySpec.swift; path = ReactiveCollectionsTests/ReactiveArraySpec.swift; sourceTree = "<group>"; };
+		9ADC56461E9E662F0049C090 /* StdlibExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StdlibExtensions.swift; sourceTree = "<group>"; };
+		9ADC56341E9D2D9C0049C090 /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = Carthage/Build/iOS/ReactiveCocoa.framework; sourceTree = "<group>"; };
+		9ADC56351E9D2DA40049C090 /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = Carthage/Build/Mac/ReactiveCocoa.framework; sourceTree = "<group>"; };
+		9ADC56361E9D2DB00049C090 /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = Carthage/Build/tvOS/ReactiveCocoa.framework; sourceTree = "<group>"; };
+		9ADC56371E9D2DB90049C090 /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = Carthage/Build/watchOS/ReactiveCocoa.framework; sourceTree = "<group>"; };
 		9AF7E17E1E9A8BE100F6672B /* LinuxMain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinuxMain.swift; sourceTree = "<group>"; };
 		9AF7E1801E9A8C8A00F6672B /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/tvOS/Nimble.framework; sourceTree = "<group>"; };
 		9AF7E1811E9A8C8A00F6672B /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/tvOS/Quick.framework; sourceTree = "<group>"; };
@@ -196,6 +218,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9ADC56431E9D2E0F0049C090 /* ReactiveCocoa.framework in Frameworks */,
 				7D69AAFE1DF9D0E200FCB568 /* ReactiveSwift.framework in Frameworks */,
 				7D69AAFF1DF9D0E200FCB568 /* Result.framework in Frameworks */,
 			);
@@ -206,6 +229,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D69AAE71DF9CEE500FCB568 /* ReactiveCollections.framework in Frameworks */,
+				9ADC56411E9D2E090049C090 /* ReactiveCocoa.framework in Frameworks */,
 				7D69AB001DF9D11900FCB568 /* ReactiveSwift.framework in Frameworks */,
 				7D69AB011DF9D11900FCB568 /* Result.framework in Frameworks */,
 				9AF7E1861E9A8CB000F6672B /* Nimble.framework in Frameworks */,
@@ -219,6 +243,7 @@
 			files = (
 				7DC1E2DD1DFADFA500A61745 /* ReactiveSwift.framework in Frameworks */,
 				7DC1E2DE1DFADFA500A61745 /* Result.framework in Frameworks */,
+				9ADC56381E9D2DC60049C090 /* ReactiveCocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -228,6 +253,7 @@
 			files = (
 				7DE06DAC1DFADB19003303AB /* ReactiveSwift.framework in Frameworks */,
 				7DE06DAD1DFADB19003303AB /* Result.framework in Frameworks */,
+				9ADC56401E9D2E050049C090 /* ReactiveCocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -236,6 +262,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7DE06D9C1DFADA84003303AB /* ReactiveCollections.framework in Frameworks */,
+				9ADC563F1E9D2E000049C090 /* ReactiveCocoa.framework in Frameworks */,
 				7DE06DB11DFADB9F003303AB /* ReactiveSwift.framework in Frameworks */,
 				7DE06DB21DFADB9F003303AB /* Result.framework in Frameworks */,
 				9AF7E18A1E9A8CBB00F6672B /* Nimble.framework in Frameworks */,
@@ -249,6 +276,7 @@
 			files = (
 				7DE06DD61DFADCE4003303AB /* ReactiveSwift.framework in Frameworks */,
 				7DE06DD71DFADCE4003303AB /* Result.framework in Frameworks */,
+				9ADC56391E9D2DCB0049C090 /* ReactiveCocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -257,6 +285,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7DE06DC61DFADCAF003303AB /* ReactiveCollections.framework in Frameworks */,
+				9ADC563B1E9D2DD30049C090 /* ReactiveCocoa.framework in Frameworks */,
 				7DE06DDC1DFADD8B003303AB /* ReactiveSwift.framework in Frameworks */,
 				7DE06DDD1DFADD8B003303AB /* Result.framework in Frameworks */,
 				9AF7E1901E9A8CCA00F6672B /* Nimble.framework in Frameworks */,
@@ -346,6 +375,7 @@
 		7DC1E2DF1DFAE01800A61745 /* watchOS */ = {
 			isa = PBXGroup;
 			children = (
+				9ADC56371E9D2DB90049C090 /* ReactiveCocoa.framework */,
 				7DC1E2DB1DFADFA500A61745 /* ReactiveSwift.framework */,
 				7DC1E2DC1DFADFA500A61745 /* Result.framework */,
 			);
@@ -355,6 +385,7 @@
 		7DE06DAF1DFADB7C003303AB /* macOS */ = {
 			isa = PBXGroup;
 			children = (
+				9ADC56351E9D2DA40049C090 /* ReactiveCocoa.framework */,
 				9AF7E1821E9A8C9700F6672B /* Nimble.framework */,
 				9AF7E1831E9A8C9700F6672B /* Quick.framework */,
 				7DE06D7C1DFAD8E9003303AB /* ReactiveSwift.framework */,
@@ -366,6 +397,7 @@
 		7DE06DB01DFADB82003303AB /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				9ADC56341E9D2D9C0049C090 /* ReactiveCocoa.framework */,
 				9AF7E1841E9A8C9F00F6672B /* Nimble.framework */,
 				9AF7E1851E9A8C9F00F6672B /* Quick.framework */,
 				7D69AAFC1DF9D0E200FCB568 /* ReactiveSwift.framework */,
@@ -377,6 +409,7 @@
 		7DE06DD81DFADCE8003303AB /* tvOS */ = {
 			isa = PBXGroup;
 			children = (
+				9ADC56361E9D2DB00049C090 /* ReactiveCocoa.framework */,
 				9AF7E1801E9A8C8A00F6672B /* Nimble.framework */,
 				9AF7E1811E9A8C8A00F6672B /* Quick.framework */,
 				7DE06DD41DFADCE4003303AB /* ReactiveSwift.framework */,
@@ -1123,6 +1156,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
@@ -1140,6 +1174,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
@@ -1350,6 +1385,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
@@ -1536,6 +1572,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
