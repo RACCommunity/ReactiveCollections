@@ -111,8 +111,8 @@ class ReactiveArrayTests: XCTestCase {
 			Delta(
 				previous: [1, 2, 3],
 				current: [3, 2, 3],
-				inserts: .empty,
-				deletes: .empty,
+				inserts: [],
+				deletes: [],
 				updates: IndexSet(integer: 0)
 			)
 		)
@@ -138,8 +138,8 @@ class ReactiveArrayTests: XCTestCase {
 			Delta(
 				previous: [1, 2, 3],
 				current: [1, 1, 1],
-				inserts: .empty,
-				deletes: .empty,
+				inserts: [],
+				deletes: [],
 				updates: IndexSet(1...2)
 			)
 		)
@@ -154,7 +154,7 @@ class ReactiveArrayTests: XCTestCase {
 				previous: [1, 1, 1],
 				current: [0, 0, 0, 1],
 				inserts: IndexSet(integer: 2),
-				deletes: .empty,
+				deletes: [],
 				updates: IndexSet(0...1)
 			)
 		)
@@ -168,8 +168,8 @@ class ReactiveArrayTests: XCTestCase {
 			Delta(
 				previous: [0, 0, 0, 1],
 				current: [1, 0, 0, 1],
-				inserts: .empty,
-				deletes: .empty,
+				inserts: [],
+				deletes: [],
 				updates: IndexSet(integer: 0)
 			)
 		)
@@ -184,7 +184,7 @@ class ReactiveArrayTests: XCTestCase {
 				previous: [1, 0, 0, 1],
 				current: [0, 1, 2, 3, 4, 5],
 				inserts: IndexSet(4...5),
-				deletes: .empty,
+				deletes: [],
 				updates: IndexSet(0...3)
 			)
 		)
@@ -211,8 +211,8 @@ class ReactiveArrayTests: XCTestCase {
 				previous: [1, 2, 3],
 				current: [1, 2, 3, 4],
 				inserts: IndexSet(integer: 3),
-				deletes: .empty,
-				updates: .empty
+				deletes: [],
+				updates: []
 			)
 		)
 
@@ -236,8 +236,8 @@ class ReactiveArrayTests: XCTestCase {
 				previous: [1, 2, 3],
 				current: [1, 2, 3, 4, 5, 6],
 				inserts: IndexSet(3..<6),
-				deletes: .empty,
-				updates: .empty
+				deletes: [],
+				updates: []
 			)
 		)
 
@@ -263,8 +263,8 @@ class ReactiveArrayTests: XCTestCase {
 				previous: [1, 2, 3],
 				current: [1, 2, 3, 4],
 				inserts: IndexSet(integer: 3),
-				deletes: .empty,
-				updates: .empty
+				deletes: [],
+				updates: []
 			)
 		)
 
@@ -278,8 +278,8 @@ class ReactiveArrayTests: XCTestCase {
 				previous: [1, 2, 3, 4],
 				current: [0, 1, 2, 3, 4],
 				inserts: IndexSet(integer: 0),
-				deletes: .empty,
-				updates: .empty
+				deletes: [],
+				updates: []
 			)
 		)
 
@@ -303,8 +303,8 @@ class ReactiveArrayTests: XCTestCase {
 				previous: [1, 2, 3],
 				current: [4, 5, 6, 1, 2, 3],
 				inserts: IndexSet(0..<3),
-				deletes: .empty,
-				updates: .empty
+				deletes: [],
+				updates: []
 			)
 		)
 
@@ -329,9 +329,9 @@ class ReactiveArrayTests: XCTestCase {
 			Delta(
 				previous: [1, 2, 3],
 				current: [],
-				inserts: .empty,
+				inserts: [],
 				deletes: IndexSet(0..<3),
-				updates: .empty
+				updates: []
 			)
 		)
 
@@ -354,9 +354,9 @@ class ReactiveArrayTests: XCTestCase {
 			Delta(
 				previous: [1, 2, 3],
 				current: [],
-				inserts: .empty,
+				inserts: [],
 				deletes: IndexSet(0..<3),
-				updates: .empty
+				updates: []
 			)
 		)
 
@@ -379,9 +379,9 @@ class ReactiveArrayTests: XCTestCase {
 			Delta(
 				previous: [1, 2, 3],
 				current: [2, 3],
-				inserts: .empty,
+				inserts: [],
 				deletes: IndexSet(integer: 0),
-				updates: .empty
+				updates: []
 			)
 		)
 
@@ -404,9 +404,9 @@ class ReactiveArrayTests: XCTestCase {
 			Delta(
 				previous: [1, 2, 3],
 				current: [3],
-				inserts: .empty,
+				inserts: [],
 				deletes: IndexSet(0...1),
-				updates: .empty
+				updates: []
 			)
 		)
 
@@ -429,9 +429,9 @@ class ReactiveArrayTests: XCTestCase {
 			Delta(
 				previous: [1, 2, 3],
 				current: [],
-				inserts: .empty,
+				inserts: [],
 				deletes: IndexSet(0...2),
-				updates: .empty
+				updates: []
 			)
 		)
 
@@ -454,9 +454,9 @@ class ReactiveArrayTests: XCTestCase {
 			Delta(
 				previous: [1, 2, 3],
 				current: [1, 2],
-				inserts: .empty,
+				inserts: [],
 				deletes: IndexSet(integer: 2),
-				updates: .empty
+				updates: []
 			)
 		)
 
@@ -479,9 +479,9 @@ class ReactiveArrayTests: XCTestCase {
 			Delta(
 				previous: [1, 2, 3],
 				current: [1],
-				inserts: .empty,
+				inserts: [],
 				deletes: IndexSet(1..<3),
-				updates: .empty
+				updates: []
 			)
 		)
 
@@ -504,9 +504,9 @@ class ReactiveArrayTests: XCTestCase {
 			Delta(
 				previous: [1, 2, 3],
 				current: [],
-				inserts: .empty,
+				inserts: [],
 				deletes: IndexSet(0..<3),
-				updates: .empty
+				updates: []
 			)
 		)
 
@@ -529,9 +529,9 @@ class ReactiveArrayTests: XCTestCase {
 			Delta(
 				previous: [1, 2, 3],
 				current: [1, 3],
-				inserts: .empty,
+				inserts: [],
 				deletes: IndexSet(integer: 1),
-				updates: .empty
+				updates: []
 			)
 		)
 
@@ -554,9 +554,9 @@ class ReactiveArrayTests: XCTestCase {
 			Delta(
 				previous: [1, 2, 3],
 				current: [1],
-				inserts: .empty,
+				inserts: [],
 				deletes: IndexSet(1..<3),
-				updates: .empty
+				updates: []
 			)
 		)
 
@@ -583,22 +583,22 @@ class ReactiveArrayTests: XCTestCase {
 				previous: [],
 				current: [1, 2, 3],
 				inserts: IndexSet(0..<3),
-				deletes: .empty,
-				updates: .empty
+				deletes: [],
+				updates: []
 			),
 			Delta(
 				previous: [1, 2, 3],
 				current: [1, 2, 3, 4],
 				inserts: IndexSet(integer: 3),
-				deletes: .empty,
-				updates: .empty
+				deletes: [],
+				updates: []
 			),
 			Delta(
 				previous: [1, 2, 3, 4],
 				current: [],
-				inserts: .empty,
+				inserts: [],
 				deletes: IndexSet(0...3),
-				updates: .empty
+				updates: []
 			)
 		]
 
@@ -624,15 +624,15 @@ class ReactiveArrayTests: XCTestCase {
 				previous: [],
 				current: [1, 2, 3, 4],
 				inserts: IndexSet(0..<4),
-				deletes: .empty,
-				updates: .empty
+				deletes: [],
+				updates: []
 			),
 			Delta(
 				previous: [1, 2, 3, 4],
 				current: [],
-				inserts: .empty,
+				inserts: [],
 				deletes: IndexSet(0..<4),
-				updates: .empty
+				updates: []
 			)
 		]
 

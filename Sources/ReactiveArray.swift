@@ -34,8 +34,8 @@ extension ReactiveArray {
 				let delta = Delta(previous: [],
 				                  current: elements,
 				                  inserts: IndexSet(integersIn: elements.indices),
-				                  deletes: .empty,
-				                  updates: .empty)
+				                  deletes: [],
+				                  updates: [])
 				observer.send(value: delta)
 
 				if let strongSelf = self {
@@ -130,9 +130,9 @@ extension ReactiveArray: RangeReplaceableCollection {
 
 			let delta = Delta(previous: previous,
 			                  current: elements,
-			                  inserts: .empty,
+			                  inserts: [],
 			                  deletes: IndexSet(integer: position),
-			                  updates: .empty)
+			                  updates: [])
 			innerObserver.send(value: delta)
 
 			return value
@@ -149,9 +149,9 @@ extension ReactiveArray: RangeReplaceableCollection {
 
 				let delta = Delta(previous: previous,
 				                  current: elements,
-				                  inserts: .empty,
+				                  inserts: [],
 				                  deletes: IndexSet(integersIn: previous.indices),
-				                  updates: .empty)
+				                  updates: [])
 				innerObserver.send(value: delta)
 			}
 		}

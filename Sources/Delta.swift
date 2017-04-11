@@ -1,12 +1,5 @@
 import Foundation
 
-public extension IndexSet {
-
-	public static var empty: IndexSet {
-		return IndexSet()
-	}
-}
-
 public struct Delta<Snapshot: Collection, ChangeRepresentation> {
 	public let previous: Snapshot
 	public let current: Snapshot
