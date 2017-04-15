@@ -87,9 +87,8 @@ matrix:
       env:
         - JOB=CARTHAGE-watchOS
     - script:
-      - gem install cocoapods -v 1.1.1
       - pod repo update --silent
-      - pod lib lint --allow-warnings
+      - pod lib lint ReactiveCollections.podspec
       env:
         - JOB=PODSPEC
     - os: osx
