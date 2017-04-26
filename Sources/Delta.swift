@@ -9,6 +9,12 @@ public struct Delta<Snapshot: Collection, ChangeRepresentation> {
 	public let updates: ChangeRepresentation
 }
 
+extension Delta: CustomDebugStringConvertible {
+	public var debugDescription: String {
+		return "previous: \(String(describing: previous)); current: \(String(describing: current)); inserts: \(String(describing: inserts)); deletes: \(String(describing: deletes)); updates: \(String(describing: updates))"
+	}
+}
+
 extension Delta where Snapshot.Iterator.Element: Equatable, ChangeRepresentation: Equatable {
 
 	public static func ==(lhs: Delta<Snapshot, ChangeRepresentation>, rhs: Delta<Snapshot, ChangeRepresentation>) -> Bool {
