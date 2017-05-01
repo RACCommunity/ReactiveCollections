@@ -5,7 +5,7 @@ import Nimble
 import Quick
 @testable import ReactiveCollections
 
-typealias Change<T> = ReactiveArray<T>.Change
+private typealias Change<T> = ReactiveArray<T>.Delta
 
 class ReactiveArraySpec: QuickSpec {
 	override func spec() {
@@ -531,6 +531,33 @@ class ReactiveArraySpec: QuickSpec {
 				beforeEach {
 					array = [1, 2, 3]
 					array.signal.observeValues { latestDelta = $0 }
+				}
+
+				it("should treat replacement of the mutable view as `removeAll`") {
+					array.modify { view in
+						view = []
+					}
+
+					expect(array) == []
+					expect(latestDelta) == Change(previous: [1, 2, 3],
+					                              current: [],
+					                              inserts: [],
+					                              deletes: IndexSet(0 ..< 3),
+					                              updates: [])
+				}
+
+				it("should treat replacement of the mutable view as `removeAll`, and append the given array") {
+					array.modify { view in
+						view = []
+						view.append(contentsOf: [8, 9, 0])
+					}
+
+					expect(array) == [8, 9, 0]
+					expect(latestDelta) == Change(previous: [1, 2, 3],
+					                              current: [8, 9, 0],
+					                              inserts: IndexSet(0 ..< 3),
+					                              deletes: IndexSet(0 ..< 3),
+					                              updates: [])
 				}
 
 				it("should insert at removed indices") {
