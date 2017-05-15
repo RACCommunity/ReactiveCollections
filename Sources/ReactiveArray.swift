@@ -253,3 +253,15 @@ private final class Storage<Elements> {
 		return returnValue
 	}
 }
+
+private let voidProperty = Property(value: ())
+
+extension ReactiveArray: IndexingDeltaSection {
+	public var deltas: SignalProducer<Delta, NoError> {
+		return producer
+	}
+
+	public var metadata: Property<()> {
+		return voidProperty
+	}
+}

@@ -1,4 +1,6 @@
 import Foundation
+import ReactiveSwift
+import Result
 
 /// `Delta` represents an atomic batch of changes applied to a collection.
 public struct Delta<ChangeRepresentation: Collection> {
@@ -219,5 +221,23 @@ extension IndexingDelta where IndexPairs.Iterator.Element == (Snapshot.Index, Sn
 			return (Int(collections.0.distance(from: collections.0.startIndex, to: indices.0).toIntMax()),
 			        Int(collections.1.distance(from: collections.1.startIndex, to: indices.1).toIntMax()))
 		}
+	}
+}
+
+public protocol IndexingDeltaSection {
+	associatedtype Delta: IndexingDelta
+	associatedtype Metadata
+
+	var metadata: Property<Metadata> { get }
+	var deltas: SignalProducer<Delta, NoError> { get }
+}
+
+public struct DefaultSection<Delta: IndexingDelta>: IndexingDeltaSection {
+	public let metadata: Property<()>
+	public let deltas: SignalProducer<Delta, NoError>
+
+	public init(deltas: SignalProducer<Delta, NoError>) {
+		self.deltas = deltas
+		self.metadata = Property(value: ())
 	}
 }
