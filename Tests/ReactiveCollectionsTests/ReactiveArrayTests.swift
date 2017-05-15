@@ -2,7 +2,6 @@ import Foundation
 import XCTest
 import ReactiveSwift
 import Result
-import Nimble
 @testable import ReactiveCollections
 
 class ReactiveArrayTests: XCTestCase {
@@ -108,17 +107,15 @@ class ReactiveArrayTests: XCTestCase {
 		array[0] = 3
 
 		expectedChanges.append(
-			Delta(
+			ArrayDelta(
 				previous: [1, 2, 3],
 				current: [3, 2, 3],
-				inserts: [],
-				deletes: [],
 				updates: IndexSet(integer: 0)
 			)
 		)
 
 		XCTAssertEqual(array[array.indices], [3, 2, 3])
-		expect(changes) == expectedChanges
+		XCTAssertEqual(changes, expectedChanges)
 	}
 
 	// MARK: - Replace tests
@@ -135,62 +132,56 @@ class ReactiveArrayTests: XCTestCase {
 		array.replaceSubrange(1...2, with: [1, 1])
 
 		expectedChanges.append(
-			Delta(
+			ArrayDelta(
 				previous: [1, 2, 3],
 				current: [1, 1, 1],
-				inserts: [],
-				deletes: [],
-				updates: IndexSet(1...2)
+				updates: IndexSet(integersIn: 1...2)
 			)
 		)
 
 		XCTAssertEqual(array[array.indices], [1, 1, 1])
-		expect(changes) == expectedChanges
+		XCTAssertEqual(changes, expectedChanges)
 
 		array.replaceSubrange(0...1, with: [0, 0, 0])
 
 		expectedChanges.append(
-			Delta(
+			ArrayDelta(
 				previous: [1, 1, 1],
 				current: [0, 0, 0, 1],
 				inserts: IndexSet(integer: 2),
-				deletes: [],
-				updates: IndexSet(0...1)
+				updates: IndexSet(integersIn: 0...1)
 			)
 		)
 
 		XCTAssertEqual(array[array.indices], [0, 0, 0, 1])
-		expect(changes) == expectedChanges
+		XCTAssertEqual(changes, expectedChanges)
 
 		array.replaceSubrange(0...0, with: [1])
 
 		expectedChanges.append(
-			Delta(
+			ArrayDelta(
 				previous: [0, 0, 0, 1],
 				current: [1, 0, 0, 1],
-				inserts: [],
-				deletes: [],
 				updates: IndexSet(integer: 0)
 			)
 		)
 
 		XCTAssertEqual(array[array.indices], [1, 0, 0, 1])
-		expect(changes) == expectedChanges
+		XCTAssertEqual(changes, expectedChanges)
 
 		array.replaceSubrange(array.indices, with: Array(0...5))
 
 		expectedChanges.append(
-			Delta(
+			ArrayDelta(
 				previous: [1, 0, 0, 1],
 				current: [0, 1, 2, 3, 4, 5],
-				inserts: IndexSet(4...5),
-				deletes: [],
-				updates: IndexSet(0...3)
+				inserts: IndexSet(integersIn: 4...5),
+				updates: IndexSet(integersIn: 0...3)
 			)
 		)
 
 		XCTAssertEqual(array[array.indices], [0, 1, 2, 3, 4, 5])
-		expect(changes) == expectedChanges
+		XCTAssertEqual(changes, expectedChanges)
 	}
 
 	// MARK: - Append tests
@@ -207,17 +198,15 @@ class ReactiveArrayTests: XCTestCase {
 		array.append(4)
 
 		expectedChanges.append(
-			Delta(
+			ArrayDelta(
 				previous: [1, 2, 3],
 				current: [1, 2, 3, 4],
-				inserts: IndexSet(integer: 3),
-				deletes: [],
-				updates: []
+				inserts: IndexSet(integer: 3)
 			)
 		)
 
 		XCTAssertEqual(array[array.indices], [1, 2, 3, 4])
-		expect(changes) == expectedChanges
+		XCTAssertEqual(changes, expectedChanges)
 	}
 
 	func test_append_contents_of() {
@@ -232,17 +221,15 @@ class ReactiveArrayTests: XCTestCase {
 		array.append(contentsOf: [4, 5, 6])
 
 		expectedChanges.append(
-			Delta(
+			ArrayDelta(
 				previous: [1, 2, 3],
 				current: [1, 2, 3, 4, 5, 6],
-				inserts: IndexSet(3..<6),
-				deletes: [],
-				updates: []
+				inserts: IndexSet(integersIn: 3..<6)
 			)
 		)
 
 		XCTAssertEqual(array[array.indices], [1, 2, 3, 4, 5, 6])
-		expect(changes) == expectedChanges
+		XCTAssertEqual(changes, expectedChanges)
 	}
 
 	// MARK: - Insert tests
@@ -259,32 +246,28 @@ class ReactiveArrayTests: XCTestCase {
 		array.insert(4, at: array.endIndex)
 
 		expectedChanges.append(
-			Delta(
+			ArrayDelta(
 				previous: [1, 2, 3],
 				current: [1, 2, 3, 4],
-				inserts: IndexSet(integer: 3),
-				deletes: [],
-				updates: []
+				inserts: IndexSet(integer: 3)
 			)
 		)
 
 		XCTAssertEqual(array[array.indices], [1, 2, 3, 4])
-		expect(changes) == expectedChanges
+		XCTAssertEqual(changes, expectedChanges)
 
 		array.insert(0, at: 0)
 
 		expectedChanges.append(
-			Delta(
+			ArrayDelta(
 				previous: [1, 2, 3, 4],
 				current: [0, 1, 2, 3, 4],
-				inserts: IndexSet(integer: 0),
-				deletes: [],
-				updates: []
+				inserts: IndexSet(integer: 0)
 			)
 		)
 
 		XCTAssertEqual(array[array.indices], [0, 1, 2, 3, 4])
-		expect(changes) == expectedChanges
+		XCTAssertEqual(changes, expectedChanges)
 	}
 
 	func test_insert_contents_of() {
@@ -299,17 +282,15 @@ class ReactiveArrayTests: XCTestCase {
 		array.insert(contentsOf: [4, 5, 6], at: 0)
 
 		expectedChanges.append(
-			Delta(
+			ArrayDelta(
 				previous: [1, 2, 3],
 				current: [4, 5, 6, 1, 2, 3],
-				inserts: IndexSet(0..<3),
-				deletes: [],
-				updates: []
+				inserts: IndexSet(integersIn: 0..<3)
 			)
 		)
 
 		XCTAssertEqual(array[array.indices], [4, 5, 6, 1, 2, 3])
-		expect(changes) == expectedChanges
+		XCTAssertEqual(changes, expectedChanges)
 	}
 
 	// MARK: - Remove tests
@@ -326,17 +307,15 @@ class ReactiveArrayTests: XCTestCase {
 		array.removeAll()
 
 		expectedChanges.append(
-			Delta(
+			ArrayDelta(
 				previous: [1, 2, 3],
 				current: [],
-				inserts: [],
-				deletes: IndexSet(0..<3),
-				updates: []
+				deletes: IndexSet(integersIn: 0..<3)
 			)
 		)
 
 		XCTAssertEqual(array[array.indices], [])
-		expect(changes) == expectedChanges
+		XCTAssertEqual(changes, expectedChanges)
 	}
 
 	func test_remove_all_and_keep_capacity() {
@@ -351,17 +330,15 @@ class ReactiveArrayTests: XCTestCase {
 		array.removeAll(keepingCapacity: true)
 
 		expectedChanges.append(
-			Delta(
+			ArrayDelta(
 				previous: [1, 2, 3],
 				current: [],
-				inserts: [],
-				deletes: IndexSet(0..<3),
-				updates: []
+				deletes: IndexSet(integersIn: 0..<3)
 			)
 		)
 
 		XCTAssertEqual(array[array.indices], [])
-		expect(changes) == expectedChanges
+		XCTAssertEqual(changes, expectedChanges)
 	}
 
 	func test_remove_first() {
@@ -376,17 +353,15 @@ class ReactiveArrayTests: XCTestCase {
 		XCTAssertEqual(array.removeFirst(), 1)
 
 		expectedChanges.append(
-			Delta(
+			ArrayDelta(
 				previous: [1, 2, 3],
 				current: [2, 3],
-				inserts: [],
-				deletes: IndexSet(integer: 0),
-				updates: []
+				deletes: IndexSet(integer: 0)
 			)
 		)
 
 		XCTAssertEqual(array[array.indices], [2, 3])
-		expect(changes) == expectedChanges
+		XCTAssertEqual(changes, expectedChanges)
 	}
 
 	func test_remove_first2() {
@@ -401,17 +376,15 @@ class ReactiveArrayTests: XCTestCase {
 		array.removeFirst(2)
 
 		expectedChanges.append(
-			Delta(
+			ArrayDelta(
 				previous: [1, 2, 3],
 				current: [3],
-				inserts: [],
-				deletes: IndexSet(0...1),
-				updates: []
+				deletes: IndexSet(integersIn: 0...1)
 			)
 		)
 
 		XCTAssertEqual(array[array.indices], [3])
-		expect(changes) == expectedChanges
+		XCTAssertEqual(changes, expectedChanges)
 	}
 
 	func test_remove_first_all() {
@@ -426,17 +399,15 @@ class ReactiveArrayTests: XCTestCase {
 		array.removeFirst(3)
 
 		expectedChanges.append(
-			Delta(
+			ArrayDelta(
 				previous: [1, 2, 3],
 				current: [],
-				inserts: [],
-				deletes: IndexSet(0...2),
-				updates: []
+				deletes: IndexSet(integersIn: 0...2)
 			)
 		)
 
 		XCTAssertEqual(array[array.indices], [])
-		expect(changes) == expectedChanges
+		XCTAssertEqual(changes, expectedChanges)
 	}
 
 	func test_remove_last() {
@@ -451,17 +422,15 @@ class ReactiveArrayTests: XCTestCase {
 		XCTAssertEqual(array.removeLast(), 3)
 
 		expectedChanges.append(
-			Delta(
+			ArrayDelta(
 				previous: [1, 2, 3],
 				current: [1, 2],
-				inserts: [],
-				deletes: IndexSet(integer: 2),
-				updates: []
+				deletes: IndexSet(integer: 2)
 			)
 		)
 
 		XCTAssertEqual(array[array.indices], [1, 2])
-		expect(changes) == expectedChanges
+		XCTAssertEqual(changes, expectedChanges)
 	}
 
 	func test_remove_last2() {
@@ -476,17 +445,15 @@ class ReactiveArrayTests: XCTestCase {
 		array.removeLast(2)
 
 		expectedChanges.append(
-			Delta(
+			ArrayDelta(
 				previous: [1, 2, 3],
 				current: [1],
-				inserts: [],
-				deletes: IndexSet(1..<3),
-				updates: []
+				deletes: IndexSet(integersIn: 1..<3)
 			)
 		)
 
 		XCTAssertEqual(array[array.indices], [1])
-		expect(changes) == expectedChanges
+		XCTAssertEqual(changes, expectedChanges)
 	}
 
 	func test_remove_last_all() {
@@ -501,17 +468,15 @@ class ReactiveArrayTests: XCTestCase {
 		array.removeLast(3)
 
 		expectedChanges.append(
-			Delta(
+			ArrayDelta(
 				previous: [1, 2, 3],
 				current: [],
-				inserts: [],
-				deletes: IndexSet(0..<3),
-				updates: []
+				deletes: IndexSet(integersIn: 0..<3)
 			)
 		)
 
 		XCTAssertEqual(array[array.indices], [])
-		expect(changes) == expectedChanges
+		XCTAssertEqual(changes, expectedChanges)
 	}
 
 	func test_remove_at_index() {
@@ -526,17 +491,15 @@ class ReactiveArrayTests: XCTestCase {
 		XCTAssertEqual(array.remove(at: 1), 2)
 
 		expectedChanges.append(
-			Delta(
+			ArrayDelta(
 				previous: [1, 2, 3],
 				current: [1, 3],
-				inserts: [],
-				deletes: IndexSet(integer: 1),
-				updates: []
+				deletes: IndexSet(integer: 1)
 			)
 		)
 
 		XCTAssertEqual(array[array.indices], [1, 3])
-		expect(changes) == expectedChanges
+		XCTAssertEqual(changes, expectedChanges)
 	}
 
 	func test_remove_subrange() {
@@ -551,17 +514,15 @@ class ReactiveArrayTests: XCTestCase {
 		array.removeSubrange(1...2)
 
 		expectedChanges.append(
-			Delta(
+			ArrayDelta(
 				previous: [1, 2, 3],
 				current: [1],
-				inserts: [],
-				deletes: IndexSet(1..<3),
-				updates: []
+				deletes: IndexSet(integersIn: 1..<3)
 			)
 		)
 
 		XCTAssertEqual(array[array.indices], [1])
-		expect(changes) == expectedChanges
+		XCTAssertEqual(changes, expectedChanges)
 	}
 
 	// MARK: - Producer tests
@@ -579,26 +540,20 @@ class ReactiveArrayTests: XCTestCase {
 		array.removeAll()
 
 		let expectedChanges: [Change<Int>] = [
-			Delta(
+			ArrayDelta(
 				previous: [],
 				current: [1, 2, 3],
-				inserts: IndexSet(0..<3),
-				deletes: [],
-				updates: []
+				inserts: IndexSet(integersIn: 0..<3)
 			),
-			Delta(
+			ArrayDelta(
 				previous: [1, 2, 3],
 				current: [1, 2, 3, 4],
-				inserts: IndexSet(integer: 3),
-				deletes: [],
-				updates: []
+				inserts: IndexSet(integer: 3)
 			),
-			Delta(
+			ArrayDelta(
 				previous: [1, 2, 3, 4],
 				current: [],
-				inserts: [],
-				deletes: IndexSet(0...3),
-				updates: []
+				deletes: IndexSet(integersIn: 0...3)
 			)
 		]
 
@@ -620,19 +575,15 @@ class ReactiveArrayTests: XCTestCase {
 		array.removeAll()
 
 		let expectedChanges: [Change<Int>] = [
-			Delta(
+			ArrayDelta(
 				previous: [],
 				current: [1, 2, 3, 4],
-				inserts: IndexSet(0..<4),
-				deletes: [],
-				updates: []
+				inserts: IndexSet(integersIn: 0..<4)
 			),
-			Delta(
+			ArrayDelta(
 				previous: [1, 2, 3, 4],
 				current: [],
-				inserts: [],
-				deletes: IndexSet(0..<4),
-				updates: []
+				deletes: IndexSet(integersIn: 0..<4)
 			)
 		]
 
