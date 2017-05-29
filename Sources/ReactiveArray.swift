@@ -2,33 +2,15 @@ import Foundation
 import ReactiveSwift
 import Result
 
-public final class ReactiveArray<Element> {
+public final class ReactiveArray<Element>: RandomAccessCollection {
 	public typealias Snapshot = ContiguousArray<Element>
-	public typealias Change = Delta<Snapshot, IndexSet>
+	public typealias Delta = ReactiveCollections.Delta<Snapshot, IndexSet>
 
 	fileprivate let storage: Storage<ContiguousArray<Element>>
+	fileprivate let observer: Observer<Delta, NoError>
 
-	public let signal: Signal<Change, NoError>
-	fileprivate let innerObserver: Observer<Change, NoError>
-
-	public init(_ elements: [Element]) {
-		(signal, innerObserver) = Signal<Change, NoError>.pipe()
-		storage = Storage(ContiguousArray(elements))
-	}
-
-	public convenience init() {
-		self.init([])
-	}
-
-	deinit {
-		innerObserver.sendCompleted()
-	}
-
-}
-
-extension ReactiveArray {
-
-	public var producer: SignalProducer<Change, NoError> {
+	public let signal: Signal<Delta, NoError>
+	public var producer: SignalProducer<Delta, NoError> {
 		return SignalProducer { [weak self, storage] observer, disposable in
 			storage.modify { elements in
 				let delta = Delta(previous: [],
@@ -46,20 +28,6 @@ extension ReactiveArray {
 			}
 		}
 	}
-}
-
-// MARK: - ExpressibleByArrayLiteral
-
-extension ReactiveArray: ExpressibleByArrayLiteral {
-
-	public convenience init(arrayLiteral elements: Element...) {
-		self.init(elements)
-	}
-}
-
-// MARK: - MutableCollection
-
-extension ReactiveArray: MutableCollection {
 
 	public var startIndex: Int {
 		return storage.elements.startIndex
@@ -70,165 +38,188 @@ extension ReactiveArray: MutableCollection {
 	}
 
 	public subscript(position: Int) -> Element {
-		get {
-			return storage.elements[position]
-		}
-		set {
-			replaceSubrange(position..<index(after: position), with: CollectionOfOne(newValue))
-		}
+		return storage.elements[position]
 	}
 
-	public subscript(bounds: Range<Int>) -> ArraySlice<Element> {
-		get {
-			return storage.elements[bounds]
-		}
-		set {
-			replaceSubrange(bounds, with: newValue)
-		}
-	}
-}
-
-// MARK: - RandomAccessCollection
-
-extension ReactiveArray: RandomAccessCollection {
-
-	public typealias Indices = CountableRange<Int>
-}
-
-// MARK: - RangeReplaceableCollection
-
-extension ReactiveArray: RangeReplaceableCollection {
-
-	public convenience init(repeating repeatedValue: Element, count: Int) {
-		self.init(Array(repeating: repeatedValue, count: count))
+	public init<S: Sequence>(_ sequence: S) where S.Iterator.Element == Element {
+		(signal, observer) = Signal<Delta, NoError>.pipe()
+		storage = Storage(ContiguousArray(sequence))
 	}
 
-	public func append(_ newElement: Element) {
-		insert(newElement, at: endIndex)
+	public convenience init() {
+		self.init([])
 	}
 
-	public func append<S : Sequence>(contentsOf newElements: S) where S.Iterator.Element == Element {
-		reserveCapacity(count + newElements.underestimatedCount)
-		insert(contentsOf: Array(newElements), at: endIndex)
-	}
-
-	public func insert(_ newElement: Element, at i: Int) {
-		replaceSubrange(i..<i, with: CollectionOfOne(newElement))
-	}
-
-	public func insert<C : Collection>(contentsOf newElements: C, at i: Int) where C.Iterator.Element == Element {
-		replaceSubrange(i..<i, with: newElements)
-	}
-
-	public func remove(at position: Int) -> Element {
-		precondition(!isEmpty, "can't remove from an empty array")
-
+	public func modify<Result>(_ action: (inout MutableView) -> Result) -> Result {
 		return storage.modify { elements in
-			let previous = elements
-			let value = previous[position]
-			elements.remove(at: position)
+			var view = MutableView(original: elements)
+			let result = action(&view)
 
-			let delta = Delta(previous: previous,
-			                  current: elements,
-			                  inserts: [],
-			                  deletes: IndexSet(integer: position),
-			                  updates: [])
-			innerObserver.send(value: delta)
+			let deletes = view.isOriginal ? view.deletes : IndexSet(integersIn: elements.startIndex ..< elements.endIndex)
+			let delta = Delta(previous: elements, current: view.elements, inserts: view.inserts, deletes: deletes, updates: view.updates)
+			elements = view.elements
 
-			return value
+			observer.send(value: delta)
+
+			return result
 		}
 	}
 
-	public func removeAll(keepingCapacity keepCapacity: Bool = false) {
-		if keepCapacity {
-			removeSubrange(indices)
-		} else {
-			storage.modify { elements in
-				let previous = storage.elements
-				elements.removeAll()
+	deinit {
+		observer.sendCompleted()
+	}
+}
 
-				let delta = Delta(previous: previous,
-				                  current: elements,
-				                  inserts: [],
-				                  deletes: IndexSet(integersIn: previous.indices),
-				                  updates: [])
-				innerObserver.send(value: delta)
+extension ReactiveArray: ExpressibleByArrayLiteral {
+	public convenience init(arrayLiteral elements: Element...) {
+		self.init(elements)
+	}
+}
+
+extension ReactiveArray where Element: Equatable {
+	public static func ==<C: Collection>(left: ReactiveArray<Element>, right: C) -> Bool where C.Iterator.Element == Element {
+		return left.elementsEqual(right, by: ==)
+	}
+}
+
+extension ReactiveArray {
+	public struct MutableView: RandomAccessCollection, MutableCollection, RangeReplaceableCollection {
+		fileprivate var isOriginal: Bool
+		fileprivate var elements: ContiguousArray<Element>
+
+		// Indices of insertions made to `elements`.
+		fileprivate var inserts: IndexSet
+
+		// Indices of deletions made to `elements`, ignoring the insertions.
+		fileprivate var deletes: IndexSet
+
+		// Indices of updates made to `elements`, ignoring the insertions.
+		fileprivate var updates: IndexSet
+
+		public init() {
+			self.elements = []
+			self.isOriginal = false
+			inserts = []
+			deletes = []
+			updates = []
+		}
+
+		fileprivate init(original elements: ContiguousArray<Element>) {
+			self.elements = elements
+			self.isOriginal = true
+			inserts = []
+			deletes = []
+			updates = []
+		}
+
+		public mutating func replaceSubrange<C>(_ subrange: Range<Int>, with newElements: C) where C: Collection, C.Iterator.Element == Element {
+			elements.replaceSubrange(subrange, with: newElements)
+
+			let elementsCount = Int(newElements.count.toIntMax())
+
+			if subrange.count > elementsCount {
+				let deleteCount = subrange.count - elementsCount
+				let deleteRange = (subrange.upperBound - deleteCount) ..< subrange.upperBound
+				let updateRange = subrange.lowerBound ..< deleteRange.lowerBound
+
+				if !updateRange.isEmpty {
+					var newUpdates = IndexSet(integersIn: updateRange)
+
+					// Handle updates to insertions.
+					newUpdates.subtract(inserts)
+
+					// Record the update set.
+					updates.formUnion(newUpdates.ignoringInserts(inserts))
+				}
+
+				if !deleteRange.isEmpty {
+					var newDeletes = IndexSet(integersIn: deleteRange)
+
+					// Handle the deletion of insertions.
+					let uncommittedInsertDeletes = inserts.intersection(newDeletes)
+					inserts.subtract(uncommittedInsertDeletes)
+					newDeletes.subtract(uncommittedInsertDeletes)
+
+					// Record the delete set and update set.
+					newDeletes = newDeletes.ignoringInserts(inserts)
+					deletes.formUnion(newDeletes)
+					updates.subtract(newDeletes)
+				}
+			} else {
+				let insertCount = elementsCount - subrange.count
+				let insertRange = subrange.upperBound ..< (subrange.upperBound + insertCount)
+				let updateRange = subrange
+
+				if !updateRange.isEmpty {
+					var newUpdates = IndexSet(integersIn: updateRange)
+
+					// Handle updates to insertions.
+					newUpdates.subtract(inserts)
+
+					// Record the update set.
+					updates.formUnion(newUpdates.ignoringInserts(inserts))
+				}
+
+				if !insertRange.isEmpty {
+					var newInserts = IndexSet(integersIn: insertRange)
+
+					// Record the insert set.
+					newInserts.formUnion(inserts.shifted(byInserts: newInserts))
+					inserts = newInserts
+				}
+			}
+		}
+
+		public var startIndex: Int {
+			return elements.startIndex
+		}
+
+		public var endIndex: Int {
+			return elements.endIndex
+		}
+
+		public subscript(position: Int) -> Element {
+			get {
+				return elements[position]
+			}
+			set {
+				replaceSubrange(position ..< position + 1, with: CollectionOfOne(newValue))
 			}
 		}
 	}
+}
 
-	public func removeFirst() -> Element {
-		precondition(!isEmpty, "can't remove first element from an empty array")
-		return remove(at: startIndex)
+extension ReactiveArray.MutableView: ExpressibleByArrayLiteral {
+	public init(arrayLiteral elements: Element...) {
+		self.init(elements)
 	}
+}
 
-	public func removeFirst(_ n: Int) {
-		precondition(n >= 0, "number of elements to remove should be non-negative")
-		precondition(n <= count, "can't remove more items from an array than it has")
-		removeSubrange(startIndex..<startIndex.advanced(by: n))
+extension ReactiveArray: CustomDebugStringConvertible {
+	public var debugDescription: String {
+		return storage.elements.description
 	}
+}
 
-	public func removeLast() -> Element {
-		precondition(!isEmpty, "can't remove last element from an empty array")
-		return remove(at: index(before: endIndex))
-	}
+extension IndexSet {
+	fileprivate func ignoringInserts(_ indices: IndexSet) -> IndexSet {
+		var shifted = IndexSet()
 
-	public func removeLast(_ n: Int) {
-		precondition(n >= 0, "number of elements to remove should be non-negative")
-		precondition(n <= count, "can't remove more items from an array than it has")
-		removeSubrange(endIndex.advanced(by: -n)..<endIndex)
-	}
-
-	public func removeSubrange(_ bounds: ClosedRange<Int>) {
-		replaceSubrange(bounds, with: EmptyCollection())
-	}
-
-	public func removeSubrange(_ bounds: CountableRange<Int>) {
-		replaceSubrange(bounds, with: EmptyCollection())
-	}
-
-	public func removeSubrange(_ bounds: CountableClosedRange<Int>) {
-		replaceSubrange(bounds, with: EmptyCollection())
-	}
-
-	public func removeSubrange(_ bounds: Range<Int>) {
-		replaceSubrange(bounds, with: EmptyCollection())
-	}
-
-	public func replaceSubrange<C>(_ subrange: ClosedRange<Int>, with newElements: C) where C : Collection, C.Iterator.Element == Element {
-		replaceSubrange(Range(subrange), with: newElements)
-	}
-
-	public func replaceSubrange<C>(_ subrange: CountableRange<Int>, with newElements: C) where C : Collection, C.Iterator.Element == Element {
-		replaceSubrange(Range(subrange), with: newElements)
-	}
-
-	public func replaceSubrange<C>(_ subrange: CountableClosedRange<Int>, with newElements: C) where C : Collection, C.Iterator.Element == Element {
-		replaceSubrange(Range(subrange), with: newElements)
-	}
-
-	public func replaceSubrange<C>(_ subrange: Range<Int>, with newElements: C) where C: Collection, C.Iterator.Element == Element {
-		storage.modify { elements in
-			let previous = elements
-
-			elements.replaceSubrange(subrange, with: newElements)
-
-			let insertsUpperBound = subrange.lowerBound.advanced(by: Int(newElements.distance(from: newElements.startIndex, to: newElements.endIndex).toIntMax()))
-			let inserts = IndexSet(integersIn: subrange.lowerBound ..< insertsUpperBound)
-			let deletes = IndexSet(integersIn: subrange)
-			let updates = inserts.intersection(deletes)
-
-			let delta = Delta(previous: previous,
-			                  current: storage.elements,
-			                  inserts: inserts.subtracting(updates),
-			                  deletes: deletes.subtracting(updates),
-			                  updates: updates)
-			innerObserver.send(value: delta)
+		for i in self {
+			shifted.insert(i - indices.count(in: 0 ... i))
 		}
+
+		return shifted
 	}
 
-	public func reserveCapacity(_ n: Int) {
-		storage.modify { $0.reserveCapacity(n) }
+	fileprivate func shifted(byInserts indices: IndexSet) -> IndexSet {
+		var shifted = IndexSet()
+
+		for i in self {
+			shifted.insert(i + indices.count(in: 0 ... i))
+		}
+
+		return shifted
 	}
 }
 
