@@ -14,36 +14,53 @@ internal func ==<T: Equatable, C: Collection>(_ array: Expectation<ReactiveArray
 	})
 }
 
-internal func ==<Snapshot, ChangeRepresentation>(
-	left: Expectation<Delta<Snapshot, ChangeRepresentation>>,
-	right: Delta<Snapshot, ChangeRepresentation>
-) where Snapshot.Iterator.Element: Equatable, ChangeRepresentation: Equatable {
+internal func ==<ChangeRepresentation>(
+	left: Expectation<Delta<ChangeRepresentation>>,
+	right: Delta<ChangeRepresentation>
+) where ChangeRepresentation: Equatable {
 	return left.to(NonNilMatcherFunc { expression, failureMessage in
 		let value = try expression.evaluate()!
 		if value == right {
 			return true
 		}
 
-		failureMessage.expected = "expected \(right.debugDescription)"
+		failureMessage.expected = "expected \(String(reflecting: right))"
 		failureMessage.to = ""
-		failureMessage.actualValue = value.debugDescription
+		failureMessage.actualValue = String(reflecting: value)
 		return false
 	})
 }
 
-internal func ==<Snapshot, ChangeRepresentation>(
-	left: Expectation<[Delta<Snapshot, ChangeRepresentation>]>,
-	right: [Delta<Snapshot, ChangeRepresentation>]
-) where Snapshot.Iterator.Element: Equatable, ChangeRepresentation: Equatable {
+internal func ==<Delta: IndexingDelta>(
+	left: Expectation<Delta>,
+	right: Delta
+) where Delta.Snapshot.Iterator.Element: Equatable, Delta.ChangeRepresentation: Equatable, Delta.IndexPairs.Iterator.Element == (Delta.Snapshot.Index, Delta.Snapshot.Index) {
+	return left.to(NonNilMatcherFunc { expression, failureMessage in
+		let value = try expression.evaluate()!
+		if value == right {
+			return true
+		}
+
+		failureMessage.expected = "expected \(String(reflecting: right))"
+		failureMessage.to = ""
+		failureMessage.actualValue = String(reflecting: value)
+		return false
+	})
+}
+
+internal func ==<Delta: IndexingDelta>(
+	left: Expectation<[Delta]>,
+	right: [Delta]
+) where Delta.Snapshot.Iterator.Element: Equatable, Delta.ChangeRepresentation: Equatable, Delta.IndexPairs.Iterator.Element == (Delta.Snapshot.Index, Delta.Snapshot.Index) {
 	return left.to(NonNilMatcherFunc { expression, failureMessage in
 		let value = try expression.evaluate()!
 		if value.elementsEqual(right, by: ==) {
 			return true
 		}
 
-		failureMessage.expected = "expected \(right.debugDescription)"
+		failureMessage.expected = "expected \(String(reflecting: right))"
 		failureMessage.to = ""
-		failureMessage.actualValue = value.debugDescription
+		failureMessage.actualValue = String(reflecting: value)
 		return false
 	})
 }

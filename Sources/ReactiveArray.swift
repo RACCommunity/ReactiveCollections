@@ -4,7 +4,7 @@ import Result
 
 public final class ReactiveArray<Element>: RandomAccessCollection {
 	public typealias Snapshot = ContiguousArray<Element>
-	public typealias Delta = ReactiveCollections.Delta<Snapshot, IndexSet>
+	public typealias Delta = ReactiveCollections.ArrayDelta<Snapshot>
 
 	fileprivate let storage: Storage<ContiguousArray<Element>>
 	fileprivate let observer: Observer<Delta, NoError>
@@ -15,9 +15,7 @@ public final class ReactiveArray<Element>: RandomAccessCollection {
 			storage.modify { elements in
 				let delta = Delta(previous: [],
 				                  current: elements,
-				                  inserts: IndexSet(integersIn: elements.indices),
-				                  deletes: [],
-				                  updates: [])
+				                  inserts: IndexSet(integersIn: elements.startIndex ..< elements.endIndex))
 				observer.send(value: delta)
 
 				if let strongSelf = self {
