@@ -172,7 +172,7 @@ public struct ArrayDelta<Snapshot: Collection>: IndexingDelta where Snapshot.Ind
 
 extension ArrayDelta: CustomDebugStringConvertible {
 	public var debugDescription: String {
-		return "previous: \(previous.count) element(s); current: \(current.count) element(s); inserts: \(inserts); deletes: \(deletes); updates: \(updates)"
+		return "previous: \(previous.count) element(s)\n>> \(previous)\ncurrent: \(current.count) element(s)\n>> \(current)\ninserts: \(inserts.count)\n>> \(Array(inserts))\ndeletes: \(deletes.count)\n>> \(Array(deletes))\nupdates: \(updates.count)\n>> \(Array(updates))\nmoves: \(moves.count)\n>> \(Array(moves))"
 	}
 }
 
