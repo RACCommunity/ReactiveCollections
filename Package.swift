@@ -9,7 +9,7 @@ let package = Package(
     name: "ReactiveCollections",
     dependencies: {
         var deps: [Package.Dependency] = [
-	    .Package(url: "https://github.com/ReactiveCocoa/ReactiveSwift.git", majorVersion: 1),
+	    .Package(url: "https://github.com/ReactiveCocoa/ReactiveSwift.git", majorVersion: 2),
 	]
         if isSwiftPackagerManagerTest {
             deps += [
