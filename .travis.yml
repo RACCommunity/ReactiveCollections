@@ -1,4 +1,5 @@
 language: objective-c
+cache: cocoapods
 osx_image: xcode8.3
 branches:
   only:
@@ -87,7 +88,7 @@ matrix:
       env:
         - JOB=CARTHAGE-watchOS
     - script:
-      - pod repo update --silent
+      - pod repo update
       - pod lib lint ReactiveCollections.podspec
       env:
         - JOB=PODSPEC
