@@ -37,18 +37,32 @@ if [[ -z $TRAVIS_XCODE_SCHEME ]]; then
     exit 1
 fi
 
-if [[ -z $XCODE_ACTION ]]; then
-    echo "Error: \$XCODE_ACTION is not set!"
-    exit 1
+if [[ "$TRAVIS_XCODE_SCHEME" == "ReactiveCollections-macOS" ]]; then
+    XCODE_SDK=macosx
+    XCODE_ACTION="build test"
+    XCODE_DESTINATION="arch=x86_64"
 fi
 
-if [[ -z $XCODE_SDK ]]; then
-    echo "Error: \$XCODE_SDK is not set!"
-    exit 1
+if [[ "$TRAVIS_XCODE_SCHEME" == "ReactiveCollections-iOS" ]]; then
+    XCODE_SDK=iphonesimulator
+    XCODE_ACTION="build-for-testing test-without-building"
+    XCODE_DESTINATION="platform=iOS Simulator,name=iPhone 7"
 fi
 
-if [[ -z $XCODE_DESTINATION ]]; then
-    echo "Error: \$XCODE_DESTINATION is not set!"
+if [[ "$TRAVIS_XCODE_SCHEME" == "ReactiveCollections-tvOS" ]]; then
+    XCODE_SDK=appletvsimulator
+    XCODE_ACTION="build-for-testing test-without-building"
+    XCODE_DESTINATION="platform=tvOS Simulator,name=Apple TV 1080p"
+fi
+
+if [[ "$TRAVIS_XCODE_SCHEME" == "ReactiveCollections-watchOS" ]]; then
+    XCODE_SDK=watchsimulator
+    XCODE_ACTION=build
+    XCODE_DESTINATION="platform=watchOS Simulator,name=Apple Watch - 38mm,OS=2.2"
+fi
+
+if [[ -z "$XCODE_SDK" ]]; then
+    echo "Unrecognized scheme: $TRAVIS_XCODE_SCHEME."
     exit 1
 fi
 
