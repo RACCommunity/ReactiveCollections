@@ -5,7 +5,7 @@ import Nimble
 import Quick
 @testable import ReactiveCollections
 
-private typealias Change<T> = ReactiveArray<T>.Delta
+private typealias TestSnapshot = ReactiveArray<Int>.Snapshot
 
 class ReactiveArraySpec: QuickSpec {
 	override func spec() {
@@ -79,8 +79,8 @@ class ReactiveArraySpec: QuickSpec {
 			}
 
 			it("get and set") {
-				var changes: [Change<Int>] = []
-				var expectedChanges: [Change<Int>] = []
+				var changes: [ReactiveArray<Int>.Snapshot] = []
+				var expectedChanges: [ReactiveArray<Int>.Snapshot] = []
 
 				let array = ReactiveArray([1, 2, 3])
 
@@ -89,12 +89,12 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0[0] = 3 }
 
 				expectedChanges.append(
-					Delta(
+					TestSnapshot(
 						previous: [1, 2, 3],
 						current: [3, 2, 3],
-						inserts: [],
-						deletes: [],
-						updates: IndexSet(integer: 0)
+						changeset: Changeset(inserts: [],
+						                     removals: [],
+						                     mutations: IndexSet(integer: 0))
 					)
 				)
 
@@ -105,8 +105,8 @@ class ReactiveArraySpec: QuickSpec {
 
 		describe("MutableView") {
 			it("replace_range") {
-				var changes: [Change<Int>] = []
-				var expectedChanges: [Change<Int>] = []
+				var changes: [ReactiveArray<Int>.Snapshot] = []
+				var expectedChanges: [ReactiveArray<Int>.Snapshot] = []
 
 				let array = ReactiveArray([1, 2, 3])
 
@@ -115,12 +115,12 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.replaceSubrange(1...2, with: [1, 1]) }
 
 				expectedChanges.append(
-					Delta(
+					TestSnapshot(
 						previous: [1, 2, 3],
 						current: [1, 1, 1],
-						inserts: [],
-						deletes: [],
-						updates: IndexSet(1...2)
+						changeset: Changeset(inserts: [],
+						                     removals: [],
+						                     mutations: IndexSet(integersIn: 1...2))
 					)
 				)
 
@@ -130,12 +130,12 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.replaceSubrange(0...1, with: [0, 0, 0]) }
 
 				expectedChanges.append(
-					Delta(
+					TestSnapshot(
 						previous: [1, 1, 1],
 						current: [0, 0, 0, 1],
-						inserts: IndexSet(integer: 2),
-						deletes: [],
-						updates: IndexSet(0...1)
+						changeset: Changeset(inserts: IndexSet(integer: 2),
+						                     removals: [],
+						                     mutations: IndexSet(integersIn: 0...1))
 					)
 				)
 
@@ -145,12 +145,12 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.replaceSubrange(0...0, with: [1]) }
 
 				expectedChanges.append(
-					Delta(
+					TestSnapshot(
 						previous: [0, 0, 0, 1],
 						current: [1, 0, 0, 1],
-						inserts: [],
-						deletes: [],
-						updates: IndexSet(integer: 0)
+						changeset: Changeset(inserts: [],
+						                     removals: [],
+						                     mutations: IndexSet(integer: 0))
 					)
 				)
 
@@ -160,12 +160,12 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.replaceSubrange(array.indices, with: Array(0...5)) }
 
 				expectedChanges.append(
-					Delta(
+					TestSnapshot(
 						previous: [1, 0, 0, 1],
 						current: [0, 1, 2, 3, 4, 5],
-						inserts: IndexSet(4...5),
-						deletes: [],
-						updates: IndexSet(0...3)
+						changeset: Changeset(inserts: IndexSet(integersIn: 4...5),
+						                     removals: [],
+						                     mutations: IndexSet(integersIn: 0...3))
 					)
 				)
 
@@ -174,8 +174,8 @@ class ReactiveArraySpec: QuickSpec {
 			}
 
 			it("append") {
-				var changes: [Change<Int>] = []
-				var expectedChanges: [Change<Int>] = []
+				var changes: [ReactiveArray<Int>.Snapshot] = []
+				var expectedChanges: [ReactiveArray<Int>.Snapshot] = []
 
 				let array = ReactiveArray([1, 2, 3])
 
@@ -184,12 +184,12 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.append(4) }
 
 				expectedChanges.append(
-					Delta(
+					TestSnapshot(
 						previous: [1, 2, 3],
 						current: [1, 2, 3, 4],
-						inserts: IndexSet(integer: 3),
-						deletes: [],
-						updates: []
+						changeset: Changeset(inserts: IndexSet(integer: 3),
+						                     removals: [],
+						                     mutations: [])
 					)
 				)
 
@@ -198,8 +198,8 @@ class ReactiveArraySpec: QuickSpec {
 			}
 
 			it("append_contents_of") {
-				var changes: [Change<Int>] = []
-				var expectedChanges: [Change<Int>] = []
+				var changes: [ReactiveArray<Int>.Snapshot] = []
+				var expectedChanges: [ReactiveArray<Int>.Snapshot] = []
 
 				let array = ReactiveArray([1, 2, 3])
 
@@ -208,12 +208,12 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.append(contentsOf: [4, 5, 6]) }
 
 				expectedChanges.append(
-					Delta(
+					TestSnapshot(
 						previous: [1, 2, 3],
 						current: [1, 2, 3, 4, 5, 6],
-						inserts: IndexSet(3..<6),
-						deletes: [],
-						updates: []
+						changeset: Changeset(inserts: IndexSet(integersIn: 3..<6),
+						                     removals: [],
+						                     mutations: [])
 					)
 				)
 
@@ -222,8 +222,8 @@ class ReactiveArraySpec: QuickSpec {
 			}
 
 			it("insert_at_index") {
-				var changes: [Change<Int>] = []
-				var expectedChanges: [Change<Int>] = []
+				var changes: [ReactiveArray<Int>.Snapshot] = []
+				var expectedChanges: [ReactiveArray<Int>.Snapshot] = []
 
 				let array = ReactiveArray([1, 2, 3])
 
@@ -232,12 +232,12 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.insert(4, at: array.endIndex) }
 
 				expectedChanges.append(
-					Delta(
+					TestSnapshot(
 						previous: [1, 2, 3],
 						current: [1, 2, 3, 4],
-						inserts: IndexSet(integer: 3),
-						deletes: [],
-						updates: []
+						changeset: Changeset(inserts: IndexSet(integer: 3),
+						                     removals: [],
+						                     mutations: [])
 					)
 				)
 
@@ -247,12 +247,12 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.insert(0, at: 0) }
 
 				expectedChanges.append(
-					Delta(
+					TestSnapshot(
 						previous: [1, 2, 3, 4],
 						current: [0, 1, 2, 3, 4],
-						inserts: IndexSet(integer: 0),
-						deletes: [],
-						updates: []
+						changeset: Changeset(inserts: IndexSet(integer: 0),
+						                     removals: [],
+						                     mutations: [])
 					)
 				)
 
@@ -261,8 +261,8 @@ class ReactiveArraySpec: QuickSpec {
 			}
 
 			it("insert_contents_of") {
-				var changes: [Change<Int>] = []
-				var expectedChanges: [Change<Int>] = []
+				var changes: [ReactiveArray<Int>.Snapshot] = []
+				var expectedChanges: [ReactiveArray<Int>.Snapshot] = []
 
 				let array = ReactiveArray([1, 2, 3])
 
@@ -271,12 +271,12 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.insert(contentsOf: [4, 5, 6], at: 0) }
 
 				expectedChanges.append(
-					Delta(
+					TestSnapshot(
 						previous: [1, 2, 3],
 						current: [4, 5, 6, 1, 2, 3],
-						inserts: IndexSet(0..<3),
-						deletes: [],
-						updates: []
+						changeset: Changeset(inserts: IndexSet(integersIn: 0..<3),
+						                     removals: [],
+						                     mutations: [])
 					)
 				)
 
@@ -285,8 +285,8 @@ class ReactiveArraySpec: QuickSpec {
 			}
 
 			it("remove_all") {
-				var changes: [Change<Int>] = []
-				var expectedChanges: [Change<Int>] = []
+				var changes: [ReactiveArray<Int>.Snapshot] = []
+				var expectedChanges: [ReactiveArray<Int>.Snapshot] = []
 
 				let array = ReactiveArray([1, 2, 3])
 
@@ -295,12 +295,12 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.removeAll() }
 
 				expectedChanges.append(
-					Delta(
+					TestSnapshot(
 						previous: [1, 2, 3],
 						current: [],
-						inserts: [],
-						deletes: IndexSet(0..<3),
-						updates: []
+						changeset: Changeset(inserts: [],
+						                     removals: IndexSet(integersIn: 0..<3),
+						                     mutations: [])
 					)
 				)
 
@@ -309,8 +309,8 @@ class ReactiveArraySpec: QuickSpec {
 			}
 
 			it("remove_all_and_keep_capacity") {
-				var changes: [Change<Int>] = []
-				var expectedChanges: [Change<Int>] = []
+				var changes: [ReactiveArray<Int>.Snapshot] = []
+				var expectedChanges: [ReactiveArray<Int>.Snapshot] = []
 
 				let array = ReactiveArray([1, 2, 3])
 
@@ -319,12 +319,12 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.removeAll(keepingCapacity: true) }
 
 				expectedChanges.append(
-					Delta(
+					TestSnapshot(
 						previous: [1, 2, 3],
 						current: [],
-						inserts: [],
-						deletes: IndexSet(0..<3),
-						updates: []
+						changeset: Changeset(inserts: [],
+						                     removals: IndexSet(integersIn: 0..<3),
+						                     mutations: [])
 					)
 				)
 
@@ -333,8 +333,8 @@ class ReactiveArraySpec: QuickSpec {
 			}
 
 			it("remove_first") {
-				var changes: [Change<Int>] = []
-				var expectedChanges: [Change<Int>] = []
+				var changes: [ReactiveArray<Int>.Snapshot] = []
+				var expectedChanges: [ReactiveArray<Int>.Snapshot] = []
 
 				let array = ReactiveArray([1, 2, 3])
 
@@ -343,12 +343,12 @@ class ReactiveArraySpec: QuickSpec {
 				expect(array.modify { $0.removeFirst() }) == 1
 
 				expectedChanges.append(
-					Delta(
+					TestSnapshot(
 						previous: [1, 2, 3],
 						current: [2, 3],
-						inserts: [],
-						deletes: IndexSet(integer: 0),
-						updates: []
+						changeset: Changeset(inserts: [],
+						                     removals: IndexSet(integer: 0),
+						                     mutations: [])
 					)
 				)
 
@@ -357,8 +357,8 @@ class ReactiveArraySpec: QuickSpec {
 			}
 
 			it("remove_first2") {
-				var changes: [Change<Int>] = []
-				var expectedChanges: [Change<Int>] = []
+				var changes: [ReactiveArray<Int>.Snapshot] = []
+				var expectedChanges: [ReactiveArray<Int>.Snapshot] = []
 
 				let array = ReactiveArray([1, 2, 3])
 
@@ -367,12 +367,12 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.removeFirst(2) }
 
 				expectedChanges.append(
-					Delta(
+					TestSnapshot(
 						previous: [1, 2, 3],
 						current: [3],
-						inserts: [],
-						deletes: IndexSet(0...1),
-						updates: []
+						changeset: Changeset(inserts: [],
+						                     removals: IndexSet(integersIn: 0...1),
+						                     mutations: [])
 					)
 				)
 
@@ -381,8 +381,8 @@ class ReactiveArraySpec: QuickSpec {
 			}
 
 			it("remove_first_all") {
-				var changes: [Change<Int>] = []
-				var expectedChanges: [Change<Int>] = []
+				var changes: [ReactiveArray<Int>.Snapshot] = []
+				var expectedChanges: [ReactiveArray<Int>.Snapshot] = []
 
 				let array = ReactiveArray([1, 2, 3])
 
@@ -391,12 +391,12 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.removeFirst(3) }
 
 				expectedChanges.append(
-					Delta(
+					TestSnapshot(
 						previous: [1, 2, 3],
 						current: [],
-						inserts: [],
-						deletes: IndexSet(0...2),
-						updates: []
+						changeset: Changeset(inserts: [],
+						                     removals: IndexSet(integersIn: 0...2),
+						                     mutations: [])
 					)
 				)
 
@@ -405,8 +405,8 @@ class ReactiveArraySpec: QuickSpec {
 			}
 
 			it("remove_last") {
-				var changes: [Change<Int>] = []
-				var expectedChanges: [Change<Int>] = []
+				var changes: [ReactiveArray<Int>.Snapshot] = []
+				var expectedChanges: [ReactiveArray<Int>.Snapshot] = []
 
 				let array = ReactiveArray([1, 2, 3])
 
@@ -415,12 +415,12 @@ class ReactiveArraySpec: QuickSpec {
 				expect(array.modify { $0.removeLast() }) == 3
 
 				expectedChanges.append(
-					Delta(
+					TestSnapshot(
 						previous: [1, 2, 3],
 						current: [1, 2],
-						inserts: [],
-						deletes: IndexSet(integer: 2),
-						updates: []
+						changeset: Changeset(inserts: [],
+						                     removals: IndexSet(integer: 2),
+						                     mutations: [])
 					)
 				)
 
@@ -429,8 +429,8 @@ class ReactiveArraySpec: QuickSpec {
 			}
 
 			it("remove_last2") {
-				var changes: [Change<Int>] = []
-				var expectedChanges: [Change<Int>] = []
+				var changes: [ReactiveArray<Int>.Snapshot] = []
+				var expectedChanges: [ReactiveArray<Int>.Snapshot] = []
 
 				let array = ReactiveArray([1, 2, 3])
 
@@ -439,12 +439,12 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.removeLast(2) }
 
 				expectedChanges.append(
-					Delta(
+					TestSnapshot(
 						previous: [1, 2, 3],
 						current: [1],
-						inserts: [],
-						deletes: IndexSet(1..<3),
-						updates: []
+						changeset: Changeset(inserts: [],
+						                     removals: IndexSet(integersIn: 1..<3),
+						                     mutations: [])
 					)
 				)
 
@@ -453,8 +453,8 @@ class ReactiveArraySpec: QuickSpec {
 			}
 
 			it("remove_last_all") {
-				var changes: [Change<Int>] = []
-				var expectedChanges: [Change<Int>] = []
+				var changes: [ReactiveArray<Int>.Snapshot] = []
+				var expectedChanges: [ReactiveArray<Int>.Snapshot] = []
 
 				let array = ReactiveArray([1, 2, 3])
 
@@ -463,12 +463,12 @@ class ReactiveArraySpec: QuickSpec {
 				array.modify { $0.removeLast(3) }
 
 				expectedChanges.append(
-					Delta(
+					TestSnapshot(
 						previous: [1, 2, 3],
 						current: [],
-						inserts: [],
-						deletes: IndexSet(0..<3),
-						updates: []
+						changeset: Changeset(inserts: [],
+						                     removals: IndexSet(integersIn: 0..<3),
+						                     mutations: [])
 					)
 				)
 
@@ -477,8 +477,8 @@ class ReactiveArraySpec: QuickSpec {
 			}
 
 			it("remove_at_index") {
-				var changes: [Change<Int>] = []
-				var expectedChanges: [Change<Int>] = []
+				var changes: [ReactiveArray<Int>.Snapshot] = []
+				var expectedChanges: [ReactiveArray<Int>.Snapshot] = []
 
 				let array = ReactiveArray([1, 2, 3])
 
@@ -487,45 +487,45 @@ class ReactiveArraySpec: QuickSpec {
 				expect(array.modify { $0.remove(at: 1) }) == 2
 
 				expectedChanges.append(
-					Delta(
+					TestSnapshot(
 						previous: [1, 2, 3],
 						current: [1, 3],
-						inserts: [],
-						deletes: IndexSet(integer: 1),
-						updates: []
+						changeset: Changeset(inserts: [],
+						                     removals: IndexSet(integer: 1),
+						                     mutations: [])
 					)
 				)
-				
+
 				expect(array) == [1, 3]
 				expect(changes.last!) == expectedChanges.last!
 			}
-			
+
 			it("remove_subrange") {
-				var changes: [Change<Int>] = []
-				var expectedChanges: [Change<Int>] = []
-				
+				var changes: [ReactiveArray<Int>.Snapshot] = []
+				var expectedChanges: [ReactiveArray<Int>.Snapshot] = []
+
 				let array = ReactiveArray([1, 2, 3])
-				
+
 				array.signal.observeValues { changes.append($0) }
-				
+
 				array.modify { $0.removeSubrange(1...2) }
-				
+
 				expectedChanges.append(
-					Delta(
+					TestSnapshot(
 						previous: [1, 2, 3],
 						current: [1],
-						inserts: [],
-						deletes: IndexSet(1..<3),
-						updates: []
+						changeset: Changeset(inserts: [],
+						                     removals: IndexSet(integersIn: 1..<3),
+						                     mutations: [])
 					)
 				)
-				
+
 				expect(array) == [1]
 				expect(changes.last!) == expectedChanges.last!
 			}
 
 			describe("operation sequences") {
-				var latestDelta: Change<Int>!
+				var latestDelta: ReactiveArray<Int>.Snapshot!
 				var array: ReactiveArray<Int>!
 
 				beforeEach {
@@ -539,11 +539,11 @@ class ReactiveArraySpec: QuickSpec {
 					}
 
 					expect(array) == []
-					expect(latestDelta) == Change(previous: [1, 2, 3],
-					                              current: [],
-					                              inserts: [],
-					                              deletes: IndexSet(0 ..< 3),
-					                              updates: [])
+					expect(latestDelta) == TestSnapshot(previous: [1, 2, 3],
+					                                    current: [],
+					                                    changeset: Changeset(inserts: [],
+					                                                         removals: IndexSet(integersIn: 0 ..< 3),
+					                                                         mutations: []))
 				}
 
 				it("should treat replacement of the mutable view as `removeAll`, and append the given array") {
@@ -553,11 +553,11 @@ class ReactiveArraySpec: QuickSpec {
 					}
 
 					expect(array) == [8, 9, 0]
-					expect(latestDelta) == Change(previous: [1, 2, 3],
-					                              current: [8, 9, 0],
-					                              inserts: IndexSet(0 ..< 3),
-					                              deletes: IndexSet(0 ..< 3),
-					                              updates: [])
+					expect(latestDelta) == TestSnapshot(previous: [1, 2, 3],
+					                                    current: [8, 9, 0],
+					                                    changeset: Changeset(inserts: IndexSet(integersIn: 0 ..< 3),
+					                                                         removals: IndexSet(integersIn: 0 ..< 3),
+					                                                         mutations: []))
 				}
 
 				it("should insert at removed indices") {
@@ -567,11 +567,11 @@ class ReactiveArraySpec: QuickSpec {
 					}
 
 					expect(array) == [8, 9, 0]
-					expect(latestDelta) == Delta(previous: [1, 2, 3],
-					                             current: [8, 9, 0],
-					                             inserts: IndexSet(0 ..< 3),
-					                             deletes: IndexSet(0 ..< 3),
-					                             updates: [])
+					expect(latestDelta) == TestSnapshot(previous: [1, 2, 3],
+					                                    current: [8, 9, 0],
+					                                    changeset: Changeset(inserts: IndexSet(0 ..< 3),
+					                                                         removals: IndexSet(0 ..< 3),
+					                                                         mutations: []))
 				}
 
 				it("should remove uncommitted inserts") {
@@ -581,11 +581,11 @@ class ReactiveArraySpec: QuickSpec {
 					}
 
 					expect(array) == [1, 2, 3]
-					expect(latestDelta) == Delta(previous: [1, 2, 3],
-					                             current: [1, 2, 3],
-					                             inserts: [],
-					                             deletes: [],
-					                             updates: [])
+					expect(latestDelta) == TestSnapshot(previous: [1, 2, 3],
+					                                    current: [1, 2, 3],
+					                                    changeset: Changeset(inserts: [],
+					                                                         removals: [],
+					                                                         mutations: []))
 				}
 
 				it("should accomodate uncommitted inserts before the elements to be removed") {
@@ -595,11 +595,11 @@ class ReactiveArraySpec: QuickSpec {
 					}
 
 					expect(array) == [1, 100, 2]
-					expect(latestDelta) == Delta(previous: [1, 2, 3],
-					                             current: [1, 100, 2],
-					                             inserts: IndexSet(integer: 1),
-					                             deletes: IndexSet(integer: 2),
-					                             updates: [])
+					expect(latestDelta) == TestSnapshot(previous: [1, 2, 3],
+					                                    current: [1, 100, 2],
+					                                    changeset: Changeset(inserts: IndexSet(integer: 1),
+					                                                         removals: IndexSet(integer: 2),
+					                                                         mutations: []))
 				}
 
 				it("should accomodate uncommitted inserts before the elements to be updated") {
@@ -609,11 +609,11 @@ class ReactiveArraySpec: QuickSpec {
 					}
 
 					expect(array) == [1, 100, 2, 200]
-					expect(latestDelta) == Delta(previous: [1, 2, 3],
-					                             current: [1, 100, 2, 200],
-					                             inserts: IndexSet(integer: 1),
-					                             deletes: [],
-					                             updates: IndexSet(integer: 2))
+					expect(latestDelta) == TestSnapshot(previous: [1, 2, 3],
+					                                    current: [1, 100, 2, 200],
+					                                    changeset: Changeset(inserts: IndexSet(integer: 1),
+					                                                         removals: [],
+					                                                         mutations: IndexSet(integer: 2)))
 				}
 
 				it("should replace the content, sort the array and remove the last elements") {
@@ -627,11 +627,11 @@ class ReactiveArraySpec: QuickSpec {
 					}
 
 					expect(array) == sorted
-					expect(latestDelta) == Delta(previous: [1, 2, 3],
-					                             current: sorted,
-					                             inserts: IndexSet(integersIn: 3 ..< 11),
-					                             deletes: [],
-					                             updates: IndexSet(integersIn: 0 ..< 3))
+					expect(latestDelta) == TestSnapshot(previous: [1, 2, 3],
+					                                    current: sorted,
+					                                    changeset: Changeset(inserts: IndexSet(integersIn: 3 ..< 11),
+					                                                         removals: [],
+					                                                         mutations: IndexSet(integersIn: 0 ..< 3)))
 				}
 
 				it("should insert the content, remove the original elements, sort the array and remove the last elements") {
@@ -646,18 +646,18 @@ class ReactiveArraySpec: QuickSpec {
 					}
 
 					expect(array) == sorted
-					expect(latestDelta) == Delta(previous: [1, 2, 3],
-					                             current: sorted,
-					                             inserts: IndexSet(integersIn: 0 ..< 11),
-					                             deletes: IndexSet(integersIn: 0 ..< 3),
-					                             updates: [])
+					expect(latestDelta) == TestSnapshot(previous: [1, 2, 3],
+					                                    current: sorted,
+					                                    changeset: Changeset(inserts: IndexSet(integersIn: 0 ..< 11),
+					                                                         removals: IndexSet(integersIn: 0 ..< 3),
+					                                                         mutations: []))
 				}
 			}
 		}
 
 		describe("producer") {
 			it("producer") {
-				var changes: [Change<Int>] = []
+				var changes: [ReactiveArray<Int>.Snapshot] = []
 
 				let array = ReactiveArray([1, 2, 3])
 
@@ -667,93 +667,93 @@ class ReactiveArraySpec: QuickSpec {
 
 				array.modify { $0.removeAll() }
 
-				let expectedChanges: [Change<Int>] = [
-					Delta(
-						previous: [],
+				let expectedChanges: [ReactiveArray<Int>.Snapshot] = [
+					TestSnapshot(
+						previous: nil,
 						current: [1, 2, 3],
-						inserts: IndexSet(0..<3),
-						deletes: [],
-						updates: []
+						changeset: Changeset(inserts: IndexSet(integersIn: 0..<3),
+						                     removals: [],
+						                     mutations: [])
 					),
-					Delta(
+					TestSnapshot(
 						previous: [1, 2, 3],
 						current: [1, 2, 3, 4],
-						inserts: IndexSet(integer: 3),
-						deletes: [],
-						updates: []
+						changeset: Changeset(inserts: IndexSet(integer: 3),
+						                     removals: [],
+						                     mutations: [])
 					),
-					Delta(
+					TestSnapshot(
 						previous: [1, 2, 3, 4],
 						current: [],
-						inserts: [],
-						deletes: IndexSet(0...3),
-						updates: []
+						changeset: Changeset(inserts: [],
+						                     removals: IndexSet(integersIn: 0...3),
+						                     mutations: [])
 					)
 				]
-
+				
 				zip(changes, expectedChanges).forEach { expect($0) == $1 }
 			}
-
+			
 			it("producer_with_up_to_date_changes") {
-				var changes: [Change<Int>] = []
-
+				var changes: [ReactiveArray<Int>.Snapshot] = []
+				
 				let array = ReactiveArray([1, 2, 3])
-
+				
 				let producer = array.producer
-
+				
 				array.modify { $0.append(4) }
-
+				
 				producer.startWithValues { changes.append($0) }
-
+				
 				array.modify { $0.removeAll() }
-
-				let expectedChanges: [Change<Int>] = [
-					Delta(
-						previous: [],
+				
+				let expectedChanges: [ReactiveArray<Int>.Snapshot] = [
+					TestSnapshot(
+						previous: nil,
 						current: [1, 2, 3, 4],
-						inserts: IndexSet(0..<4),
-						deletes: [],
-						updates: []
+						changeset: Changeset(inserts: IndexSet(integersIn: 0..<4),
+						                     removals: [],
+						                     mutations: [])
 					),
-					Delta(
+					TestSnapshot(
 						previous: [1, 2, 3, 4],
 						current: [],
-						inserts: [],
-						deletes: IndexSet(0..<4),
-						updates: []
+						changeset: Changeset(inserts: [],
+						                     removals: IndexSet(integersIn: 0..<4),
+						                     mutations: [])
 					)
 				]
-
+				
 				zip(changes, expectedChanges).forEach { expect($0) == $1 }
 			}
-
+			
 			it("producer_should_not_retain_the_array") {
 				var array = ReactiveArray([1, 2, 3]) as Optional
 				weak var weakArray = array
-
+				
 				withExtendedLifetime(array!.producer) {
 					array = nil
 					expect(weakArray).to(beNil())
 				}
 			}
-
+			
 			it("producer_should_send_last_snapshot_even_if_array_has_deinitialized") {
 				var array = ReactiveArray([1, 2, 3]) as Optional
 				let producer = array!.producer
 				array = nil
-
+				
 				var latestSnapshot: ContiguousArray<Int>?
 				var completed = false
 				var hasUnanticipatedEvents = false
-
+				
 				producer.start { event in
 					switch event {
 					case let .value(delta):
 						latestSnapshot = delta.current
-
+						
 					case .completed:
 						completed = true
-
+						
 					case .interrupted, .failed:
 						hasUnanticipatedEvents = true
 					}

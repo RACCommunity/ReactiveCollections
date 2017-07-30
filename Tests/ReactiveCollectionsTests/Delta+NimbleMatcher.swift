@@ -14,10 +14,10 @@ internal func ==<T: Equatable, C: Collection>(_ array: Expectation<ReactiveArray
 	})
 }
 
-internal func ==<Snapshot, ChangeRepresentation>(
-	left: Expectation<Delta<Snapshot, ChangeRepresentation>>,
-	right: Delta<Snapshot, ChangeRepresentation>
-) where Snapshot.Iterator.Element: Equatable, ChangeRepresentation: Equatable {
+internal func ==<C: Collection>(
+	left: Expectation<Snapshot<C>>,
+	right: Snapshot<C>
+) where C.Iterator.Element: Equatable {
 	return left.to(Predicate.define { expression in
 		let value = try expression.evaluate()!
 
@@ -30,10 +30,10 @@ internal func ==<Snapshot, ChangeRepresentation>(
 	})
 }
 
-internal func ==<Snapshot, ChangeRepresentation>(
-	left: Expectation<[Delta<Snapshot, ChangeRepresentation>]>,
-	right: [Delta<Snapshot, ChangeRepresentation>]
-) where Snapshot.Iterator.Element: Equatable, ChangeRepresentation: Equatable {
+internal func ==<C: Collection>(
+	left: Expectation<[Snapshot<C>]>,
+	right: [Snapshot<C>]
+) where C.Iterator.Element: Equatable {
 	return left.to(Predicate.define { expression in
 		let value = try expression.evaluate()!
 
