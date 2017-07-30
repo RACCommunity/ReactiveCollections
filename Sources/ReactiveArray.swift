@@ -7,7 +7,7 @@ public final class ReactiveArray<Element>: RandomAccessCollection {
 	public typealias Delta = ReactiveCollections.Delta<Snapshot, IndexSet>
 
 	fileprivate let storage: Storage<ContiguousArray<Element>>
-	fileprivate let observer: Observer<Delta, NoError>
+	fileprivate let observer: Signal<Delta, NoError>.Observer
 
 	public let signal: Signal<Delta, NoError>
 	public var producer: SignalProducer<Delta, NoError> {

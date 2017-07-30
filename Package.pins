@@ -5,13 +5,13 @@
       "package": "ReactiveSwift",
       "reason": null,
       "repositoryURL": "https://github.com/ReactiveCocoa/ReactiveSwift.git",
-      "version": "1.1.1"
+      "version": "2.0.0"
     },
     {
       "package": "Result",
       "reason": null,
       "repositoryURL": "https://github.com/antitypical/Result.git",
-      "version": "3.2.1"
+      "version": "3.2.3"
     }
   ],
   "version": 1
