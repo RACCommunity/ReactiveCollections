@@ -118,6 +118,121 @@ public struct Changeset {
 	public init<C: Collection>(initial: C) {
 		inserts = IndexSet(integersIn: 0 ..< Int(initial.count))
 	}
+
+	public init<C: Collection, Identifier: Hashable>(
+		previous: C,
+		current: C,
+		identifier: (C.Iterator.Element) -> Identifier,
+		areEqual: (C.Iterator.Element, C.Iterator.Element) -> Bool
+	) where C.Index == C.Indices.Iterator.Element {
+		var table: [Identifier: DiffEntry] = Dictionary(minimumCapacity: Int(current.count))
+		var oldReferences: [DiffReference] = []
+		var newReferences: [DiffReference] = []
+
+		oldReferences.reserveCapacity(Int(previous.count))
+		newReferences.reserveCapacity(Int(current.count))
+
+		func tableEntry(for identifier: Identifier) -> DiffEntry {
+			if let index = table.index(forKey: identifier) {
+				return table[index].value
+			}
+
+			let entry = DiffEntry()
+			table[identifier] = entry
+			return entry
+		}
+
+		// Pass 1: Scan the new snapshot.
+		for element in current {
+			let key = identifier(element)
+			let entry = tableEntry(for: key)
+
+			entry.occurenceInNew += 1
+			newReferences.append(.table(entry))
+		}
+
+		// Pass 2: Scan the old snapshot.
+		for (offset, index) in previous.indices.enumerated() {
+			let key = identifier(previous[index])
+			let entry = tableEntry(for: key)
+
+			entry.occurenceInOld += 1
+			entry.locationInOld = offset
+			oldReferences.append(.table(entry))
+		}
+
+		// Pass 3: Single-occurence lines
+		for newPosition in newReferences.startIndex ..< newReferences.endIndex {
+			switch newReferences[newPosition] {
+			case let .table(entry):
+				if entry.occurenceInNew == 1 && entry.occurenceInNew == entry.occurenceInOld {
+					let oldPosition = entry.locationInOld!
+					newReferences[newPosition] = .remote(oldPosition)
+					oldReferences[oldPosition] = .remote(newPosition)
+				}
+
+			case .remote:
+				break
+			}
+		}
+
+		self.init()
+
+		// Pass 4: Compute inserts, removals and mutations. Prepare move statistics.
+		for oldPosition in 0 ..< oldReferences.endIndex {
+			if case .table = oldReferences[oldPosition] {
+				removals.insert(oldPosition)
+			}
+		}
+
+		for newPosition in newReferences.indices {
+			switch newReferences[newPosition] {
+			case .table:
+				inserts.insert(newPosition)
+
+			case let .remote(oldPosition):
+				let previousIndex = previous.index(previous.startIndex, offsetBy: C.IndexDistance(oldPosition))
+				let currentIndex = current.index(current.startIndex, offsetBy: C.IndexDistance(newPosition))
+				let areEqual = areEqual(previous[previousIndex], current[currentIndex])
+
+				// Insert- and removal-implied move elimination.
+				//
+				// If the move happens purely as a consequence of a removal or an insert,
+				// it is ignored given that such operation already implies the move.
+				let reproducedPosition = oldPosition - removals.count(in: 0 ..< oldPosition) + inserts.count(in: 0 ..< newPosition)
+				let isInPlace = reproducedPosition == newPosition
+
+				switch (areEqual, isInPlace) {
+				case (false, true):
+					mutations.insert(oldPosition)
+
+				case (_, false):
+					moves.append(Move(source: oldPosition, destination: newPosition, isMutated: !areEqual))
+
+				case (true, true):
+					break
+				}
+			}
+		}
+	}
+}
+
+// The key equality implies only referential equality. But the value equality of the
+// uniquely identified element across snapshots is uncertain. It is pretty common to diff
+// elements with constant unique identifiers but changing contents. For example, we may
+// have an array of `Conversation`s, identified by the backend ID, that is constantly
+// updated with the latest messages pushed from the backend. So our diffing algorithm
+// must have an additional mean to test elements for value equality.
+
+private final class DiffEntry {
+	var occurenceInOld = 0
+	var occurenceInNew = 0
+	var locationInOld: Int?
+}
+
+private enum DiffReference {
+	case remote(Int)
+	case table(DiffEntry)
 }
 
 #if !swift(>=3.2)
