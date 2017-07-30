@@ -14,36 +14,52 @@ internal func ==<T: Equatable, C: Collection>(_ array: Expectation<ReactiveArray
 	})
 }
 
-internal func ==<Snapshot, ChangeRepresentation>(
-	left: Expectation<Delta<Snapshot, ChangeRepresentation>>,
-	right: Delta<Snapshot, ChangeRepresentation>
-) where Snapshot.Iterator.Element: Equatable, ChangeRepresentation: Equatable {
+internal func ==<Elements: Collection>(
+	left: Expectation<Snapshot<Elements>>,
+	right: Snapshot<Elements>
+) where Elements.Iterator.Element: Equatable {
 	return left.to(NonNilMatcherFunc { expression, failureMessage in
 		let value = try expression.evaluate()!
 		if value == right {
 			return true
 		}
 
-		failureMessage.expected = "expected \(right.debugDescription)"
+		failureMessage.expected = "expected \(right)"
 		failureMessage.to = ""
-		failureMessage.actualValue = value.debugDescription
+		failureMessage.actualValue = String(describing: value)
 		return false
 	})
 }
 
-internal func ==<Snapshot, ChangeRepresentation>(
-	left: Expectation<[Delta<Snapshot, ChangeRepresentation>]>,
-	right: [Delta<Snapshot, ChangeRepresentation>]
-) where Snapshot.Iterator.Element: Equatable, ChangeRepresentation: Equatable {
+internal func ==<Elements: Collection>(
+	left: Expectation<[Snapshot<Elements>]>,
+	right: [Snapshot<Elements>]
+) where Elements.Iterator.Element: Equatable {
 	return left.to(NonNilMatcherFunc { expression, failureMessage in
 		let value = try expression.evaluate()!
 		if value.elementsEqual(right, by: ==) {
 			return true
 		}
 
-		failureMessage.expected = "expected \(right.debugDescription)"
+		failureMessage.expected = "expected \(right)"
 		failureMessage.to = ""
-		failureMessage.actualValue = value.debugDescription
+		failureMessage.actualValue = String(describing: value)
 		return false
 	})
+}
+
+internal func == <Elements: Collection>(left: Snapshot<Elements>, right: Snapshot<Elements>) -> Bool where Elements.Iterator.Element: Equatable {
+	var previousEqual = false
+
+	if let lhs = left.previous, let rhs = right.previous, lhs.elementsEqual(rhs) {
+		previousEqual = true
+	}
+
+	if !previousEqual {
+		previousEqual = left.previous == nil && right.previous == nil
+	}
+
+	return previousEqual
+		&& left.changeset == right.changeset
+		&& left.current.elementsEqual(right.current)
 }
