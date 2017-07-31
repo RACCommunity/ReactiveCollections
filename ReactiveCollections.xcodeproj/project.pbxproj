@@ -47,6 +47,17 @@
 		9A1BD5C61F3AD6A80087EE41 /* ChangesetSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1BD5C51F3AD6A80087EE41 /* ChangesetSpec.swift */; };
 		9A1BD5C71F3AD6A80087EE41 /* ChangesetSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1BD5C51F3AD6A80087EE41 /* ChangesetSpec.swift */; };
 		9A1BD5C81F3AD6A80087EE41 /* ChangesetSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1BD5C51F3AD6A80087EE41 /* ChangesetSpec.swift */; };
+		9A2141801F52F5510024A77F /* ChangesetApplicationSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A21417F1F52F5510024A77F /* ChangesetApplicationSpec.swift */; };
+		9A2141811F52F5510024A77F /* ChangesetApplicationSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A21417F1F52F5510024A77F /* ChangesetApplicationSpec.swift */; };
+		9A2BA3C41F4434D2008A2753 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A2BA3C01F443494008A2753 /* ReactiveCocoa.framework */; };
+		9A2BA3C51F4434D9008A2753 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A2BA3C11F4434B3008A2753 /* ReactiveCocoa.framework */; };
+		9A2BA3C61F4434DD008A2753 /* ReactiveCocoa.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9A2BA3C11F4434B3008A2753 /* ReactiveCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9A2BA3C71F4434E3008A2753 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A2BA3C21F4434BF008A2753 /* ReactiveCocoa.framework */; };
+		9A2BA3C81F4434E8008A2753 /* ReactiveCocoa.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9A2BA3C21F4434BF008A2753 /* ReactiveCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9A2BA3C91F4434ED008A2753 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A2BA3C21F4434BF008A2753 /* ReactiveCocoa.framework */; };
+		9A2BA3CA1F4434F6008A2753 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A2BA3C21F4434BF008A2753 /* ReactiveCocoa.framework */; };
+		9A2BA3CB1F4434FC008A2753 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A2BA3C31F4434C8008A2753 /* ReactiveCocoa.framework */; };
+		9A2BA3CC1F443511008A2753 /* ReactiveCocoa.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9A2BA3C01F443494008A2753 /* ReactiveCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9AD6D9EB1F2DEFCB00F0BC11 /* Changeset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD6D9E51F2DEFCB00F0BC11 /* Changeset.swift */; };
 		9AD6D9EC1F2DEFCB00F0BC11 /* Changeset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD6D9E51F2DEFCB00F0BC11 /* Changeset.swift */; };
 		9AD6D9ED1F2DEFCB00F0BC11 /* Changeset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD6D9E51F2DEFCB00F0BC11 /* Changeset.swift */; };
@@ -55,6 +66,11 @@
 		9AD6D9F01F2DEFCB00F0BC11 /* Snapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD6D9E61F2DEFCB00F0BC11 /* Snapshot.swift */; };
 		9AD6D9F11F2DEFCB00F0BC11 /* Snapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD6D9E61F2DEFCB00F0BC11 /* Snapshot.swift */; };
 		9AD6D9F21F2DEFCB00F0BC11 /* Snapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD6D9E61F2DEFCB00F0BC11 /* Snapshot.swift */; };
+		9AD6DA0E1F2EFA8700F0BC11 /* NSCollectionView+Changeset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD6DA0D1F2EFA8700F0BC11 /* NSCollectionView+Changeset.swift */; };
+		9AD6DA101F2EFAA000F0BC11 /* UITableView+Changeset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD6DA0F1F2EFAA000F0BC11 /* UITableView+Changeset.swift */; };
+		9AD6DA111F2EFAA000F0BC11 /* UITableView+Changeset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD6DA0F1F2EFAA000F0BC11 /* UITableView+Changeset.swift */; };
+		9AD6DA131F2EFACD00F0BC11 /* UICollectionView+Changeset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD6DA121F2EFACD00F0BC11 /* UICollectionView+Changeset.swift */; };
+		9AD6DA141F2EFACD00F0BC11 /* UICollectionView+Changeset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD6DA121F2EFACD00F0BC11 /* UICollectionView+Changeset.swift */; };
 		9AF7E1861E9A8CB000F6672B /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AF7E1841E9A8C9F00F6672B /* Nimble.framework */; };
 		9AF7E1871E9A8CB000F6672B /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AF7E1851E9A8C9F00F6672B /* Quick.framework */; };
 		9AF7E1881E9A8CB400F6672B /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9AF7E1841E9A8C9F00F6672B /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -103,6 +119,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				9A2BA3CC1F443511008A2753 /* ReactiveCocoa.framework in CopyFiles */,
 				7D3D8BE11DF9D23F00E90921 /* ReactiveCollections.framework in CopyFiles */,
 				7D3D8BE21DF9D23F00E90921 /* ReactiveSwift.framework in CopyFiles */,
 				7D3D8BE31DF9D23F00E90921 /* Result.framework in CopyFiles */,
@@ -118,6 +135,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				7DE06DB51DFADBC3003303AB /* ReactiveCollections.framework in CopyFiles */,
+				9A2BA3C61F4434DD008A2753 /* ReactiveCocoa.framework in CopyFiles */,
 				7DE06DB61DFADBCC003303AB /* ReactiveSwift.framework in CopyFiles */,
 				7DE06DB71DFADBCC003303AB /* Result.framework in CopyFiles */,
 				9AF7E18C1E9A8CBE00F6672B /* Nimble.framework in CopyFiles */,
@@ -132,6 +150,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				7DE06DDF1DFADD9B003303AB /* ReactiveCollections.framework in CopyFiles */,
+				9A2BA3C81F4434E8008A2753 /* ReactiveCocoa.framework in CopyFiles */,
 				7DE06DE01DFADDA0003303AB /* ReactiveSwift.framework in CopyFiles */,
 				7DE06DE11DFADDA0003303AB /* Result.framework in CopyFiles */,
 				9AF7E1921E9A8CCD00F6672B /* Nimble.framework in CopyFiles */,
@@ -162,9 +181,17 @@
 		7DE06DD41DFADCE4003303AB /* ReactiveSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveSwift.framework; path = Carthage/Build/tvOS/ReactiveSwift.framework; sourceTree = "<group>"; };
 		7DE06DD51DFADCE4003303AB /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/tvOS/Result.framework; sourceTree = "<group>"; };
 		9A1BD5C51F3AD6A80087EE41 /* ChangesetSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChangesetSpec.swift; path = ReactiveCollectionsTests/ChangesetSpec.swift; sourceTree = "<group>"; };
+		9A21417F1F52F5510024A77F /* ChangesetApplicationSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChangesetApplicationSpec.swift; path = ReactiveCollectionsTests/UIKit/ChangesetApplicationSpec.swift; sourceTree = "<group>"; };
+		9A2BA3C01F443494008A2753 /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = Carthage/Build/iOS/ReactiveCocoa.framework; sourceTree = "<group>"; };
+		9A2BA3C11F4434B3008A2753 /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = Carthage/Build/Mac/ReactiveCocoa.framework; sourceTree = "<group>"; };
+		9A2BA3C21F4434BF008A2753 /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = Carthage/Build/tvOS/ReactiveCocoa.framework; sourceTree = "<group>"; };
+		9A2BA3C31F4434C8008A2753 /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = Carthage/Build/watchOS/ReactiveCocoa.framework; sourceTree = "<group>"; };
 		9A37DC651E0B34D70075EC2E /* ReactiveArraySpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReactiveArraySpec.swift; path = ReactiveCollectionsTests/ReactiveArraySpec.swift; sourceTree = "<group>"; };
 		9AD6D9E51F2DEFCB00F0BC11 /* Changeset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Changeset.swift; sourceTree = "<group>"; };
 		9AD6D9E61F2DEFCB00F0BC11 /* Snapshot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Snapshot.swift; sourceTree = "<group>"; };
+		9AD6DA0D1F2EFA8700F0BC11 /* NSCollectionView+Changeset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSCollectionView+Changeset.swift"; path = "AppKit/NSCollectionView+Changeset.swift"; sourceTree = "<group>"; };
+		9AD6DA0F1F2EFAA000F0BC11 /* UITableView+Changeset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UITableView+Changeset.swift"; path = "UIKit/UITableView+Changeset.swift"; sourceTree = "<group>"; };
+		9AD6DA121F2EFACD00F0BC11 /* UICollectionView+Changeset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UICollectionView+Changeset.swift"; path = "UIKit/UICollectionView+Changeset.swift"; sourceTree = "<group>"; };
 		9AF7E17E1E9A8BE100F6672B /* LinuxMain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinuxMain.swift; sourceTree = "<group>"; };
 		9AF7E1801E9A8C8A00F6672B /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/tvOS/Nimble.framework; sourceTree = "<group>"; };
 		9AF7E1811E9A8C8A00F6672B /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/tvOS/Quick.framework; sourceTree = "<group>"; };
@@ -207,6 +234,7 @@
 			files = (
 				7D69AAFE1DF9D0E200FCB568 /* ReactiveSwift.framework in Frameworks */,
 				7D69AAFF1DF9D0E200FCB568 /* Result.framework in Frameworks */,
+				9A2BA3C41F4434D2008A2753 /* ReactiveCocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,6 +255,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7DC1E2DD1DFADFA500A61745 /* ReactiveSwift.framework in Frameworks */,
+				9A2BA3CB1F4434FC008A2753 /* ReactiveCocoa.framework in Frameworks */,
 				7DC1E2DE1DFADFA500A61745 /* Result.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -237,6 +266,7 @@
 			files = (
 				7DE06DAC1DFADB19003303AB /* ReactiveSwift.framework in Frameworks */,
 				7DE06DAD1DFADB19003303AB /* Result.framework in Frameworks */,
+				9A2BA3C51F4434D9008A2753 /* ReactiveCocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -245,6 +275,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7DE06D9C1DFADA84003303AB /* ReactiveCollections.framework in Frameworks */,
+				9A2BA3CA1F4434F6008A2753 /* ReactiveCocoa.framework in Frameworks */,
 				7DE06DB11DFADB9F003303AB /* ReactiveSwift.framework in Frameworks */,
 				7DE06DB21DFADB9F003303AB /* Result.framework in Frameworks */,
 				9AF7E18A1E9A8CBB00F6672B /* Nimble.framework in Frameworks */,
@@ -258,6 +289,7 @@
 			files = (
 				7DE06DD61DFADCE4003303AB /* ReactiveSwift.framework in Frameworks */,
 				7DE06DD71DFADCE4003303AB /* Result.framework in Frameworks */,
+				9A2BA3C71F4434E3008A2753 /* ReactiveCocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,6 +300,7 @@
 				7DE06DC61DFADCAF003303AB /* ReactiveCollections.framework in Frameworks */,
 				7DE06DDC1DFADD8B003303AB /* ReactiveSwift.framework in Frameworks */,
 				7DE06DDD1DFADD8B003303AB /* Result.framework in Frameworks */,
+				9A2BA3C91F4434ED008A2753 /* ReactiveCocoa.framework in Frameworks */,
 				9AF7E1901E9A8CCA00F6672B /* Nimble.framework in Frameworks */,
 				9AF7E1911E9A8CCA00F6672B /* Quick.framework in Frameworks */,
 			);
@@ -322,6 +355,8 @@
 		7D69AADF1DF9CEE500FCB568 /* ReactiveCollections */ = {
 			isa = PBXGroup;
 			children = (
+				9AD6DA071F2EFA4D00F0BC11 /* AppKit */,
+				9AD6DA061F2EFA4600F0BC11 /* UIKit */,
 				7D69AAF71DF9D07800FCB568 /* ReactiveArray.swift */,
 				9AD6D9E51F2DEFCB00F0BC11 /* Changeset.swift */,
 				9AD6D9E61F2DEFCB00F0BC11 /* Snapshot.swift */,
@@ -338,6 +373,7 @@
 				9A1BD5C51F3AD6A80087EE41 /* ChangesetSpec.swift */,
 				9A37DC651E0B34D70075EC2E /* ReactiveArraySpec.swift */,
 				9AF7E19C1E9C9EAC00F6672B /* Delta+NimbleMatcher.swift */,
+				9A2BA3B11F443312008A2753 /* UIKit */,
 				7D3D8BE51DF9EB1D00E90921 /* Supporting Files */,
 			);
 			path = Tests;
@@ -357,6 +393,7 @@
 		7DC1E2DF1DFAE01800A61745 /* watchOS */ = {
 			isa = PBXGroup;
 			children = (
+				9A2BA3C31F4434C8008A2753 /* ReactiveCocoa.framework */,
 				7DC1E2DB1DFADFA500A61745 /* ReactiveSwift.framework */,
 				7DC1E2DC1DFADFA500A61745 /* Result.framework */,
 			);
@@ -366,6 +403,7 @@
 		7DE06DAF1DFADB7C003303AB /* macOS */ = {
 			isa = PBXGroup;
 			children = (
+				9A2BA3C11F4434B3008A2753 /* ReactiveCocoa.framework */,
 				9AF7E1821E9A8C9700F6672B /* Nimble.framework */,
 				9AF7E1831E9A8C9700F6672B /* Quick.framework */,
 				7DE06D7C1DFAD8E9003303AB /* ReactiveSwift.framework */,
@@ -377,6 +415,7 @@
 		7DE06DB01DFADB82003303AB /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				9A2BA3C01F443494008A2753 /* ReactiveCocoa.framework */,
 				9AF7E1841E9A8C9F00F6672B /* Nimble.framework */,
 				9AF7E1851E9A8C9F00F6672B /* Quick.framework */,
 				7D69AAFC1DF9D0E200FCB568 /* ReactiveSwift.framework */,
@@ -388,12 +427,38 @@
 		7DE06DD81DFADCE8003303AB /* tvOS */ = {
 			isa = PBXGroup;
 			children = (
+				9A2BA3C21F4434BF008A2753 /* ReactiveCocoa.framework */,
 				9AF7E1801E9A8C8A00F6672B /* Nimble.framework */,
 				9AF7E1811E9A8C8A00F6672B /* Quick.framework */,
 				7DE06DD41DFADCE4003303AB /* ReactiveSwift.framework */,
 				7DE06DD51DFADCE4003303AB /* Result.framework */,
 			);
 			name = tvOS;
+			sourceTree = "<group>";
+		};
+		9A2BA3B11F443312008A2753 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				9A21417F1F52F5510024A77F /* ChangesetApplicationSpec.swift */,
+			);
+			name = UIKit;
+			sourceTree = "<group>";
+		};
+		9AD6DA061F2EFA4600F0BC11 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				9AD6DA0F1F2EFAA000F0BC11 /* UITableView+Changeset.swift */,
+				9AD6DA121F2EFACD00F0BC11 /* UICollectionView+Changeset.swift */,
+			);
+			name = UIKit;
+			sourceTree = "<group>";
+		};
+		9AD6DA071F2EFA4D00F0BC11 /* AppKit */ = {
+			isa = PBXGroup;
+			children = (
+				9AD6DA0D1F2EFA8700F0BC11 /* NSCollectionView+Changeset.swift */,
+			);
+			name = AppKit;
 			sourceTree = "<group>";
 		};
 		9AFF559C1E0AFEC2006426F4 /* Configurations */ = {
@@ -778,9 +843,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9AD6DA101F2EFAA000F0BC11 /* UITableView+Changeset.swift in Sources */,
 				9AD6D9EB1F2DEFCB00F0BC11 /* Changeset.swift in Sources */,
 				7D69AAF81DF9D07800FCB568 /* ReactiveArray.swift in Sources */,
 				9AD6D9EF1F2DEFCB00F0BC11 /* Snapshot.swift in Sources */,
+				9AD6DA131F2EFACD00F0BC11 /* UICollectionView+Changeset.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -789,6 +856,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9AF7E19D1E9C9EAC00F6672B /* Delta+NimbleMatcher.swift in Sources */,
+				9A2141801F52F5510024A77F /* ChangesetApplicationSpec.swift in Sources */,
 				7D85106C1E0BDFC200A57CC9 /* ReactiveArraySpec.swift in Sources */,
 				9A1BD5C61F3AD6A80087EE41 /* ChangesetSpec.swift in Sources */,
 			);
@@ -809,6 +877,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9AD6D9EC1F2DEFCB00F0BC11 /* Changeset.swift in Sources */,
+				9AD6DA0E1F2EFA8700F0BC11 /* NSCollectionView+Changeset.swift in Sources */,
 				7DE06DAB1DFADB0F003303AB /* ReactiveArray.swift in Sources */,
 				9AD6D9F01F2DEFCB00F0BC11 /* Snapshot.swift in Sources */,
 			);
@@ -828,9 +897,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9AD6DA111F2EFAA000F0BC11 /* UITableView+Changeset.swift in Sources */,
 				9AD6D9ED1F2DEFCB00F0BC11 /* Changeset.swift in Sources */,
 				7DE06DDA1DFADD69003303AB /* ReactiveArray.swift in Sources */,
 				9AD6D9F11F2DEFCB00F0BC11 /* Snapshot.swift in Sources */,
+				9AD6DA141F2EFACD00F0BC11 /* UICollectionView+Changeset.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -839,6 +910,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9AF7E19F1E9C9EAC00F6672B /* Delta+NimbleMatcher.swift in Sources */,
+				9A2141811F52F5510024A77F /* ChangesetApplicationSpec.swift in Sources */,
 				7D85106E1E0BDFD400A57CC9 /* ReactiveArraySpec.swift in Sources */,
 				9A1BD5C81F3AD6A80087EE41 /* ChangesetSpec.swift in Sources */,
 			);
@@ -1141,6 +1213,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
@@ -1158,6 +1231,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
@@ -1368,6 +1442,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
@@ -1554,6 +1629,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
