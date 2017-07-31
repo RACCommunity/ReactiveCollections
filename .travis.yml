@@ -1,91 +1,35 @@
 language: objective-c
 osx_image: xcode8.3
+before_install:
+  - brew uninstall carthage
+  - HOMEBREW_NO_AUTO_UPDATE=1 brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/6ae4f69a652fb0ecb102b0c9216378679a4f1b92/Formula/carthage.rb # 0.22.0
 branches:
   only:
     - master
 script:
   - script/build
+cache:
+  directories: Carthage/Build
 xcode_project: ReactiveCollections.xcodeproj
 matrix:
   include:
-    - xcode_scheme: ReactiveCollections-macOS
-      env:
-        - XCODE_SDK=macosx
-        - XCODE_ACTION="build test"
-        - XCODE_DESTINATION="arch=x86_64"
-      before_install:
-        - brew update
-        - brew outdated carthage || brew upgrade carthage
-      install:
-        - carthage bootstrap --no-use-binaries --platform macOS
+    - stage: prepare carthage cache
+      script:
+        - carthage bootstrap --cache-builds
+    - stage: logic tests
+      xcode_scheme: ReactiveCollections-macOS
     - xcode_scheme: ReactiveCollections-iOS
-      env:
-        - XCODE_SDK=iphonesimulator
-        - XCODE_ACTION="build-for-testing test-without-building"
-        - XCODE_DESTINATION="platform=iOS Simulator,name=iPhone 7"
-      before_install:
-        - brew update
-        - brew outdated carthage || brew upgrade carthage
-      install:
-        - carthage bootstrap --no-use-binaries --platform iOS
-    - xcode_scheme: ReactiveCollections-iOS
-      env:
-        - XCODE_SDK=iphonesimulator
-        - XCODE_ACTION="build-for-testing test-without-building"
-        - XCODE_DESTINATION="platform=iOS Simulator,name=iPhone 5"
-      before_install:
-        - brew update
-        - brew outdated carthage || brew upgrade carthage
-      install:
-        - carthage bootstrap --no-use-binaries --platform iOS
     - xcode_scheme: ReactiveCollections-tvOS
-      env:
-        - XCODE_SDK=appletvsimulator
-        - XCODE_ACTION="build-for-testing test-without-building"
-        - XCODE_DESTINATION="platform=tvOS Simulator,name=Apple TV 1080p"
-      before_install:
-        - brew update
-        - brew outdated carthage || brew upgrade carthage
-      install:
-        - carthage bootstrap --no-use-binaries --platform tvOS
     - xcode_scheme: ReactiveCollections-watchOS
-      env:
-        - XCODE_SDK=watchsimulator
-        - XCODE_ACTION=build
-        - XCODE_DESTINATION="platform=watchOS Simulator,name=Apple Watch - 38mm,OS=2.2"
-      before_install:
-        - brew update
-        - brew outdated carthage || brew upgrade carthage
-      install:
-        - carthage bootstrap --no-use-binaries --platform watchOS
+    - stage: package manager tests
+      script:
+        - carthage build --cache-builds --no-skip-current --platform macOS
     - script:
-        - brew update
-        - brew outdated carthage || brew upgrade carthage
-        - carthage bootstrap --no-use-binaries --platform macOS
-        - carthage build --no-skip-current --platform macOS
-      env:
-        - JOB=CARTHAGE-macOS
+        - carthage build --cache-builds --no-skip-current --platform iOS
     - script:
-        - brew update
-        - brew outdated carthage || brew upgrade carthage
-        - carthage bootstrap --no-use-binaries --platform iOS
-        - carthage build --no-skip-current --platform iOS
-      env:
-        - JOB=CARTHAGE-iOS
+        - carthage build --cache-builds --no-skip-current --platform tvOS
     - script:
-        - brew update
-        - brew outdated carthage || brew upgrade carthage
-        - carthage bootstrap --no-use-binaries --platform tvOS
-        - carthage build --no-skip-current --platform tvOS
-      env:
-        - JOB=CARTHAGE-tvOS
-    - script:
-        - brew update
-        - brew outdated carthage || brew upgrade carthage
-        - carthage bootstrap --no-use-binaries --platform watchOS
-        - carthage build --no-skip-current --platform watchOS
-      env:
-        - JOB=CARTHAGE-watchOS
+        - carthage build --cache-builds --no-skip-current --platform watchOS
     - script:
       - pod repo update --silent
       - pod lib lint ReactiveCollections.podspec
