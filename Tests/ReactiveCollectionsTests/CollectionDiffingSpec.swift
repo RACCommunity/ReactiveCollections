@@ -33,12 +33,17 @@ private struct Pair<Key: Hashable, Value: Equatable>: Hashable {
 class CollectionDiffingSpec: QuickSpec {
 	override func spec() {
 		describe("operations") {
-			func test<C: Collection>(from original: C, to final: C, setup: (Signal<C, NoError>) -> Signal<Snapshot<C>, NoError>, expecting: @escaping (Changeset) -> Void) {
+			func test<C: RangeReplaceableCollection>(from original: C, to final: C, setup: (Signal<C, NoError>) -> Signal<Snapshot<C>, NoError>, file: StaticString = #file, line: UInt = #line, expecting: @escaping (Changeset) -> Void) where C.Iterator.Element: Equatable {
 				let (snapshots, snapshotObserver) = Signal<C, NoError>.pipe()
 				let deltas = setup(snapshots)
 
 				deltas.skip(first: 1).observeValues { snapshot in
 					expecting(snapshot.changeset)
+					reproducibilityTest(applying: snapshot.changeset,
+					                    to: snapshot.previous!,
+					                    expecting: snapshot.current,
+					                    file: file,
+					                    line: line)
 				}
 
 				snapshotObserver.send(value: original)
@@ -272,9 +277,6 @@ class CollectionDiffingSpec: QuickSpec {
 				}
 			}
 
-			// Move tests are disabled for now, until the algorithm has been updated to
-			// eliminate redundant moves.
-/*
 			describe("moves") {
 				it("should reflect a forward move") {
 					test(from: [0, 1, 2, 3, 4],
@@ -294,20 +296,73 @@ class CollectionDiffingSpec: QuickSpec {
 			}
 
 			describe("removals and moves") {
-				it("should reflect a forward move and a removal") {
+				it("should reflect a move that crosses over a removal") {
 					test(from: [0, 1, 2, 3, 4],
-					     to: [2, 3, 0, 4],
+					     to:   [2, 3, 0, 4],
 					     setup: { $0.diff() }) {
 						expect($0) == Changeset(removals: [1],
 						                        moves: [Changeset.Move(source: 0, destination: 2, isMutated: false)])
 					}
 				}
+
+				it("should reflect a move preceded by a removal") {
+					test(from: [0, 1, 2, 3, 4],
+					     to:   [2, 3, 1, 4],
+					     setup: { $0.diff() }) {
+							expect($0) == Changeset(removals: [0],
+							                        moves: [Changeset.Move(source: 1, destination: 2, isMutated: false)])
+					}
+				}
+
+				it("should reflect a move succeeded by a removal") {
+					test(from: [0, 1, 2, 3, 4],
+					     to: [0, 2, 3, 1],
+					     setup: { $0.diff() }) {
+							expect($0) == Changeset(removals: [4],
+							                        moves: [Changeset.Move(source: 1, destination: 3, isMutated: false)])
+					}
+				}
 			}
-*/
+
+			describe("inserts and moves") {
+				it("should reflect a move that crosses over an insert") {
+					test(from: [0, 1,  2, 3, 4],
+					     to:   [1, 2, 10, 3, 0, 4],
+					     setup: { $0.diff() }) {
+							expect($0) == Changeset(inserts: [2],
+							                        moves: [Changeset.Move(source: 0, destination: 4, isMutated: false)])
+					}
+				}
+
+				it("should reflect a move preceded by an insert") {
+					test(from: [0, 1, 2, 3, 4],
+					     to:   [10, 0, 2, 3, 1, 4],
+					     setup: { $0.diff() }) {
+							expect($0) == Changeset(inserts: [0],
+							                        moves: [Changeset.Move(source: 1, destination: 4, isMutated: false)])
+					}
+				}
+
+				it("should reflect a move succeeded by an insert") {
+					test(from: [0, 1, 2, 3, 4],
+					     to:   [0, 2, 3, 1, 4, 10],
+					     setup: { $0.diff() }) {
+							expect($0) == Changeset(inserts: [5],
+							                        moves: [Changeset.Move(source: 1, destination: 3, isMutated: false)])
+					}
+				}
+			}
 		}
 
 		describe("reproducibility") {
-			func reproducibilityTest<C: RangeReplaceableCollection>(from original: C, to final: C, areEqual: @escaping (C.Iterator.Element, C.Iterator.Element) -> Bool, setup: (Signal<C, NoError>) -> Signal<Snapshot<C>, NoError>) {
+			func test<C: RangeReplaceableCollection>(
+				from original: C,
+				to final: C,
+				areEqual: @escaping (C.Iterator.Element, C.Iterator.Element) -> Bool,
+				file: StaticString = #file,
+				line: UInt = #line,
+				setup: (Signal<C, NoError>) -> Signal<Snapshot<C>, NoError>
+			) {
 				let (snapshots, snapshotObserver) = Signal<C, NoError>.pipe()
 				let deltas = setup(snapshots)
 
@@ -327,45 +382,75 @@ class CollectionDiffingSpec: QuickSpec {
 				expect(snapshot?.previous).toNot(beNil())
 
 				if let snapshot = snapshot, let previous = snapshot.previous {
-					var values = previous
-					expect(values.elementsEqual(original, by: areEqual)) == true
-
-					snapshot.changeset.removals
-						.union(IndexSet(snapshot.changeset.moves.lazy.map { $0.source }))
-						.reversed()
-						.forEach { offset in
-							let index = values.index(values.startIndex, offsetBy: C.IndexDistance(offset))
-							values.remove(at: index)
-						}
-
-					snapshot.changeset.mutations.forEach { offset in
-						let index = values.index(values.startIndex, offsetBy: C.IndexDistance(offset))
-						let index2 = snapshot.current.index(snapshot.current.startIndex, offsetBy: C.IndexDistance(offset))
-						values.replaceSubrange(index ..< values.index(after: index),
-						                       with: CollectionOfOne(snapshot.current[index2]))
-					}
-
-					snapshot.changeset.inserts
-						.union(IndexSet(snapshot.changeset.moves.lazy.map { $0.destination }))
-						.forEach { offset in
-							let index = values.index(values.startIndex, offsetBy: C.IndexDistance(offset))
-							let index2 = snapshot.current.index(snapshot.current.startIndex, offsetBy: C.IndexDistance(offset))
-							values.insert(snapshot.current[index2], at: index)
-						}
-
-					expect(values).to(equal(final, by: areEqual))
+					reproducibilityTest(applying: snapshot.changeset,
+					                    to: previous,
+					                    expecting: snapshot.current,
+					                    areEqual: areEqual,
+					                    file: file,
+					                    line: line)
 				}
 			}
 
+			it("should produce a snapshot that can be reproduced from the previous snapshot by applying the changeset") {
+
+				test(from: [0, 1, 2, 3, 4],
+				     to:   [3, 2, 0, 4, 1],
+				     areEqual: ==,
+				     setup: { $0.diff() })
+
+				test(from: [0, 1, 2, 3, 4],
+				     to:   [4, 3, 2, 1, 0],
+				     areEqual: ==,
+				     setup: { $0.diff() })
+
+				test(from: [0, 1, 2, 3, 4],
+				     to:   [3, 4, 2, 1, 0],
+				     areEqual: ==,
+				     setup: { $0.diff() })
+
+				test(from: [0, 1, 2, 3, 4],
+				     to:   [1, 4, 0, 3, 2],
+				     areEqual: ==,
+				     setup: { $0.diff() })
+
+				test(from: [0, 1, 2, 3, 4],
+				     to:   [3, 2, 4, 0, 1],
+				     areEqual: ==,
+				     setup: { $0.diff() })
+
+				test(from: [0, 1, 2, 3, 4],
+				     to:   [2, 4, 0, 3, 1],
+				     areEqual: ==,
+				     setup: { $0.diff() })
+
+				test(from: [0, 1, 2, 3, 4],
+				     to:   [4, 1, 3, 0, 2],
+				     areEqual: ==,
+				     setup: { $0.diff() })
+/*
+				let numbers = Array(0 ... 4)
+
+				for _ in 0 ... 100 {
+					let newNumbers = numbers.shuffled()
+
+					test(from: numbers,
+						 to: newNumbers,
+						 areEqual: ==,
+						 setup: { $0.diff() })
+
+					print("----")
+				}*/
+			}
+/*
 			describe("Hashable elements") {
 				it("should produce a snapshot that can be reproduced from the previous snapshot by applying the changeset") {
 					let numbers = Array(0 ..< 64).shuffled()
 					let newNumbers = Array(numbers.dropLast(8) + (128 ..< 168)).shuffled()
 
-					reproducibilityTest(from: numbers,
-					                    to: newNumbers,
-					                    areEqual: ==,
-					                    setup: { $0.diff() })
+					test(from: numbers,
+					     to: newNumbers,
+					     areEqual: ==,
+					     setup: { $0.diff() })
 				}
 
 				it("should produce a snapshot that can be reproduced from the previous snapshot by applying the changeset, even if the collection is bidirectional") {
@@ -374,10 +459,10 @@ class CollectionDiffingSpec: QuickSpec {
 					newCharacters.append(contentsOf: "mnopqrstuvwxyz67890#".characters)
 					newCharacters = newCharacters.shuffled()
 
-					reproducibilityTest(from: oldCharacters,
-					                    to: newCharacters,
-					                    areEqual: ==,
-					                    setup: { $0.diff() })
+					test(from: oldCharacters,
+					     to: newCharacters,
+					     areEqual: ==,
+					     setup: { $0.diff() })
 				}
 			}
 
@@ -386,12 +471,12 @@ class CollectionDiffingSpec: QuickSpec {
 					let objects = Array(0 ..< 64).map { _ in ObjectValue() }.shuffled()
 					let newObjects = (Array(objects.dropLast(8)) + (0 ..< 32).map { _ in ObjectValue() }).shuffled()
 
-					reproducibilityTest(from: objects,
-					                    to: newObjects,
-					                    areEqual: ===,
-					                    setup: { $0.diff() })
+					test(from: objects,
+					     to: newObjects,
+					     areEqual: ===,
+					     setup: { $0.diff() })
 				}
-			}
+			}*/
 		}
 	}
 }
@@ -414,14 +499,6 @@ private extension RangeReplaceableCollection where Index == Indices.Iterator.Ele
 		return elements
 	}
 }
-
-#if !swift(>=3.2)
-	extension SignedInteger {
-		fileprivate init<I: SignedInteger>(_ integer: I) {
-			self.init(integer.toIntMax())
-		}
-	}
-#endif
 
 #if os(Linux)
 	private func randomInteger() -> Int {

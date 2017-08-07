@@ -185,35 +185,298 @@ public struct Changeset {
 			}
 		}
 
+		var moveSources = IndexSet()
+		var moveDestinations = IndexSet()
+
+		// Pass 5: Compute removals and position-invariant mutations, and prepare move satistics.
 		for newPosition in newReferences.indices {
 			switch newReferences[newPosition] {
 			case .table:
 				inserts.insert(newPosition)
 
 			case let .remote(oldPosition):
+				guard oldPosition == newPosition else {
+					moveSources.insert(oldPosition)
+					moveDestinations.insert(newPosition)
+					continue
+				}
+
 				let previousIndex = previous.index(previous.startIndex, offsetBy: C.IndexDistance(oldPosition))
 				let currentIndex = current.index(current.startIndex, offsetBy: C.IndexDistance(newPosition))
-				let areEqual = areEqual(previous[previousIndex], current[currentIndex])
 
-				// Insert- and removal-implied move elimination.
-				//
-				// If the move happens purely as a consequence of a removal or an insert,
-				// it is ignored given that such operation already implies the move.
-				let reproducedPosition = oldPosition - removals.count(in: 0 ..< oldPosition) + inserts.count(in: 0 ..< newPosition)
-				let isInPlace = reproducedPosition == newPosition
-
-				switch (areEqual, isInPlace) {
-				case (false, true):
-					mutations.insert(oldPosition)
-
-				case (_, false):
-					moves.append(Move(source: oldPosition, destination: newPosition, isMutated: !areEqual))
-
-				case (true, true):
-					break
+				if !areEqual(previous[previousIndex], current[currentIndex]) {
+					mutations.insert(newPosition)
 				}
 			}
 		}
+
+		// Pass 6: Bucket moves.
+		var bucket: [Int: Set<Path>] = [:]
+
+		for newPosition in newReferences.indices {
+			if case let .remote(oldPosition) = newReferences[newPosition] {
+				if oldPosition != newPosition {
+					let stepSize = newPosition - oldPosition
+					let precedingInserts = inserts.count(in: 0 ..< newPosition)
+
+					guard stepSize != precedingInserts else {
+						continue
+					}
+
+					let precedingRemovals = removals.count(in: 0 ..< oldPosition)
+
+					guard stepSize != -precedingRemovals else {
+						continue
+					}
+
+					bucket.insert(Path(source: oldPosition, destination: newPosition),
+					              postRemovalStepSize: abs(stepSize + precedingRemovals))
+				}
+			}
+		}
+
+		// Pass 7: Process moves.
+		var stepSizes = IndexSet(bucket.keys)
+		print("step sizes: \(Array(stepSizes))")
+
+		for bucketStepSize in stepSizes.reversed() {
+			assert(bucketStepSize > 0)
+			print("resolving bucket of post removal step size \(bucketStepSize)")
+
+			while !bucket[bucketStepSize]!.isEmpty {
+				let path = bucket[bucketStepSize]!.removeFirst()
+				let isForward = path.destination - path.source > 0
+
+				if isForward {
+					// Forward
+					let precedingInserts = inserts.count(in: 0 ..< path.source)
+					let precedingRemovals = removals.count(in: 0 ..< path.source)
+					let overlappingInserts = inserts.count(in: path.source ..< path.destination)
+
+					var searchStart = path.source + precedingInserts - precedingRemovals
+					var searchIndex = path.destination - 1
+					var stepSizeOffset = -precedingRemovals + overlappingInserts
+
+					print("resolving \(path.source) -> \(path.destination); forward")
+					print("initial: \(searchStart) ... \(searchIndex); offset = \(stepSizeOffset); stepSize = \(-1 + stepSizeOffset)")
+
+					func debug(_ title: StaticString, _ additionalContext: String?) {
+						print(String(format: "%@itr=%3d...%3d; stepSizeOffset=%3d; stepSize=%3d",
+						             String(describing: title)
+										.replacingOccurrences(of: " ", with: "_")
+										.appending(": ")
+										.appending(additionalContext.map { $0 + "; " } ?? "")
+										.padding(toLength: 40, withPad: " ", startingAt: 0),
+						             searchStart,
+						             searchIndex,
+						             stepSizeOffset,
+						             -1 + stepSizeOffset))
+					}
+
+					var elidableSourceLowerBound = -1
+
+					while searchIndex - searchStart >= 0 && searchIndex >= 0 {
+						defer {
+							searchIndex -= 1
+
+							if searchIndex < path.source && removals.contains(searchIndex) {
+								searchStart -= 1
+								debug("expand search", "overlappingRemoval=\(searchIndex)")
+							}
+						}
+
+						if searchIndex >= path.source && removals.contains(searchIndex) {
+							stepSizeOffset -= 1
+							debug("expand step size", "overlappingRemoval=\(searchIndex)")
+						}
+
+						switch newReferences[searchIndex] {
+						case .table:
+							stepSizeOffset -= 1
+							searchStart -= 1
+							debug("skip", "insertion")
+
+						case let .remote(oldPosition):
+							let localStepSize = searchIndex - oldPosition
+
+							guard localStepSize != 0 else {
+								elidableSourceLowerBound = max(elidableSourceLowerBound, oldPosition)
+								debug("not moved", "elidableLB=\(elidableSourceLowerBound)")
+								continue
+							}
+
+							guard localStepSize < 0 else {
+								// Ignore any moves in the same direction.
+								// Treat as an insertion.
+								stepSizeOffset -= 1
+								searchStart -= 1
+								elidableSourceLowerBound = max(elidableSourceLowerBound, searchIndex)
+								debug("skip", "same_direction; path=\(oldPosition)->\(searchIndex); elidableLB=\(elidableSourceLowerBound)")
+								break
+								
+							}
+
+							guard localStepSize == -1 + stepSizeOffset else {
+								// Ignore any moves that wasn't of the expected dependent move
+								// step size.
+								debug("skip", "localStepSize=\(localStepSize)")
+								break
+							}
+
+							guard !(searchIndex ... oldPosition).contains(elidableSourceLowerBound) else {
+								debug("skip", "elidableLB=\(elidableSourceLowerBound)")
+								break
+							}
+
+							bucket.remove(Path(source: oldPosition, destination: searchIndex),
+							              postRemovalStepSize: abs(localStepSize + removals.count(in: 0 ..< oldPosition)))
+
+							debug("elide", "path=\(oldPosition)->\(searchIndex)")
+
+							let previousIndex = previous.index(previous.startIndex, offsetBy: C.IndexDistance(oldPosition))
+							let currentIndex = current.index(current.startIndex, offsetBy: C.IndexDistance(searchIndex))
+
+							if !areEqual(previous[previousIndex], current[currentIndex]) {
+								mutations.insert(oldPosition)
+							}
+						}
+					}
+				} else {
+					// Backward
+					let precedingInserts = inserts.count(in: 0 ..< path.destination) + moveDestinations.count(in: 0 ..< path.destination)
+
+					var searchIndex = path.destination + 1
+					var searchEnd = path.source + precedingInserts
+					var stepSizeOffset = precedingInserts
+
+					print("resolving \(path.source) -> \(path.destination); backward")
+					print("initial: \(searchIndex) ... \(searchEnd); offset = \(stepSizeOffset); stepSize = \(1 + stepSizeOffset)")
+
+					func debug(_ title: StaticString, _ additionalContext: String?) {
+						print(String(format: "%@itr=%3d...%3d; stepSizeOffset=%3d; stepSize=%3d",
+						             String(describing: title)
+										.replacingOccurrences(of: " ", with: "_")
+										.appending(": ")
+										.appending(additionalContext.map { $0 + "; " } ?? "")
+										.padding(toLength: 40, withPad: " ", startingAt: 0),
+						             searchIndex,
+						             searchEnd,
+						             stepSizeOffset,
+						             1 + stepSizeOffset))
+					}
+
+					var elidableSourceLowerBound = -1
+
+					let cap = newReferences.count
+					while searchEnd - searchIndex >= 0 && searchIndex < cap {
+						defer {
+							if searchIndex < path.source {
+								if removals.contains(searchIndex - 1) {
+									stepSizeOffset -= 1
+									searchEnd -= 1
+									debug("contract search", "overlappingRemoval=\(searchIndex - 1)")
+								}
+							}
+
+							searchIndex += 1
+						}
+
+						switch newReferences[searchIndex] {
+						case .table:
+							stepSizeOffset += 1
+							searchEnd += 1
+							debug("skip", "insertion")
+
+						case let .remote(oldPosition):
+							let localStepSize = searchIndex - oldPosition
+
+							guard localStepSize != 0 else {
+								elidableSourceLowerBound = max(elidableSourceLowerBound, oldPosition)
+								debug("not moved", "elidableSourceLowerBound=\(elidableSourceLowerBound)")
+								continue
+							}
+
+							guard localStepSize > 0 else {
+								// Ignore any moves in the same direction.
+								// Treat as an insertion.
+								stepSizeOffset += 1
+								searchEnd += 1
+								debug("skip", "same_direction; path=\(oldPosition)->\(searchIndex)")
+								break
+							}
+
+							guard localStepSize == 1 + stepSizeOffset else {
+								// Ignore any moves that wasn't of the expected dependent move
+								// step size.
+								debug("skip", "localStepSize=\(localStepSize)")
+								break
+							}
+
+							guard oldPosition >= elidableSourceLowerBound else {
+								debug("skip", "elidableSourceLowerBound=\(elidableSourceLowerBound)")
+								break
+							}
+
+							bucket.remove(Path(source: oldPosition, destination: searchIndex),
+							              postRemovalStepSize: abs(localStepSize + removals.count(in: 0 ..< oldPosition)))
+
+							debug("elide", "path=\(oldPosition)->\(searchIndex)")
+
+							let previousIndex = previous.index(previous.startIndex, offsetBy: C.IndexDistance(oldPosition))
+							let currentIndex = current.index(current.startIndex, offsetBy: C.IndexDistance(searchIndex))
+
+							if !areEqual(previous[previousIndex], current[currentIndex]) {
+								mutations.insert(oldPosition)
+							}
+						}
+					}
+				}
+
+				let previousIndex = previous.index(previous.startIndex, offsetBy: C.IndexDistance(path.source))
+				let currentIndex = current.index(current.startIndex, offsetBy: C.IndexDistance(path.destination))
+
+				moves.append(Changeset.Move(source: path.source,
+				                            destination: path.destination,
+				                            isMutated: !areEqual(previous[previousIndex], current[currentIndex])))
+			}
+		}
+	}
+}
+
+extension Changeset.Move {
+	fileprivate var stepSize: Int {
+		return destination - source
+	}
+}
+
+private func sign(_ i: Int) -> Bool {
+	return i >= 0 ? true : false
+}
+
+private struct Path: Hashable {
+	let source: Int
+	let destination: Int
+
+	var hashValue: Int {
+		return (source + destination) / 2
+	}
+
+	static func ==(lhs: Path, rhs: Path) -> Bool {
+		return lhs.source == rhs.source && lhs.destination == rhs.destination
+	}
+}
+
+extension Dictionary where Key == Int, Value == Set<Path> {
+	fileprivate mutating func remove(_ path: Path, postRemovalStepSize stepSize: Int) {
+		self[stepSize]?.remove(path)
+	}
+
+	fileprivate mutating func insert(_ path: Path, postRemovalStepSize stepSize: Int) {
+		if index(forKey: stepSize) == nil {
+			self[stepSize] = []
+		}
+
+		self[stepSize]!.insert(path)
 	}
 }
 

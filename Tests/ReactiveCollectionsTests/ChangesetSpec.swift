@@ -277,7 +277,7 @@ class ChangesetSpec: QuickSpec {
 }
 
 @discardableResult
-private func reproducibilityTest<C: RangeReplaceableCollection>(
+internal func reproducibilityTest<C: RangeReplaceableCollection>(
 	applying changeset: Changeset,
 	to previous: C,
 	expecting current: C,
@@ -288,7 +288,7 @@ private func reproducibilityTest<C: RangeReplaceableCollection>(
 }
 
 @discardableResult
-private func reproducibilityTest<C: RangeReplaceableCollection>(
+internal func reproducibilityTest<C: RangeReplaceableCollection>(
 	applying changeset: Changeset,
 	to previous: C,
 	expecting current: C,
@@ -335,7 +335,7 @@ private func reproducibilityTest<C: RangeReplaceableCollection>(
 
 #if !swift(>=3.2)
 	extension SignedInteger {
-		fileprivate init<I: SignedInteger>(_ integer: I) {
+		internal init<I: SignedInteger>(_ integer: I) {
 			self.init(integer.toIntMax())
 		}
 	}
