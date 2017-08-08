@@ -157,7 +157,7 @@ class ReactiveArraySpec: QuickSpec {
 				expect(array) == [1, 0, 0, 1]
 				expect(changes.last!) == expectedChanges.last!
 
-				array.modify { $0.replaceSubrange(array.indices, with: Array(0...5)) }
+				array.modify { $0.replaceSubrange($0.indices, with: Array(0...5)) }
 
 				expectedChanges.append(
 					TestSnapshot(
@@ -229,7 +229,7 @@ class ReactiveArraySpec: QuickSpec {
 
 				array.signal.observeValues { changes.append($0) }
 
-				array.modify { $0.insert(4, at: array.endIndex) }
+				array.modify { $0.insert(4, at: $0.endIndex) }
 
 				expectedChanges.append(
 					TestSnapshot(

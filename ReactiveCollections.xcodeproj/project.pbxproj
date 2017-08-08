@@ -44,6 +44,9 @@
 		7DE06DDF1DFADD9B003303AB /* ReactiveCollections.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DE06DBD1DFADCAE003303AB /* ReactiveCollections.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7DE06DE01DFADDA0003303AB /* ReactiveSwift.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DE06DD41DFADCE4003303AB /* ReactiveSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7DE06DE11DFADDA0003303AB /* Result.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DE06DD51DFADCE4003303AB /* Result.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9A1BD5C61F3AD6A80087EE41 /* ChangesetSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1BD5C51F3AD6A80087EE41 /* ChangesetSpec.swift */; };
+		9A1BD5C71F3AD6A80087EE41 /* ChangesetSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1BD5C51F3AD6A80087EE41 /* ChangesetSpec.swift */; };
+		9A1BD5C81F3AD6A80087EE41 /* ChangesetSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1BD5C51F3AD6A80087EE41 /* ChangesetSpec.swift */; };
 		9AD6D9EB1F2DEFCB00F0BC11 /* Changeset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD6D9E51F2DEFCB00F0BC11 /* Changeset.swift */; };
 		9AD6D9EC1F2DEFCB00F0BC11 /* Changeset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD6D9E51F2DEFCB00F0BC11 /* Changeset.swift */; };
 		9AD6D9ED1F2DEFCB00F0BC11 /* Changeset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD6D9E51F2DEFCB00F0BC11 /* Changeset.swift */; };
@@ -158,6 +161,7 @@
 		7DE06DC51DFADCAF003303AB /* ReactiveCollectionsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReactiveCollectionsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DE06DD41DFADCE4003303AB /* ReactiveSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveSwift.framework; path = Carthage/Build/tvOS/ReactiveSwift.framework; sourceTree = "<group>"; };
 		7DE06DD51DFADCE4003303AB /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/tvOS/Result.framework; sourceTree = "<group>"; };
+		9A1BD5C51F3AD6A80087EE41 /* ChangesetSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChangesetSpec.swift; path = ReactiveCollectionsTests/ChangesetSpec.swift; sourceTree = "<group>"; };
 		9A37DC651E0B34D70075EC2E /* ReactiveArraySpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReactiveArraySpec.swift; path = ReactiveCollectionsTests/ReactiveArraySpec.swift; sourceTree = "<group>"; };
 		9AD6D9E51F2DEFCB00F0BC11 /* Changeset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Changeset.swift; sourceTree = "<group>"; };
 		9AD6D9E61F2DEFCB00F0BC11 /* Snapshot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Snapshot.swift; sourceTree = "<group>"; };
@@ -331,6 +335,7 @@
 			isa = PBXGroup;
 			children = (
 				9AF7E17E1E9A8BE100F6672B /* LinuxMain.swift */,
+				9A1BD5C51F3AD6A80087EE41 /* ChangesetSpec.swift */,
 				9A37DC651E0B34D70075EC2E /* ReactiveArraySpec.swift */,
 				9AF7E19C1E9C9EAC00F6672B /* Delta+NimbleMatcher.swift */,
 				7D3D8BE51DF9EB1D00E90921 /* Supporting Files */,
@@ -785,6 +790,7 @@
 			files = (
 				9AF7E19D1E9C9EAC00F6672B /* Delta+NimbleMatcher.swift in Sources */,
 				7D85106C1E0BDFC200A57CC9 /* ReactiveArraySpec.swift in Sources */,
+				9A1BD5C61F3AD6A80087EE41 /* ChangesetSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -814,6 +820,7 @@
 			files = (
 				9AF7E19E1E9C9EAC00F6672B /* Delta+NimbleMatcher.swift in Sources */,
 				7D85106D1E0BDFCD00A57CC9 /* ReactiveArraySpec.swift in Sources */,
+				9A1BD5C71F3AD6A80087EE41 /* ChangesetSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -833,6 +840,7 @@
 			files = (
 				9AF7E19F1E9C9EAC00F6672B /* Delta+NimbleMatcher.swift in Sources */,
 				7D85106E1E0BDFD400A57CC9 /* ReactiveArraySpec.swift in Sources */,
+				9A1BD5C81F3AD6A80087EE41 /* ChangesetSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
