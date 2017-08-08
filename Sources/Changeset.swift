@@ -5,6 +5,59 @@ import Foundation
 /// A `Changeset` represents changes as **offsets** of elements. You may
 /// subscript a collection of zero-based indexing with the offsets, e.g. `Array`. You must
 /// otherwise convert the offsets into indices before subscripting.
+///
+/// # Implicit order between offsets.
+///
+/// Removal offsets precede insertion offsets. Move offset pairs are semantically
+/// equivalent to a pair of removal offset (source) and an insertion offset (destination).
+///
+/// ## Example: Reproducing an array.
+///
+/// Given a previous version of a collection, a current version of a collection, and a
+/// `Changeset`, we can reproduce the current version by applying the `Changeset` to
+/// the previous version.
+///
+/// - note: `Array` is a zero-based container, thus being able to consume zero-based
+/// offsets directly. If you are working upon non-zero-based or undetermined collection
+/// types, you **must** first convert offsets into indices.
+///
+/// 1. Clone the previous version.
+///
+///    ```
+///    var elements = previous
+///    ```
+///
+/// 2. Copy mutated elements specified by `mutations`.
+///
+///    `mutations` offsets are invariant. So it can simply be conducted as:
+///    ```
+///    for range in changeset.mutations.rangeView {
+///        elements[range] = current[range]
+///    }
+///    ```
+///
+/// 3. Perform removals specified by `removals` and `moves` (sources).
+///
+///    ```
+///    let removals = changeset.removals
+///        .union(IndexSet(changeset.moves.map { $0.source }))
+///
+///    for range in removals.rangeView.reversed() {
+///        elements.removeSubrange(range)
+///    }
+///    ```
+///
+/// 4. Perform inserts specified by `inserts` and `moves` (destinations).
+///
+///    ```
+///    let inserts = changeset.inserts
+///        .union(IndexSet(changeset.moves.map { $0.destination }))
+///
+///    for range in inserts.rangeView {
+///        elements.insert(contentsOf: current[range], at: range.lowerBound)
+///    }
+///    ```
+///
 public struct Changeset {
 	/// Represents the context of a move operation applied to a collection.
 	public struct Move {
@@ -17,37 +70,41 @@ public struct Changeset {
 		}
 	}
 
-	/// The offsets of inserted elements **after** the removals were applied.
+	/// The offsets of inserted elements in the current version of the collection.
 	///
 	/// - important: To obtain the actual index, you must apply
-	///              `Collection.index(self:_:offsetBy:)` on the current snapshot, the
+	///              `Collection.index(self:_:offsetBy:)` on the current version, the
 	///              start index and the offset.
 	public var inserts = IndexSet()
 
-	/// The offsets of removed elements **prior to** any changes being applied.
+	/// The offsets of removed elements in the previous version of the collection.
 	///
 	/// - important: To obtain the actual index, you must apply
-	///              `Collection.index(self:_:offsetBy:)` on the previous snapshot, the
+	///              `Collection.index(self:_:offsetBy:)` on the previous version, the
 	///              start index and the offset.
 	public var removals = IndexSet()
 
-	/// The offsets of position-invariant mutations.
+	/// The offsets of position-invariant mutations that are valid across both versions
+	/// of the collection.
 	///
 	/// `mutations` only implies an invariant relative position. The actual indexes can
 	/// be different, depending on the collection type.
 	///
-	/// If an element has both changed and moved, it would be included in `moves` with an
-	/// asserted mutation flag.
+	/// If an element has both changed and moved, it is instead included in `moves` with
+	/// an asserted mutation flag.
 	///
 	/// - important: To obtain the actual index, you must apply
-	///              `Collection.index(self:_:offsetBy:)` on the relevant snapshot, the
+	///              `Collection.index(self:_:offsetBy:)` on the relevant versions, the
 	///              start index and the offset.
 	public var mutations = IndexSet()
 
 	/// The offset pairs of moves with a mutation flag as the associated value.
 	///
+	/// The source offset is semantically equivalent to a removal offset, while the
+	/// destination offset is semantically equivalent to an insertion offset.
+	///
 	/// - important: To obtain the actual index, you must apply
-	///              `Collection.index(self:_:offsetBy:)` on the relevant snapshot, the
+	///              `Collection.index(self:_:offsetBy:)` on the relevant versions, the
 	///              start index and the offset.
 	public var moves = [Move]()
 

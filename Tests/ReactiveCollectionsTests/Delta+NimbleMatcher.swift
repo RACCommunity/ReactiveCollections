@@ -1,23 +1,10 @@
 import Nimble
 import ReactiveCollections
 
-internal func ==<T: Equatable, C: Collection>(_ array: Expectation<ReactiveArray<T>>, _ collection: C) where C.Iterator.Element == T {
-	array.to(NonNilMatcherFunc { expression, failureMessage in
-		let value = try expression.evaluate()!
-		if value.elementsEqual(collection, by: ==) {
-			return true
-		}
-
-		failureMessage.actualValue = String(reflecting: value)
-		failureMessage.expected = String(reflecting: collection)
-		return false
-	})
-}
-
 internal func ==<Elements: Collection>(
 	left: Expectation<Snapshot<Elements>>,
 	right: Snapshot<Elements>
-) where Elements.Iterator.Element: Equatable {
+	) where Elements.Iterator.Element: Equatable {
 	return left.to(NonNilMatcherFunc { expression, failureMessage in
 		let value = try expression.evaluate()!
 		if value == right {
@@ -34,7 +21,7 @@ internal func ==<Elements: Collection>(
 internal func ==<Elements: Collection>(
 	left: Expectation<[Snapshot<Elements>]>,
 	right: [Snapshot<Elements>]
-) where Elements.Iterator.Element: Equatable {
+	) where Elements.Iterator.Element: Equatable {
 	return left.to(NonNilMatcherFunc { expression, failureMessage in
 		let value = try expression.evaluate()!
 		if value.elementsEqual(right, by: ==) {
@@ -62,4 +49,25 @@ internal func == <Elements: Collection>(left: Snapshot<Elements>, right: Snapsho
 	return previousEqual
 		&& left.changeset == right.changeset
 		&& left.current.elementsEqual(right.current)
+}
+
+internal func ==<C1: Collection, C2: Collection>(_ expectation: Expectation<C1>, _ expected: C2) where C1.Iterator.Element: Equatable, C1.Iterator.Element == C2.Iterator.Element {
+	expectation.to(equal(expected, by: ==))
+}
+
+internal func equal<C1: Collection, C2: Collection>(
+	_ expected: C2,
+	by areEqual: @escaping (C2.Iterator.Element, C2.Iterator.Element) -> Bool
+) -> NonNilMatcherFunc<C1> where C1.Iterator.Element == C2.Iterator.Element {
+	return NonNilMatcherFunc { expression, failureMessage in
+		let value = try expression.evaluate()!
+
+		if value.elementsEqual(expected, by: areEqual) {
+			return true
+		}
+
+		failureMessage.actualValue = String(reflecting: value)
+		failureMessage.expected = String(reflecting: expected)
+		return false
+	}
 }
