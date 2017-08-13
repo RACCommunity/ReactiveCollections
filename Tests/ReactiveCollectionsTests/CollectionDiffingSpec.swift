@@ -427,9 +427,14 @@ class CollectionDiffingSpec: QuickSpec {
 				     to:   [4, 1, 3, 0, 2],
 				     areEqual: ==,
 				     setup: { $0.diff() })
-/*
-				let numbers = Array(0 ... 4)
 
+				test(from: [0, 1, 2, 3, 4, 5],
+				     to:   [3, 5, 1, 4, 0, 2],
+				     areEqual: ==,
+				     setup: { $0.diff() })
+
+				let numbers = Array(0 ... 5)
+/*
 				for _ in 0 ... 100 {
 					let newNumbers = numbers.shuffled()
 

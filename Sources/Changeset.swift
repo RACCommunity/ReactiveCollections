@@ -328,6 +328,13 @@ public struct Changeset {
 								break
 							}
 
+							if case let .remote(newLocForPrevious) = oldReferences[oldPosition - 1],
+							   newLocForPrevious >= searchIndex,
+							   abs(newLocForPrevious - oldPosition + 1) >= abs(localStepSize) {
+								debug("skip", "criticalMove")
+								break
+							}
+
 							bucket.remove(Path(source: oldPosition, destination: searchIndex),
 							              postRemovalStepSize: abs(localStepSize + removals.count(in: 0 ..< oldPosition)))
 
@@ -343,7 +350,7 @@ public struct Changeset {
 					}
 				} else {
 					// Backward
-					let precedingInserts = inserts.count(in: 0 ..< path.destination) + moveDestinations.count(in: 0 ..< path.destination)
+					let precedingInserts = inserts.count(in: 0 ..< path.destination)
 
 					var searchIndex = path.destination + 1
 					var searchEnd = path.source + precedingInserts
