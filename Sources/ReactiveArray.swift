@@ -3,21 +3,17 @@ import ReactiveSwift
 import Result
 
 public final class ReactiveArray<Element>: RandomAccessCollection {
-	public typealias Snapshot = ContiguousArray<Element>
-	public typealias Delta = ReactiveCollections.Delta<Snapshot, IndexSet>
+	public typealias Snapshot = ReactiveCollections.Snapshot<ContiguousArray<Element>>
 
 	fileprivate let storage: Storage<ContiguousArray<Element>>
-	fileprivate let observer: Signal<Delta, NoError>.Observer
+	fileprivate let observer: Signal<Snapshot, NoError>.Observer
 
-	public let signal: Signal<Delta, NoError>
-	public var producer: SignalProducer<Delta, NoError> {
+	public let signal: Signal<Snapshot, NoError>
+	public var producer: SignalProducer<Snapshot, NoError> {
 		return SignalProducer { [weak self, storage] observer, disposable in
 			storage.modify { elements in
-				let delta = Delta(previous: [],
-				                  current: elements,
-				                  inserts: IndexSet(integersIn: elements.indices),
-				                  deletes: [],
-				                  updates: [])
+				let changeset = Changeset(initial: elements)
+				let delta = Snapshot(previous: nil, current: elements, changeset: changeset)
 				observer.send(value: delta)
 
 				if let strongSelf = self {
@@ -42,7 +38,7 @@ public final class ReactiveArray<Element>: RandomAccessCollection {
 	}
 
 	public init<S: Sequence>(_ sequence: S) where S.Iterator.Element == Element {
-		(signal, observer) = Signal<Delta, NoError>.pipe()
+		(signal, observer) = Signal<Snapshot, NoError>.pipe()
 		storage = Storage(ContiguousArray(sequence))
 	}
 
@@ -55,11 +51,13 @@ public final class ReactiveArray<Element>: RandomAccessCollection {
 			var view = MutableView(original: elements)
 			let result = action(&view)
 
-			let deletes = view.isOriginal ? view.deletes : IndexSet(integersIn: elements.startIndex ..< elements.endIndex)
-			let delta = Delta(previous: elements, current: view.elements, inserts: view.inserts, deletes: deletes, updates: view.updates)
-			elements = view.elements
+			if !view.isOriginal {
+				view.changeset.removals = IndexSet(integersIn: elements.startIndex ..< elements.endIndex)
+			}
 
-			observer.send(value: delta)
+			let snapshot = Snapshot(previous: elements, current: view.elements, changeset: view.changeset)
+			elements = view.elements
+			observer.send(value: snapshot)
 
 			return result
 		}
@@ -87,29 +85,18 @@ extension ReactiveArray {
 		fileprivate var isOriginal: Bool
 		fileprivate var elements: ContiguousArray<Element>
 
-		// Indices of insertions made to `elements`.
-		fileprivate var inserts: IndexSet
-
-		// Indices of deletions made to `elements`, ignoring the insertions.
-		fileprivate var deletes: IndexSet
-
-		// Indices of updates made to `elements`, ignoring the insertions.
-		fileprivate var updates: IndexSet
+		fileprivate var changeset: Changeset
 
 		public init() {
 			self.elements = []
 			self.isOriginal = false
-			inserts = []
-			deletes = []
-			updates = []
+			changeset = Changeset()
 		}
 
 		fileprivate init(original elements: ContiguousArray<Element>) {
 			self.elements = elements
 			self.isOriginal = true
-			inserts = []
-			deletes = []
-			updates = []
+			changeset = Changeset()
 		}
 
 		public mutating func replaceSubrange<C>(_ subrange: Range<Int>, with newElements: C) where C: Collection, C.Iterator.Element == Element {
@@ -126,24 +113,24 @@ extension ReactiveArray {
 					var newUpdates = IndexSet(integersIn: updateRange)
 
 					// Handle updates to insertions.
-					newUpdates.subtract(inserts)
+					newUpdates.subtract(changeset.inserts)
 
 					// Record the update set.
-					updates.formUnion(newUpdates.ignoringInserts(inserts))
+					changeset.mutations.formUnion(newUpdates.ignoringInserts(changeset.inserts))
 				}
 
 				if !deleteRange.isEmpty {
 					var newDeletes = IndexSet(integersIn: deleteRange)
 
 					// Handle the deletion of insertions.
-					let uncommittedInsertDeletes = inserts.intersection(newDeletes)
-					inserts.subtract(uncommittedInsertDeletes)
+					let uncommittedInsertDeletes = changeset.inserts.intersection(newDeletes)
+					changeset.inserts.subtract(uncommittedInsertDeletes)
 					newDeletes.subtract(uncommittedInsertDeletes)
 
 					// Record the delete set and update set.
-					newDeletes = newDeletes.ignoringInserts(inserts)
-					deletes.formUnion(newDeletes)
-					updates.subtract(newDeletes)
+					newDeletes = newDeletes.ignoringInserts(changeset.inserts)
+					changeset.removals.formUnion(newDeletes)
+					changeset.mutations.subtract(newDeletes)
 				}
 			} else {
 				let insertCount = elementsCount - subrange.count
@@ -154,18 +141,18 @@ extension ReactiveArray {
 					var newUpdates = IndexSet(integersIn: updateRange)
 
 					// Handle updates to insertions.
-					newUpdates.subtract(inserts)
+					newUpdates.subtract(changeset.inserts)
 
 					// Record the update set.
-					updates.formUnion(newUpdates.ignoringInserts(inserts))
+					changeset.mutations.formUnion(newUpdates.ignoringInserts(changeset.inserts))
 				}
 
 				if !insertRange.isEmpty {
 					var newInserts = IndexSet(integersIn: insertRange)
 
 					// Record the insert set.
-					newInserts.formUnion(inserts.shifted(byInserts: newInserts))
-					inserts = newInserts
+					newInserts.formUnion(changeset.inserts.shifted(byInserts: newInserts))
+					changeset.inserts = newInserts
 				}
 			}
 		}
