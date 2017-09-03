@@ -18,5 +18,6 @@ let package = Package(
             ]
         }
 	return deps
-    }()
+    }(),
+    exclude: ["Sources/UIKit/", "Sources/AppKit/", "Tests/ReactiveCollectionsTests/UIKit/", "Tests/ReactiveCollectionsTests/AppKit/"]
 )

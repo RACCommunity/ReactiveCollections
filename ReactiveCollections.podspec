@@ -14,6 +14,9 @@ Pod::Spec.new do |s|
 
   # Directory glob for all Swift files
   s.source_files  = "Sources/*.{swift}"
+  s.osx.source_files = "Sources/AppKit/*.{swift}"
+  s.ios.source_files = "Sources/UIKit/*.{swift}"
+  s.tvos.source_files = "Sources/UIKit/*.{swift}"
   s.dependency 'ReactiveSwift', '~> 2.0'
   s.dependency 'ReactiveCocoa', '~> 6.0'
 end
