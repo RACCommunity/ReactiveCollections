@@ -58,6 +58,8 @@ internal func ==<C1: Collection, C2: Collection>(
 
 internal func equal<C1: Collection, C2: Collection>(
 	_ expected: C2,
+	original: C2? = nil,
+	changeset: Changeset? = nil,
 	by areEqual: @escaping (C2.Iterator.Element, C2.Iterator.Element) -> Bool
 ) -> Predicate<C1> where C1.Iterator.Element == C2.Iterator.Element {
 	return Predicate.define { expression in
@@ -67,7 +69,11 @@ internal func equal<C1: Collection, C2: Collection>(
 			return PredicateResult(status: .matches, message: .expectedTo("succeeds"))
 		}
 
+		let message = "match \(expected)"
+			+ (original.map { ", original \($0)" } ?? "")
+			+ (changeset.map { ", changeset \($0)" } ?? "")
+
 		return PredicateResult(status: .doesNotMatch,
-		                       message: .expectedActualValueTo("match \(expected)"))
+		                       message: .expectedActualValueTo(message))
 	}
 }

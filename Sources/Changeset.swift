@@ -116,7 +116,360 @@ public struct Changeset {
 	}
 
 	public init<C: Collection>(initial: C) {
-		inserts = IndexSet(integersIn: 0 ..< Int(initial.count))
+		self.init()
+		self.inserts = IndexSet(integersIn: 0 ..< Int(initial.count))
+	}
+
+	public init<C: Collection, Identifier: Hashable>(
+		previous: C?,
+		current: C,
+		identifier: (C.Iterator.Element) -> Identifier,
+		areEqual: (C.Iterator.Element, C.Iterator.Element) -> Bool
+	) where C.Index == C.Indices.Iterator.Element {
+		guard let previous = previous else {
+			self.init(initial: current)
+			return
+		}
+
+		var table: [Identifier: DiffEntry] = Dictionary(minimumCapacity: Int(current.count))
+
+		var oldIdentifiers = ContiguousArray(previous.map(identifier))
+		var newIdentifiers = ContiguousArray(current.map(identifier))
+
+		var oldReferences: [DiffReference] = []
+		var newReferences: [DiffReference] = []
+
+		let oldCount = oldIdentifiers.count
+		let newCount = newIdentifiers.count
+
+		oldReferences.reserveCapacity(oldCount)
+		newReferences.reserveCapacity(newCount)
+
+		func tableEntry(for identifier: Identifier) -> DiffEntry {
+			if let entry = table[identifier] {
+				return entry
+			}
+
+			let entry = DiffEntry()
+			table[identifier] = entry
+			return entry
+		}
+
+		// Pass 1: Scan the new snapshot.
+		for offset in 0 ..< newCount {
+			let entry = tableEntry(for: newIdentifiers[offset])
+
+			entry.occurenceInNew += 1
+			newReferences.append(.table(entry))
+		}
+
+		// Pass 2: Scan the old snapshot.
+		for offset in 0 ..< oldCount {
+			let entry = tableEntry(for: oldIdentifiers[offset])
+
+			entry.locationsInOld.insert(offset)
+			oldReferences.append(.table(entry))
+		}
+
+		// Pass 3: Single-occurence lines
+		for newPosition in 0 ..< newCount {
+			switch newReferences[newPosition] {
+			case let .table(entry):
+				if entry.occurenceInNew == 1 && entry.locationsInOld.count == 1 {
+					let oldPosition = entry.locationsInOld.first!
+					newReferences[newPosition] = .remote(oldPosition)
+					oldReferences[oldPosition] = .remote(newPosition)
+				}
+
+			case .remote:
+				break
+			}
+		}
+
+		self.init()
+
+		// Pass 4: Pair repeated values, and compute insertions.
+		for newPosition in 0 ..< newCount {
+			guard case let .table(entry) = newReferences[newPosition] else { continue }
+			if let closestOld = entry.locationsInOld.closest(to: newPosition) {
+				// Pull the closest old location from the all unassigned known old
+				// locations of this entry. Then remove this instance from the table
+				// entry, so that the unpaired instance would be identified by Pass 7
+				// as removals.
+				entry.locationsInOld.remove(closestOld)
+				entry.occurenceInNew -= 1
+				newReferences[newPosition] = .remote(closestOld)
+				oldReferences[closestOld] = .remote(newPosition)
+			} else if entry.occurenceInNew > 0 {
+				// If no old location is left, it is treated as an inserted element.
+				inserts.insert(newPosition)
+			}
+		}
+
+		// Pass 5: Mark adjacent lines as direct moves.
+		for newPosition in 0 ..< (newCount - 1) {
+			guard case let .remote(oldPosition) = newReferences[newPosition],
+			      oldPosition + 1 < oldCount,
+			      oldIdentifiers[oldPosition + 1] == newIdentifiers[newPosition + 1],
+			      case let .table(entry) = newReferences[newPosition + 1],
+			      entry.locationsInOld.contains(oldPosition + 1) else {
+				continue
+			}
+
+			newReferences[newPosition + 1] = .remote(oldPosition + 1)
+			oldReferences[oldPosition + 1] = .remote(newPosition + 1)
+			entry.occurenceInNew -= 1
+			entry.locationsInOld.remove(oldPosition + 1)
+		}
+
+		// Pass 6: Mark adjacent lines as direct moves.
+		for oldPosition in 0 ..< (oldCount - 1) {
+			guard case let .remote(newPosition) = oldReferences[oldPosition],
+			      newPosition + 1 < newCount,
+			      oldIdentifiers[oldPosition + 1] == newIdentifiers[newPosition + 1],
+			      case let .table(entry) = newReferences[newPosition + 1],
+			      entry.locationsInOld.contains(oldPosition + 1) else {
+				continue
+			}
+
+			newReferences[newPosition + 1] = .remote(oldPosition + 1)
+			oldReferences[oldPosition + 1] = .remote(newPosition + 1)
+			entry.occurenceInNew -= 1
+			entry.locationsInOld.remove(oldPosition + 1)
+		}
+
+		// Pass 7: Compute removals. Prepare removal offsets for move elimination.
+		for oldPosition in 0 ..< oldCount {
+			if case let .table(entry) = oldReferences[oldPosition], entry.occurenceInNew == 0 {
+				removals.insert(oldPosition)
+			}
+		}
+
+		// Pass 8: Compute mutations and moves.
+		var movePaths: Set<MovePath> = []
+		var isMoveMutating: [MovePath: Bool] = [:]
+
+		for newPosition in 0 ..< newCount {
+			guard case let .remote(oldPosition) = newReferences[newPosition] else {
+				continue
+			}
+
+			let previousIndex = previous.index(previous.startIndex, offsetBy: C.IndexDistance(oldPosition))
+			let currentIndex = current.index(current.startIndex, offsetBy: C.IndexDistance(newPosition))
+			let isMutated = !areEqual(previous[previousIndex], current[currentIndex])
+
+			if newPosition - oldPosition != 0 {
+				let path = MovePath(source: oldPosition, destination: newPosition)
+				movePaths.insert(path)
+				isMoveMutating[path] = isMutated
+			} else if isMutated {
+				mutations.insert(oldPosition)
+			}
+		}
+
+		// The following two passes perform move eliminations. The algorithm is
+		// conservative and care about only one contiguous block immediately following the
+		// deletion or the insertion.
+
+		// Pass 9: Eliminating removal-caused moves.
+		for range in removals.rangeView {
+			var path = MovePath(source: range.upperBound, destination: range.lowerBound)
+			while path.destination < newCount, movePaths.remove(path) != nil {
+				if isMoveMutating[path]! {
+					mutations.insert(path.destination)
+				}
+
+				path = path.shifted(by: 1)
+			}
+		}
+
+		// Pass 10: Eliminating insertion-caused moves.
+		for range in inserts.rangeView {
+			var path = MovePath(source: range.lowerBound, destination: range.upperBound)
+			while path.destination < newCount, movePaths.remove(path) != nil {
+				if isMoveMutating[path]! {
+					mutations.insert(path.destination)
+				}
+
+				path = path.shifted(by: 1)
+			}
+		}
+
+		// Pass 11: Forge the move results.
+		moves = movePaths.map { path in
+			return Changeset.Move(source: path.source,
+			                      destination: path.destination,
+			                      isMutated: isMoveMutating[path]!)
+		}
+	}
+
+	/// Compute the difference of `self` with regard to `old` by value equality.
+	///
+	/// `diff(with:)` works best with collections that contain unique values.
+	///
+	/// If the multiple elements are bound to the same identifier, the algorithm would
+	/// generate moves at its best effort, with the rest being represented as inserts
+	/// and/or removals.
+	///
+	/// - precondition: The collection type must exhibit array semantics.
+	///
+	/// - complexity: O(n) time and space.
+	public init<C: Collection, Identifier: Hashable>(
+		previous: C?,
+		current: C,
+		identifier: (C.Iterator.Element) -> Identifier
+	) where C.Iterator.Element: Equatable, C.Index == C.Indices.Iterator.Element {
+		self.init(previous: previous, current: current, identifier: identifier, areEqual: ==)
+	}
+
+	/// Compute the difference of `self` with regard to `old` by value equality.
+	///
+	/// `diff(with:)` works best with collections that contain unique values.
+	///
+	/// If the multiple elements appear in the collection, the algorithm would generate
+	/// moves at its best effort, with the rest being represented as inserts
+	/// and/or removals.
+	///
+	/// - precondition: The collection type must exhibit array semantics.
+	///
+	/// - complexity: O(n) time and space.
+	public init<C: Collection>(
+		previous: C?,
+		current: C
+	) where C.Iterator.Element: Hashable, C.Index == C.Indices.Iterator.Element {
+		self.init(previous: previous, current: current, identifier: { $0 }, areEqual: ==)
+	}
+
+	/// Compute the difference of `self` with regard to `old` by object identity.
+	///
+	/// If the same object appears multiple times in the collection, the algorithm would
+	/// generate moves at its best effort, with the rest being represented as inserts
+	/// and/or removals.
+	///
+	/// - precondition: The collection type must exhibit array semantics.
+	///
+	/// - complexity: O(n) time and space.
+	public init<C: Collection>(
+		previous: C?,
+		current: C
+	) where C.Iterator.Element: AnyObject, C.Index == C.Indices.Iterator.Element {
+		self.init(previous: previous, current: current, identifier: ObjectIdentifier.init, areEqual: ===)
+	}
+
+	/// Compute the difference of `self` with regard to `old` using the given comparing
+	/// strategy. The elements are identified by their object identity.
+	///
+	/// If the same object appears multiple times in the collection, the algorithm would
+	/// generate moves at its best effort, with the rest being represented as inserts
+	/// and/or removals.
+	///
+	/// - precondition: The collection type must exhibit array semantics.
+	///
+	/// - parameters:
+	///   - strategy: The comparing strategy to use.
+	///
+	/// - complexity: O(n) time and space.
+	public init<C: Collection>(
+		previous: C?,
+		current: C,
+		comparingBy strategy: ObjectDiffStrategy = .value
+	) where C.Iterator.Element: AnyObject & Equatable, C.Index == C.Indices.Iterator.Element {
+		switch strategy.kind {
+		case .value:
+			self.init(previous: previous, current: current, identifier: ObjectIdentifier.init, areEqual: ==)
+		case .identity:
+			self.init(previous: previous, current: current, identifier: ObjectIdentifier.init, areEqual: ===)
+		}
+	}
+
+	/// Compute the difference of `self` with regard to `old` using the given comparing
+	/// strategy. The elements are identified by the given identifying strategy.
+	///
+	/// If the same object is identified multiple times in the collection, the algorithm
+	/// would generate moves at its best effort, with the rest being represented as
+	/// inserts and/or removals.
+	///
+	/// - precondition: The collection type must exhibit array semantics.
+	///
+	/// - parameters:
+	///   - identifyingStrategy: The identifying strategy to use.
+	///   - comparingStrategy: The comparingStrategy strategy to use.
+	///
+	/// - complexity: O(n) time and space.
+	public init<C: Collection>(
+		previous: C?,
+		current: C,
+		identifyingBy identifyingStrategy: ObjectDiffStrategy = .identity,
+		comparingBy comparingStrategy: ObjectDiffStrategy = .value
+	) where C.Iterator.Element: AnyObject & Hashable, C.Index == C.Indices.Iterator.Element {
+		switch (identifyingStrategy.kind, comparingStrategy.kind) {
+		case (.value, .value):
+			self.init(previous: previous, current: current, identifier: { $0 }, areEqual: ==)
+		case (.value, .identity):
+			self.init(previous: previous, current: current, identifier: { $0 }, areEqual: ===)
+		case (.identity, .identity):
+			self.init(previous: previous, current: current, identifier: ObjectIdentifier.init, areEqual: ===)
+		case (.identity, .value):
+			self.init(previous: previous, current: current, identifier: ObjectIdentifier.init, areEqual: ==)
+		}
+	}
+}
+
+extension Changeset {
+	/// The comparison strategies used by the collection diffing operators on collections
+	/// that contain `Hashable` objects.
+	public struct ObjectDiffStrategy {
+		fileprivate enum Kind {
+			case identity
+			case value
+		}
+
+		/// Compare the elements by their object identity.
+		public static let identity = ObjectDiffStrategy(kind: .identity)
+
+		/// Compare the elements by their value equality.
+		public static let value = ObjectDiffStrategy(kind: .value)
+
+		fileprivate let kind: Kind
+
+		private init(kind: Kind) {
+			self.kind = kind
+		}
+	}
+}
+
+// The key equality implies only referential equality. But the value equality of the
+// uniquely identified element across snapshots is uncertain. It is pretty common to diff
+// elements with constant unique identifiers but changing contents. For example, we may
+// have an array of `Conversation`s, identified by the backend ID, that is constantly
+// updated with the latest messages pushed from the backend. So our diffing algorithm
+// must have an additional mean to test elements for value equality.
+
+private final class DiffEntry {
+	var occurenceInNew: UInt = 0
+	var locationsInOld = IndexSet()
+}
+
+private enum DiffReference {
+	case remote(Int)
+	case table(DiffEntry)
+}
+
+private struct MovePath: Hashable {
+	let source: Int
+	let destination: Int
+
+	var hashValue: Int {
+		let sum = source + destination
+		return (sum * (sum + 1)) >> 1 + destination
+	}
+
+	func shifted(by offset: Int) -> MovePath {
+		return MovePath(source: source + offset, destination: destination + offset)
+	}
+
+	static func == (left: MovePath, right: MovePath) -> Bool {
+		return left.source == right.source && left.destination == right.destination
 	}
 }
 
@@ -128,7 +481,18 @@ public struct Changeset {
 	}
 #endif
 
-extension Changeset.Move: Equatable {
+extension IndexSet {
+	fileprivate func closest(to integer: Int) -> Int? {
+		guard !isEmpty else { return nil }
+		return integerLessThanOrEqualTo(integer) ?? integerGreaterThan(integer)
+	}
+}
+
+extension Changeset.Move: Hashable {
+	public var hashValue: Int {
+		return source + destination
+	}
+
 	public static func == (left: Changeset.Move, right: Changeset.Move) -> Bool {
 		return left.isMutated == right.isMutated && left.source == right.source && left.destination == right.destination
 	}
@@ -136,7 +500,7 @@ extension Changeset.Move: Equatable {
 
 extension Changeset: Equatable {
 	public static func == (left: Changeset, right: Changeset) -> Bool {
-		return left.inserts == right.inserts && left.removals == right.removals && left.mutations == right.mutations && left.moves == right.moves
+		return left.inserts == right.inserts && left.removals == right.removals && left.mutations == right.mutations && Set(left.moves) == Set(right.moves)
 	}
 }
 
