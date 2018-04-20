@@ -1,9 +1,6 @@
 language: objective-c
 cache: cocoapods
 osx_image: xcode9.3
-before_install:
-  - brew uninstall carthage
-  - HOMEBREW_NO_AUTO_UPDATE=1 brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/45dd24d8dfa7a2fb69812c678ceb34be0c16e295/Formula/carthage.rb # 0.29.0
 branches:
   only:
     - master
