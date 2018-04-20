@@ -102,7 +102,7 @@ extension ReactiveArray {
 		public mutating func replaceSubrange<C>(_ subrange: Range<Int>, with newElements: C) where C: Collection, C.Iterator.Element == Element {
 			elements.replaceSubrange(subrange, with: newElements)
 
-			let elementsCount = Int(newElements.count.toIntMax())
+			let elementsCount = newElements.count
 
 			if subrange.count > elementsCount {
 				let deleteCount = subrange.count - elementsCount
